@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 namespace Raspberry.IO.GeneralPurpose
 {
     public enum PinDirection
@@ -6,13 +5,4 @@ namespace Raspberry.IO.GeneralPurpose
         Input,
         Output
     }
-=======
-namespace Raspberry.IO.GeneralPurpose
-{
-    public enum PinDirection
-    {
-        Input,
-        Output
-    }
->>>>>>> Initial Import
 }
