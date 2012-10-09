@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Raspberry.IO.GeneralPurpose;
@@ -7,13 +8,6 @@ namespace Raspberry.IO.Console
 {
     class Program
     {
-        private class Status
-        {
-            public Connection Connection { get; set; }
-            public int Current { get; set; }
-            public bool Descending { get; set; }
-        }
-
         static void Main(string[] args)
         {
             var driver = GetDriver(args);
@@ -38,31 +32,26 @@ namespace Raspberry.IO.Console
                                ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable()
                            };
 
-            using (var connection = new Connection(driver, false, pins))
+            using (var connection = new Connection(driver, pins))
             {
                 System.Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
                 System.Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / speed);
 
                 var status = new Status { Connection = connection };
-                connection.InputPinChanged += (sender, pinStatusEventArgs) =>
-                                                  {
-                                                      System.Console.WriteLine("[{0:HH:mm:ss}] Pin {1}: {2}", DateTime.UtcNow, pinStatusEventArgs.Pin.Name ?? Convert.ToString((int) pinStatusEventArgs.Pin.Pin), pinStatusEventArgs.Enabled ? "Enabled" : "Disabled");
-                                                      status.Descending = !pinStatusEventArgs.Enabled;
-                                                  };
-
-                connection.Open();
+                connection.Pins[ConnectorPin.P1Pin3].StatusChanged +=(sender, eventArgs) => { status.Descending = !eventArgs.Enabled; };
+                //connection.PinStatusChanged += (sender, eventArgs) => System.Console.WriteLine("[{0:HH:mm:ss}] Pin {1}: {2}", DateTime.UtcNow, eventArgs.Configuration.Name ?? Convert.ToString((int) eventArgs.Configuration.Pin), eventArgs.Enabled ? "Enabled" : "Disabled");
 
                 using (new Timer(Animate, status, 0, speed))
                     System.Console.ReadLine();
             }
         }
 
-        private static int GetSpeed(string[] args)
+        private static int GetSpeed(IEnumerable<string> args)
         {
             return args.SkipWhile(a => a != "-speed").Skip(1).Select(int.Parse).DefaultIfEmpty(250).First();
         }
 
-        private static IConnectionDriver GetDriver(string[] args)
+        private static IConnectionDriver GetDriver(IEnumerable<string> args)
         {
             var driverName = args.SkipWhile(a => a != "-driver").Skip(1).DefaultIfEmpty("").First();
 
@@ -109,6 +98,13 @@ namespace Raspberry.IO.Console
 
             status.Current = (i + 1) % 0x40;
             */
+        }
+
+        private class Status
+        {
+            public Connection Connection { get; set; }
+            public int Current { get; set; }
+            public bool Descending { get; set; }
         }
     }
 }
