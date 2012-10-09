@@ -34,6 +34,13 @@ namespace Raspberry.IO.Console
             var speed = args.SkipWhile(a => a != "-speed").Skip(1).Select(int.Parse).DefaultIfEmpty(250).First();
 
             var mainboard = Mainboard.Current;
+
+            if (!mainboard.IsRaspberryPi)
+            {
+                System.Console.WriteLine("{0} is not a valid processor for a Raspberry Pi.");
+                return;
+            }
+
             System.Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
             System.Console.WriteLine("Using {0} driver, frequency {1:0.##}hz", driverName, 1000.0 / speed);
 
@@ -45,16 +52,16 @@ namespace Raspberry.IO.Console
                                ConnectorPin.P1Pin15.Output().Name("Led4"),
                                ConnectorPin.P1Pin13.Output().Name("Led5").Enable(),
                                ConnectorPin.P1Pin11.Output().Name("Led6"),
-                               ConnectorPin.P1Pin3.Input().Revert().Switch().Enable()
+                               ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable()
                            };
 
             using (var connection = new Connection(driver, pins))
             {
                 var status = new Status { Connection = connection };
 
-                connection.InputPinChanged += delegate(object sender, PinStatusEventArgs pinStatusEventArgs)
+                connection.InputPinChanged += (sender, pinStatusEventArgs) =>
                                                   {
-                                                      System.Console.WriteLine("[{0:HH:mm:ss}] Pin {1}: {2}", DateTime.UtcNow, (int)pinStatusEventArgs.Pin.Pin, pinStatusEventArgs.Enabled);
+                                                      System.Console.WriteLine("[{0:HH:mm:ss}] Pin {1}: {2}", DateTime.UtcNow, pinStatusEventArgs.Pin.Name ?? Convert.ToString((int) pinStatusEventArgs.Pin.Pin), pinStatusEventArgs.Enabled ? "Enabled" : "Disabled");
                                                       status.Descending = !pinStatusEventArgs.Enabled;
                                                   };
 

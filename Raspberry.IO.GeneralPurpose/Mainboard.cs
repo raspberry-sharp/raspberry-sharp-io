@@ -8,6 +8,7 @@ namespace Raspberry.IO.GeneralPurpose
     public class Mainboard
     {
         private static readonly Lazy<Mainboard> board = new Lazy<Mainboard>(LoadBoard);
+        private const string raspberryPiProcessor = "BCM2708";
 
         private readonly Dictionary<string, string> settings;
 
@@ -19,6 +20,11 @@ namespace Raspberry.IO.GeneralPurpose
         public static Mainboard Current
         {
             get { return board.Value; }
+        }
+
+        public bool IsRaspberryPi
+        {
+            get { return Processor == raspberryPiProcessor; }
         }
 
         public string Processor
