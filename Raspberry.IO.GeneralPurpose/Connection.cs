@@ -14,6 +14,7 @@ namespace Raspberry.IO.GeneralPurpose
 
         private readonly Timer timer;
         private readonly Dictionary<ProcessorPin, bool> pinValues = new Dictionary<ProcessorPin, bool>();
+        private readonly Dictionary<ProcessorPin, bool> pinRawValues = new Dictionary<ProcessorPin, bool>();
 
         public Connection(params PinConfiguration[] pins) : this(null, (IEnumerable<PinConfiguration>) pins){}
 
@@ -41,7 +42,7 @@ namespace Raspberry.IO.GeneralPurpose
                 driver.Export(pin);
                 var outputPin = pin as OutputPinConfiguration;
                 if (outputPin != null)
-                    this[pin.Pin] = outputPin.GetEffective(outputPin.IsActive);
+                    this[pin.Pin] = outputPin.GetEffective(outputPin.Enabled);
             }
         }
 
@@ -55,16 +56,39 @@ namespace Raspberry.IO.GeneralPurpose
         {
             var newPinValues = pins.Values
                 .Where(p => p.Direction == PinDirection.Input)
-                .Select(p => new {p.Pin, Value = this[p.Pin]})
+                .Select(p => new {p.Pin, Value = driver.Read(p.Pin)})
                 .ToDictionary(p => p.Pin, p => p.Value);
 
             foreach (var np in newPinValues)
             {
-                var newPinValue = newPinValues[np.Key];
-                if (!pinValues.ContainsKey(np.Key) || pinValues[np.Key] != newPinValue)
+                var init = !pinRawValues.ContainsKey(np.Key);
+                var oldPinValue = pinRawValues.ContainsKey(np.Key) && pinRawValues[np.Key];
+                var newPinValue = np.Value;
+
+                pinRawValues[np.Key] = newPinValue;
+                if (init || oldPinValue != newPinValue)
                 {
-                    InputPinChanged(this, new PinStatusEventArgs {Pin = pins[np.Key], IsActive = newPinValue});
-                    pinValues[np.Key] = newPinValue;
+                    var pin = (InputPinConfiguration)pins[np.Key];
+                    var switchPin = pin as SwitchInputPinConfiguration;
+
+                    if (switchPin != null)
+                    {
+                        if (init)
+                        {
+                            pinValues[np.Key] = switchPin.Enabled;
+                            InputPinChanged(this, new PinStatusEventArgs { Pin = pin, Enabled = pinValues[np.Key] });
+                        }
+                        else if (pin.GetEffective(newPinValue))
+                        {
+                            pinValues[np.Key] = !pinValues[np.Key];
+                            InputPinChanged(this, new PinStatusEventArgs { Pin = pin, Enabled = pinValues[np.Key] });
+                        }
+                    }
+                    else
+                    {
+                        pinValues[np.Key] = pin.GetEffective(newPinValue);
+                        InputPinChanged(this, new PinStatusEventArgs { Pin = pin, Enabled = pinValues[np.Key] });
+                    }
                 }
             }
         }
@@ -103,9 +127,7 @@ namespace Raspberry.IO.GeneralPurpose
         {
             get
             {
-                return pin.Direction == PinDirection.Input
-                    ? pin.GetEffective(driver.Read(pin.Pin))
-                    : pinValues[pin.Pin];
+                return pinValues[pin.Pin];
             }
             set
             {

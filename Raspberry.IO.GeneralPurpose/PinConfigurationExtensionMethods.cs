@@ -7,6 +7,11 @@ namespace Raspberry.IO.GeneralPurpose
             return new InputPinConfiguration(pin);
         }
 
+        public static SwitchInputPinConfiguration Switch(this InputPinConfiguration pin)
+        {
+            return new SwitchInputPinConfiguration(pin);
+        }
+
         public static PinConfiguration Output(this ProcessorPin pin)
         {
             return new OutputPinConfiguration(pin);
@@ -22,27 +27,39 @@ namespace Raspberry.IO.GeneralPurpose
             return new OutputPinConfiguration(pin.ToProcessor());
         }
 
-        public static T Named<T>(this T configuration, string name) where T : PinConfiguration
+        public static T Name<T>(this T configuration, string name) where T : PinConfiguration
         {
             configuration.Name = name;
             return configuration;
         }
 
-        public static T Reversed<T>(this T configuration) where T : PinConfiguration
+        public static T Revert<T>(this T configuration) where T : PinConfiguration
         {
-            configuration.IsReversed = !configuration.IsReversed;
+            configuration.Reversed = !configuration.Reversed;
             return configuration;
         }
 
-        public static OutputPinConfiguration Active(this OutputPinConfiguration configuration)
+        public static OutputPinConfiguration Enable(this OutputPinConfiguration configuration)
         {
-            configuration.IsActive = true;
+            configuration.Enabled = true;
             return configuration;
         }
 
-        public static OutputPinConfiguration Inactive(this OutputPinConfiguration configuration)
+        public static OutputPinConfiguration Disable(this OutputPinConfiguration configuration)
         {
-            configuration.IsActive = false;
+            configuration.Enabled = false;
+            return configuration;
+        }
+
+        public static SwitchInputPinConfiguration Enable(this SwitchInputPinConfiguration configuration)
+        {
+            configuration.Enabled = true;
+            return configuration;
+        }
+
+        public static SwitchInputPinConfiguration Disable(this SwitchInputPinConfiguration configuration)
+        {
+            configuration.Enabled = false;
             return configuration;
         }
     }

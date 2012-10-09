@@ -44,8 +44,10 @@
     <Compile Include="ConnectionMemoryDriver.cs" />
     <Compile Include="ConnectorPin.cs" />
     <Compile Include="IConnectionDriver.cs" />
+    <Compile Include="InputPinConfiguration.cs" />
     <Compile Include="Mainboard.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="OutputPinConfiguration.cs" />
     <Compile Include="PinConfiguration.cs" />
     <Compile Include="PinMapping.cs" />
     <Compile Include="PinConfigurationExtensionMethods.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="PinDirection.cs" />
     <Compile Include="PinStatusEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SwitchInputPinConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="libbcm2835.so">

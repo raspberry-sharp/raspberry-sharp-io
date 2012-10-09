@@ -39,13 +39,13 @@ namespace Raspberry.IO.Console
 
             var pins = new PinConfiguration[]
                            {
-                               ConnectorPin.P1Pin26.Output().Named("Led1").Active(),
-                               ConnectorPin.P1Pin24.Output().Named("Led2"),
-                               ConnectorPin.P1Pin22.Output().Named("Led3").Active(),
-                               ConnectorPin.P1Pin15.Output().Named("Led4"),
-                               ConnectorPin.P1Pin13.Output().Named("Led5").Active(),
-                               ConnectorPin.P1Pin11.Output().Named("Led6"),
-                               ConnectorPin.P1Pin3.Input().Reversed()
+                               ConnectorPin.P1Pin26.Output().Name("Led1").Enable(),
+                               ConnectorPin.P1Pin24.Output().Name("Led2"),
+                               ConnectorPin.P1Pin22.Output().Name("Led3").Enable(),
+                               ConnectorPin.P1Pin15.Output().Name("Led4"),
+                               ConnectorPin.P1Pin13.Output().Name("Led5").Enable(),
+                               ConnectorPin.P1Pin11.Output().Name("Led6"),
+                               ConnectorPin.P1Pin3.Input().Revert().Switch().Enable()
                            };
 
             using (var connection = new Connection(driver, pins))
@@ -54,9 +54,8 @@ namespace Raspberry.IO.Console
 
                 connection.InputPinChanged += delegate(object sender, PinStatusEventArgs pinStatusEventArgs)
                                                   {
-                                                      System.Console.WriteLine("[{0:HH:mm:ss}] Pin {1}: {2}", DateTime.UtcNow, (int)pinStatusEventArgs.Pin.Pin, pinStatusEventArgs.IsActive);
-                                                      if (pinStatusEventArgs.IsActive)
-                                                        status.Descending = !status.Descending;
+                                                      System.Console.WriteLine("[{0:HH:mm:ss}] Pin {1}: {2}", DateTime.UtcNow, (int)pinStatusEventArgs.Pin.Pin, pinStatusEventArgs.Enabled);
+                                                      status.Descending = !pinStatusEventArgs.Enabled;
                                                   };
 
                 using (new Timer(Animate, status, 0, speed))
