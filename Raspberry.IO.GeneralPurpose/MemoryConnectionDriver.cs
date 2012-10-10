@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Raspberry.IO.GeneralPurpose
 {
-    public class ConnectionMemoryDriver : IConnectionDriver
+    public class MemoryConnectionDriver : IConnectionDriver
     {
         private static readonly Lazy<bool> initialized = new Lazy<bool>(() => bcm2835_init() != 0);
 

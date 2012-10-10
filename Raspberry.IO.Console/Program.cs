@@ -58,9 +58,9 @@ namespace Raspberry.IO.Console
             switch (driverName)
             {
                 case "memory":
-                    return new ConnectionMemoryDriver();
+                    return new MemoryConnectionDriver();
                 case "file":
-                    return new ConnectionFileDriver();
+                    return new FileConnectionDriver();
                 case "":
                     return null;
 

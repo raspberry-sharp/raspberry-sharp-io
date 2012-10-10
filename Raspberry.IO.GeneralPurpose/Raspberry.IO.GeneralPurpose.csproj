@@ -42,8 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\GpioConnectionConfigurationSection.cs" />
-    <Compile Include="ConnectionFileDriver.cs" />
-    <Compile Include="ConnectionMemoryDriver.cs" />
+    <Compile Include="FileConnectionDriver.cs" />
+    <Compile Include="MemoryConnectionDriver.cs" />
     <Compile Include="ConnectorPin.cs" />
     <Compile Include="IConnectionDriver.cs" />
     <Compile Include="InputPinConfiguration.cs" />

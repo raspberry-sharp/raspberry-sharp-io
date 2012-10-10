@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Raspberry.IO.GeneralPurpose
 {
-    public class ConnectionFileDriver : IConnectionDriver
+    public class FileConnectionDriver : IConnectionDriver
     {
         private const string gpioPath = "/sys/class/gpio";
         

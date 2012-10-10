@@ -245,7 +245,7 @@ namespace Raspberry.IO.GeneralPurpose
             if (configurationSection != null && !string.IsNullOrEmpty(configurationSection.DriverTypeName))
                 return (IConnectionDriver) Activator.CreateInstance(Type.GetType(configurationSection.DriverTypeName, true));
             else
-                return new ConnectionMemoryDriver();
+                return new MemoryConnectionDriver();
         }
 
         private void Export(PinConfiguration configuration)
