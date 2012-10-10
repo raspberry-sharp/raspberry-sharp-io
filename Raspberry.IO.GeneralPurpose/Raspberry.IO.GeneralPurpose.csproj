@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\ChaserBehavior.cs" />
+    <Compile Include="Behaviors\PinsBehavior.cs" />
+    <Compile Include="Behaviors\PinsBehaviorExtensionMethods.cs" />
     <Compile Include="Configuration\GpioConnectionConfigurationSection.cs" />
     <Compile Include="FileConnectionDriver.cs" />
     <Compile Include="MemoryConnectionDriver.cs" />
@@ -64,6 +67,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
