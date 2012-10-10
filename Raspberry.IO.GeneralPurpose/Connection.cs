@@ -22,6 +22,8 @@ namespace Raspberry.IO.GeneralPurpose
         private readonly Timer timer;
         private readonly Dictionary<ProcessorPin, bool> pinValues = new Dictionary<ProcessorPin, bool>();
         private readonly Dictionary<ProcessorPin, bool> pinRawValues = new Dictionary<ProcessorPin, bool>();
+        
+        public const int DefaultBlinkDuration = 250;
 
         #endregion
 
@@ -213,6 +215,33 @@ namespace Raspberry.IO.GeneralPurpose
             this[configuration] = !this[configuration];
         }
 
+        public void Blink(string pinName, int duration = DefaultBlinkDuration)
+        {
+            Toggle(pinName);
+            Thread.Sleep(duration);
+            Toggle(pinName);
+        }
+
+        public void Blink(ProcessorPin pin, int duration = DefaultBlinkDuration)
+        {
+            Toggle(pin);
+            Thread.Sleep(duration);
+            Toggle(pin);
+        }
+
+        public void Blink(ConnectorPin pin, int duration = DefaultBlinkDuration)
+        {
+            Toggle(pin);
+            Thread.Sleep(duration);
+            Toggle(pin);
+        }
+
+        public void Blink(PinConfiguration configuration, int duration = DefaultBlinkDuration)
+        {
+            Toggle(configuration);
+            Thread.Sleep(duration);
+            Toggle(configuration);
+        }
         #endregion
 
         #region Events
@@ -354,7 +383,12 @@ namespace Raspberry.IO.GeneralPurpose
 
             public void Toggle()
             {
-                Value = !Value;
+                connection.Toggle(Configuration);
+            }
+
+            public void Blink(int duration = Connection.DefaultBlinkDuration)
+            {
+                connection.Blink(Configuration, duration);
             }
 
             public event EventHandler<PinStatusEventArgs> StatusChanged
