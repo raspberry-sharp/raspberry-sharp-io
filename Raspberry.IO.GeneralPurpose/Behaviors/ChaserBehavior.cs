@@ -4,42 +4,54 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
     public class ChaserBehavior : PinsBehavior
     {
-        public ChaserBehavior(IEnumerable<PinConfiguration> configurations) : base(configurations) { }
+        public ChaserBehavior(IEnumerable<PinConfiguration> configurations) : base(configurations)
+        {
+            Width = 1;
+        }
 
         private bool wayOut;
 
         public bool RoundTrip { get; set; }
         public bool Descending { get; set; }
         public bool Loop { get; set; }
+        public int Width { get; set; }
 
         protected override int FirstStep()
         {
             wayOut = true;
-            return Descending ? Configurations.Length - 1 : 0;
+            return WidthBefore;
         }
 
         protected override void Step(int step)
         {
+            var minEnabledStep = step - WidthBefore;
+            var maxEnabledStep = step + WidthAfter;
+
             for (var i = 0; i < Configurations.Length; i++)
             {
-                var configuration = Configurations[i];
-                Connection[configuration] = (step == i);
+                var configuration = Configurations[Descending ? Configurations.Length - 1 - i : i];
+                if (!Overflow)
+                    Connection[configuration] = (i >= minEnabledStep && i <= maxEnabledStep);
+                else
+                    Connection[configuration] = (i >= minEnabledStep && i <= maxEnabledStep)
+                        || (maxEnabledStep >= Configurations.Length && i <= maxEnabledStep % Configurations.Length)
+                        || (minEnabledStep < 0 && i >= minEnabledStep + Configurations.Length);
             }
         }
 
         protected override bool TryNextStep(ref int step)
         {
-            if (wayOut != Descending)
+            if (wayOut)
             {
-                if (step == Configurations.Length - 1)
+                if (step == MaximumStep)
                 {
-                    if (RoundTrip && (Loop || !Descending))
+                    if (RoundTrip)
                     {
-                        wayOut = Descending;
+                        wayOut = false;
                         step--;
                     }
                     else if (Loop)
-                        step = 0;
+                        step = MinimumStep;
                     else
                         return false;
                 }
@@ -48,15 +60,15 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             }
             else
             {
-                if (step == 0)
+                if (step == MinimumStep)
                 {
-                    if (RoundTrip && (Loop || Descending))
+                    if (Loop && RoundTrip)
                     {
-                        wayOut = !Descending;
+                        wayOut = true;
                         step++;
                     }
                     else if (Loop)
-                        step = Configurations.Length;
+                        step = MaximumStep;
                     else
                         return false;
                 }
@@ -64,6 +76,31 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             }
 
             return true;
+        }
+
+        private bool Overflow
+        {
+            get { return Loop && !RoundTrip; }
+        }
+
+        private int MinimumStep
+        {
+            get { return Overflow ? 0 : WidthBefore; }
+        }
+
+        private int MaximumStep
+        {
+            get { return Configurations.Length - 1 - (Overflow ? 0 : WidthAfter); }
+        }
+
+        private int WidthBefore
+        {
+            get { return (Width%2) == 1 ? (Width - 1)/2 : Width/2; }
+        }
+
+        private int WidthAfter
+        {
+            get { return (Width%2) == 1 ? (Width - 1)/2 : Width/2 - 1; }
         }
     }
 }

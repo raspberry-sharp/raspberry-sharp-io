@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.GeneralPurpose.Behaviors;
 
@@ -32,7 +31,14 @@ namespace Raspberry.IO.Console
                                ConnectorPin.P1Pin11.Output().Name("Led6")
                            };
 
-            var behavior = new ChaserBehavior(leds) {Loop = true, Descending = true};
+            var behavior = new ChaserBehavior(leds)
+                               {
+                                   Loop = GetLoop(args),
+                                   RoundTrip = GetRoundTrip(args),
+                                   Descending = GetDescending(args),
+                                   Width = GetWidth(args),
+                                   Interval = speed
+                               };
 
             using (var connection = new Connection(driver, leds))
             {
@@ -49,6 +55,26 @@ namespace Raspberry.IO.Console
 
                 connection.Stop(behavior);
             }
+        }
+
+        private static bool GetLoop(IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-loop").Any();
+        }
+
+        private static bool GetRoundTrip(IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-roundTrip").Any();
+        }
+
+        private static bool GetDescending(IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-descending").Any();
+        }
+
+        private static int GetWidth(IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-width").Skip(1).Select(int.Parse).DefaultIfEmpty(1).First();
         }
 
         private static int GetSpeed(IEnumerable<string> args)
