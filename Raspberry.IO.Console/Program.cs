@@ -39,6 +39,14 @@ namespace Raspberry.IO.Console
                                    Width = GetWidth(args),
                                    Interval = speed
                                };
+            /*
+            var random = new Random();
+            var behavior = new PatternBehavior(leds, Enumerable.Range(0, 5).Select(i => random.Next(511)))
+                               {
+                                   Loop = GetLoop(args),
+                                   RoundTrip = GetRoundTrip(args),
+                                   Interval = speed
+                               };*/
 
             //var behavior = new BlinkBehavior(leds){ Count = GetWidth(args), Interval = speed};
             
