@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\BlinkBehavior.cs" />
     <Compile Include="Behaviors\ChaserBehavior.cs" />
     <Compile Include="Behaviors\PinsBehavior.cs" />
     <Compile Include="Behaviors\PinsBehaviorExtensionMethods.cs" />
