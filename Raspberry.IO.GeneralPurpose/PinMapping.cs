@@ -1,14 +1,24 @@
+#region References
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
+#endregion
+
 namespace Raspberry.IO.GeneralPurpose
 {
     public static class PinMapping
     {
+        #region Fields
+
         private static readonly Dictionary<ProcessorPin, ConnectorPin> connectorMappings;
         private static readonly Dictionary<ConnectorPin, ProcessorPin> processorMappings;
+
+        #endregion
+
+        #region Instance Management
 
         static PinMapping()
         {
@@ -64,6 +74,10 @@ namespace Raspberry.IO.GeneralPurpose
             connectorMappings = mapping.ToDictionary(p => p.Processor, p => p.Connector);
         }
 
+        #endregion
+
+        #region Methods
+
         public static ProcessorPin ToProcessor(this ConnectorPin pin)
         {
             ProcessorPin processorPin;
@@ -79,7 +93,9 @@ namespace Raspberry.IO.GeneralPurpose
             if (connectorMappings.TryGetValue(pin, out connectorPin))
                 return connectorPin;
             else
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to connector on board revision {1}", (int)pin, Mainboard.Current.BoardRevision));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to connector on board revision {1}", (int) pin, Mainboard.Current.BoardRevision));
         }
+
+        #endregion
     }
 }

@@ -2,6 +2,8 @@ namespace Raspberry.IO.GeneralPurpose
 {
     public static class PinConfigurationExtensionMethods
     {
+        #region Methods
+
         public static PinConfiguration Input(this ProcessorPin pin)
         {
             return new InputPinConfiguration(pin);
@@ -62,5 +64,7 @@ namespace Raspberry.IO.GeneralPurpose
             configuration.Enabled = false;
             return configuration;
         }
+
+        #endregion
     }
 }

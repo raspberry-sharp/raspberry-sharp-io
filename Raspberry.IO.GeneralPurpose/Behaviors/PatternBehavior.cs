@@ -1,24 +1,40 @@
+#region References
+
 using System.Collections.Generic;
 using System.Linq;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
     public class PatternBehavior : PinsBehavior
     {
+        #region Fields
+
         private bool wayOut;
 
-        public PatternBehavior(IEnumerable<PinConfiguration> configurations, IEnumerable<int> patterns) : this(configurations, (IEnumerable<long>) patterns.Select(i => (long)i)){}
+        #endregion
+
+        #region Instance Management
+
+        public PatternBehavior(IEnumerable<PinConfiguration> configurations, IEnumerable<int> patterns) : this(configurations, patterns.Select(i => (long) i)){}
 
         public PatternBehavior(IEnumerable<PinConfiguration> configurations, IEnumerable<long> patterns) : base(configurations)
         {
             Patterns = patterns.ToArray();
         }
 
+        #endregion
+
+        #region Properties
+
         public bool Loop { get; set; }
 
         public bool RoundTrip { get; set; }
 
-        private long[] Patterns { get; set; }
+        #endregion
+
+        #region Protected Methods
 
         protected override int FirstStep()
         {
@@ -72,5 +88,13 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
             return true;
         }
+
+        #endregion
+
+        #region Private Helpers
+
+        private long[] Patterns { get; set; }
+
+        #endregion
     }
 }

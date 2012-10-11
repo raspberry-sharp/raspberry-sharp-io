@@ -1,21 +1,35 @@
+#region References
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+#endregion
+
 namespace Raspberry.IO.GeneralPurpose
 {
     public class Mainboard
     {
-        private static readonly Lazy<Mainboard> board = new Lazy<Mainboard>(LoadBoard);
-        private const string raspberryPiProcessor = "BCM2708";
+        #region Fields
 
+        private static readonly Lazy<Mainboard> board = new Lazy<Mainboard>(LoadBoard);
         private readonly Dictionary<string, string> settings;
+
+        private const string raspberryPiProcessor = "BCM2708";
+        
+        #endregion
+
+        #region Instance Management
 
         private Mainboard(Dictionary<string, string> settings)
         {
             this.settings = settings;
         }
+
+        #endregion
+
+        #region Properties
 
         public static Mainboard Current
         {
@@ -56,6 +70,10 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        #endregion
+
+        #region Private Helpers
+
         private static Mainboard LoadBoard()
         {
             const string filePath = "/proc/cpuinfo";
@@ -73,5 +91,7 @@ namespace Raspberry.IO.GeneralPurpose
 
             return new Mainboard(settings);
         }
+
+        #endregion
     }
 }

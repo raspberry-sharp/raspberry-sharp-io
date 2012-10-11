@@ -52,7 +52,7 @@ namespace Raspberry.IO.Console
                                    Interval = GetSpeed(args)
                                };*/
             
-            using (var connection = new Connection(driver, leds))
+            using (var connection = new GpioConnection(driver, leds))
             {
                 var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable();
                 connection.Add(switchButton);

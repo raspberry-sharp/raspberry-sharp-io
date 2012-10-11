@@ -1,11 +1,21 @@
+#region References
+
 using System.IO;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose
 {
     public class FileConnectionDriver : IConnectionDriver
     {
+        #region Fields
+
         private const string gpioPath = "/sys/class/gpio";
-        
+
+        #endregion
+
+        #region Methods
+
         public void Write(ProcessorPin pin, bool value)
         {
             var gpioId = string.Format("gpio{0}", (int) pin);
@@ -45,5 +55,7 @@ namespace Raspberry.IO.GeneralPurpose
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))
                 streamWriter.Write((int) pin.Pin);
         }
+
+        #endregion
     }
 }

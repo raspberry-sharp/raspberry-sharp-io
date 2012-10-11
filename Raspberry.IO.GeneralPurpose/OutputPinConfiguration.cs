@@ -2,7 +2,13 @@ namespace Raspberry.IO.GeneralPurpose
 {
     public class OutputPinConfiguration : PinConfiguration
     {
+        #region Instance Management
+
         public OutputPinConfiguration(ProcessorPin pin) : base(pin){}
+
+        #endregion
+
+        #region Properties
 
         public bool Enabled { get; set; }
 
@@ -10,5 +16,7 @@ namespace Raspberry.IO.GeneralPurpose
         {
             get { return PinDirection.Output; }
         }
+
+        #endregion
     }
 }

@@ -2,17 +2,18 @@ namespace Raspberry.IO.GeneralPurpose
 {
     public abstract class PinConfiguration
     {
-        private readonly ProcessorPin pin;
+        #region Instance Management
 
         protected PinConfiguration(ProcessorPin pin)
         {
-            this.pin = pin;
+            Pin = pin;
         }
-        
-        public ProcessorPin Pin
-        {
-            get { return pin; }
-        }
+
+        #endregion
+
+        #region Properties
+
+        public ProcessorPin Pin { get; private set; }
 
         public abstract PinDirection Direction { get; }
 
@@ -20,9 +21,15 @@ namespace Raspberry.IO.GeneralPurpose
 
         public bool Reversed { get; set; }
 
+        #endregion
+
+        #region Internal Methods
+
         internal bool GetEffective(bool value)
         {
             return Reversed ? !value : value;
         }
+
+        #endregion
     }
 }

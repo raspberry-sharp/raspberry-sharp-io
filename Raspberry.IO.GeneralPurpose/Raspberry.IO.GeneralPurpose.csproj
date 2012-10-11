@@ -53,7 +53,7 @@
     <Compile Include="IConnectionDriver.cs" />
     <Compile Include="InputPinConfiguration.cs" />
     <Compile Include="Mainboard.cs" />
-    <Compile Include="Connection.cs" />
+    <Compile Include="GpioConnection.cs" />
     <Compile Include="OutputPinConfiguration.cs" />
     <Compile Include="PinConfiguration.cs" />
     <Compile Include="PinMapping.cs" />

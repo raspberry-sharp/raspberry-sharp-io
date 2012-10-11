@@ -1,16 +1,30 @@
+#region References
+
 using System.Collections.Generic;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
     public class ChaserBehavior : PinsBehavior
     {
+        #region Fields
+
         private bool wayOut;
         private bool roundTrip;
-        public ChaserBehavior(IEnumerable<PinConfiguration> configurations)
-            : base(configurations)
+
+        #endregion
+
+        #region Instance Management
+
+        public ChaserBehavior(IEnumerable<PinConfiguration> configurations) : base(configurations)
         {
             Width = 1;
         }
+
+        #endregion
+
+        #region Properties
 
         public bool RoundTrip
         {
@@ -24,6 +38,10 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         public bool Loop { get; set; }
         public int Width { get; set; }
+
+        #endregion
+
+        #region Protected Methods
 
         protected override int FirstStep()
         {
@@ -43,8 +61,8 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
                     Connection[configuration] = (i >= minEnabledStep && i <= maxEnabledStep);
                 else
                     Connection[configuration] = (i >= minEnabledStep && i <= maxEnabledStep)
-                        || (maxEnabledStep >= Configurations.Length && i <= maxEnabledStep % Configurations.Length)
-                        || (minEnabledStep < 0 && i >= minEnabledStep + Configurations.Length);
+                                                || (maxEnabledStep >= Configurations.Length && i <= maxEnabledStep%Configurations.Length)
+                                                || (minEnabledStep < 0 && i >= minEnabledStep + Configurations.Length);
             }
         }
 
@@ -87,6 +105,10 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             return true;
         }
 
+        #endregion
+
+        #region Private Helpers
+
         private bool Overflow
         {
             get { return Loop && !RoundTrip; }
@@ -111,5 +133,7 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
         {
             get { return (Width%2) == 1 ? (Width - 1)/2 : Width/2 - 1; }
         }
+
+        #endregion
     }
 }

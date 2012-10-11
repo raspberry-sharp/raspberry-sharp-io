@@ -1,13 +1,23 @@
-﻿using System.Collections.Generic;
+﻿#region References
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
     public abstract class PinsBehavior
     {
+        #region Fields
+
         private readonly Timer timer;
         private int currentStep;
+
+        #endregion
+
+        #region Instance Management
 
         protected PinsBehavior(IEnumerable<PinConfiguration> configurations)
         {
@@ -17,21 +27,19 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             timer = new Timer(OnTimer, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+        #endregion
+
+        #region Properties
+
         public PinConfiguration[] Configurations { get; private set; }
 
         public int Interval { get; set; }
 
-        private void OnTimer(object state)
-        {
-            Step(currentStep);
-            if (!TryNextStep(ref currentStep))
-            {
-                Thread.Sleep(Interval);
-                Stop();
-            }
-        }
+        #endregion
 
-        protected Connection Connection { get; private set; }
+        #region Protected Methods
+
+        protected GpioConnection Connection { get; private set; }
 
         protected abstract int FirstStep();
 
@@ -39,7 +47,11 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         protected abstract bool TryNextStep(ref int step);
 
-        internal void Start(Connection connection)
+        #endregion
+
+        #region Internal Methods
+
+        internal void Start(GpioConnection connection)
         {
             Connection = connection;
             foreach (var pinConfiguration in Configurations)
@@ -56,5 +68,21 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             foreach (var pinConfiguration in Configurations)
                 Connection[pinConfiguration] = false;
         }
+
+        #endregion
+
+        #region Private Helpers
+
+        private void OnTimer(object state)
+        {
+            Step(currentStep);
+            if (!TryNextStep(ref currentStep))
+            {
+                Thread.Sleep(Interval);
+                Stop();
+            }
+        }
+
+        #endregion
     }
 }

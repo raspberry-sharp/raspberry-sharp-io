@@ -12,7 +12,7 @@ using Raspberry.IO.GeneralPurpose.Configuration;
 
 namespace Raspberry.IO.GeneralPurpose
 {
-    public class Connection : IDisposable
+    public class GpioConnection : IDisposable
     {
         #region Fields
 
@@ -29,21 +29,21 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Instance Management
 
-        public Connection(params PinConfiguration[] pins) : this(true, null, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(params PinConfiguration[] pins) : this(true, null, (IEnumerable<PinConfiguration>) pins){}
 
-        public Connection(IEnumerable<PinConfiguration> pins) : this(true, null, pins){}
+        public GpioConnection(IEnumerable<PinConfiguration> pins) : this(true, null, pins){}
 
-        public Connection(IConnectionDriver driver, params PinConfiguration[] pins) : this(true, driver, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(IConnectionDriver driver, params PinConfiguration[] pins) : this(true, driver, (IEnumerable<PinConfiguration>) pins){}
 
-        public Connection(IConnectionDriver driver, IEnumerable<PinConfiguration> pins) : this(true, driver, pins){}
+        public GpioConnection(IConnectionDriver driver, IEnumerable<PinConfiguration> pins) : this(true, driver, pins){}
 
-        public Connection(bool open, params PinConfiguration[] pins) : this(open, null, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(bool open, params PinConfiguration[] pins) : this(open, null, (IEnumerable<PinConfiguration>) pins){}
 
-        public Connection(bool open, IConnectionDriver driver, params PinConfiguration[] pins) : this(open, driver, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(bool open, IConnectionDriver driver, params PinConfiguration[] pins) : this(open, driver, (IEnumerable<PinConfiguration>) pins){}
 
-        public Connection(bool open, IEnumerable<PinConfiguration> pins) : this(open, null, pins){}
+        public GpioConnection(bool open, IEnumerable<PinConfiguration> pins) : this(open, null, pins){}
 
-        public Connection(bool open, IConnectionDriver driver, IEnumerable<PinConfiguration> pins)
+        public GpioConnection(bool open, IConnectionDriver driver, IEnumerable<PinConfiguration> pins)
         {
             Driver = driver ?? GetDefaultDriver();
             Pins = new ConnectionPins(this);
@@ -168,6 +168,26 @@ namespace Raspberry.IO.GeneralPurpose
             Export(pin);
         }
 
+        public bool Contains(string pinName)
+        {
+            return namedPins.ContainsKey(pinName);
+        }
+
+        public bool Contains(ConnectorPin pin)
+        {
+            return pinConfigurations.ContainsKey(pin.ToProcessor());
+        }
+
+        public bool Contains(ProcessorPin pin)
+        {
+            return pinConfigurations.ContainsKey(pin);
+        }
+
+        public bool Contains(PinConfiguration configuration)
+        {
+            return pinConfigurations.ContainsKey(configuration.Pin);
+        }
+
         public void Remove(string pinName)
         {
             Remove(namedPins[pinName]);
@@ -242,6 +262,7 @@ namespace Raspberry.IO.GeneralPurpose
             Thread.Sleep(duration);
             Toggle(configuration);
         }
+
         #endregion
 
         #region Events
@@ -364,10 +385,10 @@ namespace Raspberry.IO.GeneralPurpose
 
         public class ConnectionPin
         {
-            private readonly Connection connection;
+            private readonly GpioConnection connection;
             private readonly HashSet<EventHandler<PinStatusEventArgs>> events = new HashSet<EventHandler<PinStatusEventArgs>>();
 
-            public ConnectionPin(Connection connection, PinConfiguration pinConfiguration)
+            public ConnectionPin(GpioConnection connection, PinConfiguration pinConfiguration)
             {
                 this.connection = connection;
                 Configuration = pinConfiguration;
@@ -386,7 +407,7 @@ namespace Raspberry.IO.GeneralPurpose
                 connection.Toggle(Configuration);
             }
 
-            public void Blink(int duration = Connection.DefaultBlinkDuration)
+            public void Blink(int duration = DefaultBlinkDuration)
             {
                 connection.Blink(Configuration, duration);
             }
@@ -419,9 +440,9 @@ namespace Raspberry.IO.GeneralPurpose
 
         public class ConnectionPins : IEnumerable<ConnectionPin>
         {
-            private readonly Connection connection;
+            private readonly GpioConnection connection;
 
-            internal ConnectionPins(Connection connection)
+            internal ConnectionPins(GpioConnection connection)
             {
                 this.connection = connection;
             }

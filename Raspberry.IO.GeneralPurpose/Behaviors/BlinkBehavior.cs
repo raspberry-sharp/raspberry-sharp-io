@@ -1,12 +1,26 @@
+#region References
+
 using System.Collections.Generic;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
     public class BlinkBehavior : PinsBehavior
     {
+        #region Instance Management
+
         public BlinkBehavior(IEnumerable<PinConfiguration> configurations) : base(configurations){}
 
+        #endregion
+
+        #region Properties
+
         public int Count { get; set; }
+
+        #endregion
+
+        #region Protected Methods
 
         protected override int FirstStep()
         {
@@ -24,5 +38,7 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             step++;
             return step <= Count*2;
         }
+
+        #endregion
     }
 }
