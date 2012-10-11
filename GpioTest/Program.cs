@@ -4,7 +4,7 @@ using System.Linq;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.GeneralPurpose.Behaviors;
 
-namespace Raspberry.IO.Console
+namespace GpioTest
 {
     class Program
     {
@@ -15,7 +15,7 @@ namespace Raspberry.IO.Console
 
             if (!mainboard.IsRaspberryPi)
             {
-                System.Console.WriteLine("{0} is not a valid processor for a Raspberry Pi.");
+                Console.WriteLine("{0} is not a valid processor for a Raspberry Pi.");
                 return;
             }
 
@@ -57,12 +57,12 @@ namespace Raspberry.IO.Console
                 var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable().OnStatusChanged(b => behavior.RoundTrip = !behavior.RoundTrip);
                 connection.Add(switchButton);
 
-                System.Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
-                System.Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / GetSpeed(args));
+                Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
+                Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / GetSpeed(args));
 
                 connection.Start(behavior);
 
-                System.Console.ReadKey(true);
+                Console.ReadKey(true);
 
                 connection.Stop(behavior);
             }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.GeneralPurpose", "Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj", "{281C71ED-C36D-408E-8BAA-75C381DC17E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.Console", "Raspberry.IO.Console\Raspberry.IO.Console.csproj", "{5D9D1834-4C4B-4E03-B635-5F205205B6F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpioTest", "GpioTest\GpioTest.csproj", "{5D9D1834-4C4B-4E03-B635-5F205205B6F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
