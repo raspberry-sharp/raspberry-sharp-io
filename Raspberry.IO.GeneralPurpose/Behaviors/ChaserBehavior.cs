@@ -4,14 +4,24 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
     public class ChaserBehavior : PinsBehavior
     {
-        public ChaserBehavior(IEnumerable<PinConfiguration> configurations) : base(configurations)
+        private bool wayOut;
+        private bool roundTrip;
+        public ChaserBehavior(IEnumerable<PinConfiguration> configurations)
+            : base(configurations)
         {
             Width = 1;
         }
 
-        private bool wayOut;
+        public bool RoundTrip
+        {
+            get { return roundTrip; }
+            set
+            {
+                roundTrip = value;
+                wayOut = true;
+            }
+        }
 
-        public bool RoundTrip { get; set; }
         public bool Loop { get; set; }
         public int Width { get; set; }
 
