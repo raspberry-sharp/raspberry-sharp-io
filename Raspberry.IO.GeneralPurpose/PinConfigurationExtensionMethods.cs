@@ -1,3 +1,5 @@
+using System;
+
 namespace Raspberry.IO.GeneralPurpose
 {
     public static class PinConfigurationExtensionMethods
@@ -27,6 +29,12 @@ namespace Raspberry.IO.GeneralPurpose
         public static OutputPinConfiguration Output(this ConnectorPin pin)
         {
             return new OutputPinConfiguration(pin.ToProcessor());
+        }
+
+        public static T OnStatusChanged<T>(this T configuration, Action<bool> action) where T : PinConfiguration
+        {
+            configuration.StatusChangedAction = action;
+            return configuration;
         }
 
         public static T Name<T>(this T configuration, string name) where T : PinConfiguration

@@ -1,3 +1,5 @@
+using System;
+
 namespace Raspberry.IO.GeneralPurpose
 {
     public abstract class PinConfiguration
@@ -20,6 +22,8 @@ namespace Raspberry.IO.GeneralPurpose
         public string Name { get; set; }
 
         public bool Reversed { get; set; }
+
+        public Action<bool> StatusChangedAction { get; set; }
 
         #endregion
 

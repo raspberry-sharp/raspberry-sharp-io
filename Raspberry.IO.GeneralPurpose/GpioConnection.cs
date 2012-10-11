@@ -21,6 +21,7 @@ namespace Raspberry.IO.GeneralPurpose
 
         private readonly Timer timer;
         private readonly Dictionary<ProcessorPin, bool> pinValues = new Dictionary<ProcessorPin, bool>();
+        private readonly Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>> pinEvents = new Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>>();
         private readonly Dictionary<ProcessorPin, bool> pinRawValues = new Dictionary<ProcessorPin, bool>();
         
         public const int DefaultBlinkDuration = 250;
@@ -50,6 +51,7 @@ namespace Raspberry.IO.GeneralPurpose
 
             var pinList = pins.ToList();
             pinConfigurations = pinList.ToDictionary(p => p.Pin);
+
             namedPins = pinList.Where(p => !string.IsNullOrEmpty(p.Name)).ToDictionary(p => p.Name);
 
             timer = new Timer(CheckInputPins, null, Timeout.Infinite, Timeout.Infinite);
@@ -162,6 +164,7 @@ namespace Raspberry.IO.GeneralPurpose
                 throw new InvalidOperationException("A pin with the same name is already present on the connection");
 
             pinConfigurations.Add(pin.Pin, pin);
+
             if (!string.IsNullOrEmpty(pin.Name))
                 namedPins.Add(pin.Name, pin);
 
@@ -300,6 +303,17 @@ namespace Raspberry.IO.GeneralPurpose
 
         private void Export(PinConfiguration configuration)
         {
+            if (configuration.StatusChangedAction != null)
+            {
+                var handler = new EventHandler<PinStatusEventArgs>((sender, args) =>
+                                                                       {
+                                                                           if (args.Configuration == configuration)
+                                                                               configuration.StatusChangedAction(args.Enabled);
+                                                                       });
+                pinEvents[configuration.Pin] = handler;
+                PinStatusChanged += handler;
+            }
+
             Driver.Export(configuration);
             var outputConfiguration = configuration as OutputPinConfiguration;
             if (outputConfiguration != null)
@@ -332,6 +346,13 @@ namespace Raspberry.IO.GeneralPurpose
             }
 
             Driver.Unexport(configuration);
+
+            EventHandler<PinStatusEventArgs> handler;
+            if (pinEvents.TryGetValue(configuration.Pin, out handler))
+            {
+                PinStatusChanged -= handler;
+                pinEvents.Remove(configuration.Pin);
+            }
         }
 
         private void CheckInputPins(object state)

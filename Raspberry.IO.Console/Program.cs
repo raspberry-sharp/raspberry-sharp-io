@@ -52,11 +52,10 @@ namespace Raspberry.IO.Console
                                    Interval = GetSpeed(args)
                                };*/
             
-            using (var connection = new GpioConnection(driver, leds))
+            using (var connection = new GpioConnection(driver))
             {
-                var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable();
+                var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable().OnStatusChanged(b => behavior.RoundTrip = !behavior.RoundTrip);
                 connection.Add(switchButton);
-                connection.Pins[switchButton].StatusChanged += (sender, eventArgs) => { behavior.RoundTrip = !behavior.RoundTrip; };
 
                 System.Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
                 System.Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / GetSpeed(args));

@@ -6,6 +6,12 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         public static void Start(this GpioConnection connection, PinsBehavior behavior)
         {
+            foreach (var configuration in behavior.Configurations)
+            {
+                if (!connection.Contains(configuration))
+                    connection.Add(configuration);
+            }
+
             behavior.Start(connection);
         }
 
