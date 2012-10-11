@@ -12,7 +12,6 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
         private bool wayOut;
 
         public bool RoundTrip { get; set; }
-        public bool Descending { get; set; }
         public bool Loop { get; set; }
         public int Width { get; set; }
 
@@ -29,7 +28,7 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
             for (var i = 0; i < Configurations.Length; i++)
             {
-                var configuration = Configurations[Descending ? Configurations.Length - 1 - i : i];
+                var configuration = Configurations[i];
                 if (!Overflow)
                     Connection[configuration] = (i >= minEnabledStep && i <= maxEnabledStep);
                 else

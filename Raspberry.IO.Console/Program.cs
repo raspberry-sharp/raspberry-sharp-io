@@ -11,8 +11,6 @@ namespace Raspberry.IO.Console
         static void Main(string[] args)
         {
             var driver = GetDriver(args);
-            var speed = GetSpeed(args);
-
             var mainboard = Mainboard.Current;
 
             if (!mainboard.IsRaspberryPi)
@@ -35,9 +33,8 @@ namespace Raspberry.IO.Console
                                {
                                    Loop = GetLoop(args),
                                    RoundTrip = GetRoundTrip(args),
-                                   Descending = GetDescending(args),
                                    Width = GetWidth(args),
-                                   Interval = speed
+                                   Interval = GetSpeed(args)
                                };
             /*
             var random = new Random();
@@ -45,19 +42,24 @@ namespace Raspberry.IO.Console
                                {
                                    Loop = GetLoop(args),
                                    RoundTrip = GetRoundTrip(args),
-                                   Interval = speed
+                                   Interval = GetSpeed(args)
                                };*/
 
-            //var behavior = new BlinkBehavior(leds){ Count = GetWidth(args), Interval = speed};
+            /*
+            var behavior = new BlinkBehavior(leds)
+                               {
+                                   Count = GetWidth(args),
+                                   Interval = GetSpeed(args)
+                               };*/
             
             using (var connection = new Connection(driver, leds))
             {
                 var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable();
                 connection.Add(switchButton);
-                connection.Pins[switchButton].StatusChanged += (sender, eventArgs) => { behavior.Descending = !behavior.Descending; };
+                connection.Pins[switchButton].StatusChanged += (sender, eventArgs) => { behavior.RoundTrip = !behavior.RoundTrip; };
 
                 System.Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
-                System.Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / speed);
+                System.Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / GetSpeed(args));
 
                 connection.Start(behavior);
 
@@ -76,12 +78,7 @@ namespace Raspberry.IO.Console
         {
             return args.SkipWhile(a => a != "-roundTrip").Any();
         }
-
-        private static bool GetDescending(IEnumerable<string> args)
-        {
-            return args.SkipWhile(a => a != "-descending").Any();
-        }
-
+        
         private static int GetWidth(IEnumerable<string> args)
         {
             return args.SkipWhile(a => a != "-width").Skip(1).Select(int.Parse).DefaultIfEmpty(1).First();
