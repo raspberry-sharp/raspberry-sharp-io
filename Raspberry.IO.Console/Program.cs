@@ -30,7 +30,7 @@ namespace Raspberry.IO.Console
                                ConnectorPin.P1Pin13.Output().Name("Led5").Enable(),
                                ConnectorPin.P1Pin11.Output().Name("Led6")
                            };
-
+            
             var behavior = new ChaserBehavior(leds)
                                {
                                    Loop = GetLoop(args),
@@ -40,6 +40,8 @@ namespace Raspberry.IO.Console
                                    Interval = speed
                                };
 
+            //var behavior = new BlinkBehavior(leds){ Count = GetWidth(args), Interval = speed};
+            
             using (var connection = new Connection(driver, leds))
             {
                 var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable();
