@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.GeneralPurpose.Behaviors;
 
 namespace GpioTest
 {
+    /// <summary>
+    /// This is a sample program. Must be modified to match your GPIO project.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
-            var driver = GetDriver(args);
+            var driver = args.GetDriver();
             var mainboard = Mainboard.Current;
 
             if (!mainboard.IsRaspberryPi)
@@ -19,6 +21,7 @@ namespace GpioTest
                 return;
             }
 
+            // Declare outputs (leds)
             var leds = new PinConfiguration[]
                            {
                                ConnectorPin.P1Pin26.Output().Name("Led1").Enable(),
@@ -29,80 +32,48 @@ namespace GpioTest
                                ConnectorPin.P1Pin11.Output().Name("Led6")
                            };
             
+            // Assign a behavior to the leds
             var behavior = new ChaserBehavior(leds)
                                {
-                                   Loop = GetLoop(args),
-                                   RoundTrip = GetRoundTrip(args),
-                                   Width = GetWidth(args),
-                                   Interval = GetSpeed(args)
+                                   Loop = args.GetLoop(),
+                                   RoundTrip = args.GetRoundTrip(),
+                                   Width = args.GetWidth(),
+                                   Interval = args.GetSpeed()
                                };
+
+            // Alternate behaviors...
             /*
             var random = new Random();
             var behavior = new PatternBehavior(leds, Enumerable.Range(0, 5).Select(i => random.Next(511)))
                                {
-                                   Loop = GetLoop(args),
-                                   RoundTrip = GetRoundTrip(args),
-                                   Interval = GetSpeed(args)
+                                   Loop = Helpers.GetLoop(args),
+                                   RoundTrip = Helpers.GetRoundTrip(args),
+                                   Interval = Helpers.GetSpeed(args)
                                };*/
 
             /*
             var behavior = new BlinkBehavior(leds)
                                {
-                                   Count = GetWidth(args),
-                                   Interval = GetSpeed(args)
+                                   Count = args.GetWidth(),
+                                   Interval = args.GetSpeed()
                                };*/
-            
+
+            // Declare input (switchButton) interacting with the leds behavior
+            var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable().OnStatusChanged(b => behavior.RoundTrip = !behavior.RoundTrip);
+
+            // Create connection
             using (var connection = new GpioConnection(driver))
             {
-                var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable().OnStatusChanged(b => behavior.RoundTrip = !behavior.RoundTrip);
-                connection.Add(switchButton);
+                connection.Add(switchButton);       
 
                 Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
-                Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / GetSpeed(args));
+                Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / args.GetSpeed());
 
-                connection.Start(behavior);
+                connection.Start(behavior);     // Starting the behavior automatically registers the pins to the connection, if needed.
 
                 Console.ReadKey(true);
 
                 connection.Stop(behavior);
-            }
-        }
-
-        private static bool GetLoop(IEnumerable<string> args)
-        {
-            return args.SkipWhile(a => a != "-loop").Any();
-        }
-
-        private static bool GetRoundTrip(IEnumerable<string> args)
-        {
-            return args.SkipWhile(a => a != "-roundTrip").Any();
-        }
-        
-        private static int GetWidth(IEnumerable<string> args)
-        {
-            return args.SkipWhile(a => a != "-width").Skip(1).Select(int.Parse).DefaultIfEmpty(1).First();
-        }
-
-        private static int GetSpeed(IEnumerable<string> args)
-        {
-            return args.SkipWhile(a => a != "-speed").Skip(1).Select(int.Parse).DefaultIfEmpty(250).First();
-        }
-
-        private static IConnectionDriver GetDriver(IEnumerable<string> args)
-        {
-            var driverName = args.SkipWhile(a => a != "-driver").Skip(1).DefaultIfEmpty("").First();
-
-            switch (driverName)
-            {
-                case "memory":
-                    return new MemoryConnectionDriver();
-                case "file":
-                    return new FileConnectionDriver();
-                case "":
-                    return null;
-
-                default:
-                    throw new InvalidOperationException("Unsupported driver");
             }
         }
     }

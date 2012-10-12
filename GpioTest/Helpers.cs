@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Raspberry.IO.GeneralPurpose;
+
+namespace GpioTest
+{
+    internal static class Helpers
+    {
+        public static bool GetLoop(this IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-loop").Any();
+        }
+
+        public static bool GetRoundTrip(this IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-roundTrip").Any();
+        }
+
+        public static int GetWidth(this IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-width").Skip(1).Select(int.Parse).DefaultIfEmpty(1).First();
+        }
+
+        public static int GetSpeed(this IEnumerable<string> args)
+        {
+            return args.SkipWhile(a => a != "-speed").Skip(1).Select(int.Parse).DefaultIfEmpty(250).First();
+        }
+
+        public static IConnectionDriver GetDriver(this IEnumerable<string> args)
+        {
+            var driverName = args.SkipWhile(a => a != "-driver").Skip(1).DefaultIfEmpty("").First();
+
+            switch (driverName)
+            {
+                case "memory":
+                    return new MemoryConnectionDriver();
+                case "file":
+                    return new FileConnectionDriver();
+                case "":
+                    return null;
+
+                default:
+                    throw new InvalidOperationException("Unsupported driver");
+            }
+        }
+    }
+}
