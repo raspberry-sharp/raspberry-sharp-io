@@ -12,6 +12,9 @@ using Raspberry.IO.GeneralPurpose.Configuration;
 
 namespace Raspberry.IO.GeneralPurpose
 {
+    /// <summary>
+    /// Represents a connection to the GPIO pins.
+    /// </summary>
     public class GpioConnection : IDisposable
     {
         #region Fields
@@ -23,31 +26,74 @@ namespace Raspberry.IO.GeneralPurpose
         private readonly Dictionary<ProcessorPin, bool> pinValues = new Dictionary<ProcessorPin, bool>();
         private readonly Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>> pinEvents = new Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>>();
         private readonly Dictionary<ProcessorPin, bool> pinRawValues = new Dictionary<ProcessorPin, bool>();
-        
+
+        /// <summary>
+        /// Gets the default blink duration, in milliseconds.
+        /// </summary>
         public const int DefaultBlinkDuration = 250;
 
         #endregion
 
         #region Instance Management
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(params PinConfiguration[] pins) : this(true, null, (IEnumerable<PinConfiguration>) pins){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(IEnumerable<PinConfiguration> pins) : this(true, null, pins){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="driver">The driver.</param>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(IConnectionDriver driver, params PinConfiguration[] pins) : this(true, driver, (IEnumerable<PinConfiguration>) pins){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="driver">The driver.</param>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(IConnectionDriver driver, IEnumerable<PinConfiguration> pins) : this(true, driver, pins){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(bool open, params PinConfiguration[] pins) : this(open, null, (IEnumerable<PinConfiguration>) pins){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
+        /// <param name="driver">The driver.</param>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(bool open, IConnectionDriver driver, params PinConfiguration[] pins) : this(open, driver, (IEnumerable<PinConfiguration>) pins){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(bool open, IEnumerable<PinConfiguration> pins) : this(open, null, pins){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
+        /// </summary>
+        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
+        /// <param name="driver">The driver.</param>
+        /// <param name="pins">The pins.</param>
         public GpioConnection(bool open, IConnectionDriver driver, IEnumerable<PinConfiguration> pins)
         {
             Driver = driver ?? GetDefaultDriver();
-            Pins = new ConnectionPins(this);
+            Pins = new ConnectedPins(this);
 
             var pinList = pins.ToList();
             pinConfigurations = pinList.ToDictionary(p => p.Pin);
@@ -68,22 +114,40 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Properties
 
+        /// <summary>
+        /// Gets a value indicating whether connection is opened.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if connection is opened; otherwise, <c>false</c>.
+        /// </value>
         public bool IsOpened { get; private set; }
 
+        /// <summary>
+        /// Gets the driver.
+        /// </summary>
         public IConnectionDriver Driver { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the status of the pin having the specified name.
+        /// </summary>
         public bool this[string name]
         {
             get { return this[namedPins[name].Pin]; }
             set { this[namedPins[name].Pin] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the status of the specified pin.
+        /// </summary>
         public bool this[ConnectorPin pin]
         {
             get { return this[pin.ToProcessor()]; }
             set { this[pin.ToProcessor()] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the status of the specified pin.
+        /// </summary>
         public bool this[PinConfiguration pin]
         {
             get { return pinValues[pin.Pin]; }
@@ -103,18 +167,27 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Gets or sets the status of the specified pin.
+        /// </summary>
         public bool this[ProcessorPin pin]
         {
             get { return this[pinConfigurations[pin]]; }
             set { this[pinConfigurations[pin]] = value; }
         }
 
-        public ConnectionPins Pins { get; private set; }
+        /// <summary>
+        /// Gets the pins.
+        /// </summary>
+        public ConnectedPins Pins { get; private set; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Opens the connection.
+        /// </summary>
         public void Open()
         {
             lock (timer)
@@ -130,6 +203,9 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Closes the connection.
+        /// </summary>
         public void Close()
         {
             lock (timer)
@@ -145,6 +221,9 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Clears pin attached to this connection.
+        /// </summary>
         public void Clear()
         {
             lock (pinConfigurations)
@@ -159,6 +238,10 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Adds the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Add(PinConfiguration pin)
         {
             lock (pinConfigurations)
@@ -177,41 +260,85 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Determines whether the connection contains the specified pin.
+        /// </summary>
+        /// <param name="pinName">Name of the pin.</param>
+        /// <returns>
+        ///   <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(string pinName)
         {
             return namedPins.ContainsKey(pinName);
         }
 
+        /// <summary>
+        /// Determines whether the connection contains the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <returns>
+        ///   <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(ConnectorPin pin)
         {
             return pinConfigurations.ContainsKey(pin.ToProcessor());
         }
 
+        /// <summary>
+        /// Determines whether the connection contains the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <returns>
+        ///   <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(ProcessorPin pin)
         {
             return pinConfigurations.ContainsKey(pin);
         }
 
+        /// <summary>
+        /// Determines whether the connection contains the specified pin.
+        /// </summary>
+        /// <param name="configuration">The pin configuration.</param>
+        /// <returns>
+        ///   <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(PinConfiguration configuration)
         {
             return pinConfigurations.ContainsKey(configuration.Pin);
         }
 
+        /// <summary>
+        /// Removes the specified pin.
+        /// </summary>
+        /// <param name="pinName">Name of the pin.</param>
         public void Remove(string pinName)
         {
             Remove(namedPins[pinName]);
         }
 
+        /// <summary>
+        /// Removes the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Remove(ConnectorPin pin)
         {
             Remove(pinConfigurations[pin.ToProcessor()]);
         }
 
+        /// <summary>
+        /// Removes the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Remove(ProcessorPin pin)
         {
             Remove(pinConfigurations[pin]);
         }
 
+        /// <summary>
+        /// Removes the specified pin.
+        /// </summary>
+        /// <param name="configuration">The pin configuration.</param>
         public void Remove(PinConfiguration configuration)
         {
             lock (pinConfigurations)
@@ -227,26 +354,47 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Toggles the specified pin.
+        /// </summary>
+        /// <param name="pinName">Name of the pin.</param>
         public void Toggle(string pinName)
         {
             this[pinName] = !this[pinName];
         }
 
+        /// <summary>
+        /// Toggles the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Toggle(ProcessorPin pin)
         {
             this[pin] = !this[pin];
         }
 
+        /// <summary>
+        /// Toggles the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Toggle(ConnectorPin pin)
         {
             this[pin] = !this[pin];
         }
 
+        /// <summary>
+        /// Toggles the specified pin.
+        /// </summary>
+        /// <param name="configuration">The pin configuration.</param>
         public void Toggle(PinConfiguration configuration)
         {
             this[configuration] = !this[configuration];
         }
 
+        /// <summary>
+        /// Blinks the specified pin.
+        /// </summary>
+        /// <param name="pinName">Name of the pin.</param>
+        /// <param name="duration">The duration, in millisecond.</param>
         public void Blink(string pinName, int duration = DefaultBlinkDuration)
         {
             Toggle(pinName);
@@ -254,6 +402,11 @@ namespace Raspberry.IO.GeneralPurpose
             Toggle(pinName);
         }
 
+        /// <summary>
+        /// Blinks the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="duration">The duration, in millisecond.</param>
         public void Blink(ProcessorPin pin, int duration = DefaultBlinkDuration)
         {
             Toggle(pin);
@@ -261,6 +414,11 @@ namespace Raspberry.IO.GeneralPurpose
             Toggle(pin);
         }
 
+        /// <summary>
+        /// Blinks the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="duration">The duration, in millisecond.</param>
         public void Blink(ConnectorPin pin, int duration = DefaultBlinkDuration)
         {
             Toggle(pin);
@@ -268,6 +426,11 @@ namespace Raspberry.IO.GeneralPurpose
             Toggle(pin);
         }
 
+        /// <summary>
+        /// Blinks the specified pin.
+        /// </summary>
+        /// <param name="configuration">The pin configuration.</param>
+        /// <param name="duration">The duration, in millisecond.</param>
         public void Blink(PinConfiguration configuration, int duration = DefaultBlinkDuration)
         {
             Toggle(configuration);
@@ -279,12 +442,19 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Events
 
+        /// <summary>
+        /// Occurs when the status of a pin changed.
+        /// </summary>
         public event EventHandler<PinStatusEventArgs> PinStatusChanged;
 
         #endregion
 
         #region Protected Methods
 
+        /// <summary>
+        /// Raises the <see cref="PinStatusChanged"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Raspberry.IO.GeneralPurpose.PinStatusEventArgs"/> instance containing the event data.</param>
         protected void OnPinStatusChanged(PinStatusEventArgs e)
         {
             var handler = PinStatusChanged;
@@ -418,35 +588,62 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Inner Classes
 
-        public class ConnectionPin
+        /// <summary>
+        /// Represents a connected pin.
+        /// </summary>
+        public class ConnectedPin
         {
             private readonly GpioConnection connection;
             private readonly HashSet<EventHandler<PinStatusEventArgs>> events = new HashSet<EventHandler<PinStatusEventArgs>>();
 
-            public ConnectionPin(GpioConnection connection, PinConfiguration pinConfiguration)
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConnectedPin"/> class.
+            /// </summary>
+            /// <param name="connection">The connection.</param>
+            /// <param name="pinConfiguration">The pin configuration.</param>
+            public ConnectedPin(GpioConnection connection, PinConfiguration pinConfiguration)
             {
                 this.connection = connection;
                 Configuration = pinConfiguration;
             }
 
+            /// <summary>
+            /// Gets the configuration.
+            /// </summary>
             public PinConfiguration Configuration { get; private set; }
 
-            public bool Value
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="ConnectedPin"/> is enabled.
+            /// </summary>
+            /// <value>
+            ///   <c>true</c> if enabled; otherwise, <c>false</c>.
+            /// </value>
+            public bool Enabled
             {
                 get { return connection[Configuration]; }
                 set { connection[Configuration] = value; }
             }
 
+            /// <summary>
+            /// Toggles this pin.
+            /// </summary>
             public void Toggle()
             {
                 connection.Toggle(Configuration);
             }
 
+            /// <summary>
+            /// Blinks the pin.
+            /// </summary>
+            /// <param name="duration">The blink duration, in millisecond.</param>
             public void Blink(int duration = DefaultBlinkDuration)
             {
                 connection.Blink(Configuration, duration);
             }
 
+            /// <summary>
+            /// Occurs when pin status changed.
+            /// </summary>
             public event EventHandler<PinStatusEventArgs> StatusChanged
             {
                 add
@@ -473,43 +670,68 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
-        public class ConnectionPins : IEnumerable<ConnectionPin>
+        /// <summary>
+        /// Represents connected pins.
+        /// </summary>
+        public class ConnectedPins : IEnumerable<ConnectedPin>
         {
             private readonly GpioConnection connection;
 
-            internal ConnectionPins(GpioConnection connection)
+            internal ConnectedPins(GpioConnection connection)
             {
                 this.connection = connection;
             }
 
-            public ConnectionPin this[ProcessorPin pin]
+            /// <summary>
+            /// Gets the status of the specified pin.
+            /// </summary>
+            public ConnectedPin this[ProcessorPin pin]
             {
-                get { return new ConnectionPin(connection, connection.GetConfiguration(pin)); }
+                get { return new ConnectedPin(connection, connection.GetConfiguration(pin)); }
             }
 
-            public ConnectionPin this[string name]
+            /// <summary>
+            /// Gets the status of the specified pin.
+            /// </summary>
+            public ConnectedPin this[string name]
             {
-                get { return new ConnectionPin(connection, connection.GetConfiguration(name)); }
+                get { return new ConnectedPin(connection, connection.GetConfiguration(name)); }
             }
 
-            public ConnectionPin this[ConnectorPin pin]
+            /// <summary>
+            /// Gets the status of the specified pin.
+            /// </summary>
+            public ConnectedPin this[ConnectorPin pin]
             {
                 get { return this[pin.ToProcessor()]; }
             }
 
-            public ConnectionPin this[PinConfiguration pin]
+            /// <summary>
+            /// Gets the status of the specified pin.
+            /// </summary>
+            public ConnectedPin this[PinConfiguration pin]
             {
-                get { return new ConnectionPin(connection, pin); }
+                get { return new ConnectedPin(connection, pin); }
             }
 
+            /// <summary>
+            /// Returns an enumerator that iterates through a collection.
+            /// </summary>
+            /// <returns>
+            /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            /// </returns>
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return GetEnumerator();
             }
 
-            public IEnumerator<ConnectionPin> GetEnumerator()
+            /// <summary>
+            /// Gets the enumerator.
+            /// </summary>
+            /// <returns>The enumerator.</returns>
+            public IEnumerator<ConnectedPin> GetEnumerator()
             {
-                return connection.Configurations.Select(c => new ConnectionPin(connection, c)).GetEnumerator();
+                return connection.Configurations.Select(c => new ConnectedPin(connection, c)).GetEnumerator();
             }
         }
 

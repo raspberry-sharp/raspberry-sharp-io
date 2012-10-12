@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace Raspberry.IO.GeneralPurpose
 {
+    /// <summary>
+    /// Provides helper methods for mapping pins between processor and connectors
+    /// </summary>
     public static class PinMapping
     {
         #region Fields
@@ -78,6 +81,11 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Methods
 
+        /// <summary>
+        /// Convert the specified connector pin to a processor pin.
+        /// </summary>
+        /// <param name="pin">The connector pin.</param>
+        /// <returns>The processor pin.</returns>
         public static ProcessorPin ToProcessor(this ConnectorPin pin)
         {
             ProcessorPin processorPin;
@@ -87,6 +95,11 @@ namespace Raspberry.IO.GeneralPurpose
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Connector pin {0} is not mapped to processor on board revision {1}", pin.ToString().Replace("Pin", "-"), Mainboard.Current.BoardRevision));
         }
 
+        /// <summary>
+        /// Convert the specified processor pin to a connector pin.
+        /// </summary>
+        /// <param name="pin">The processor pin.</param>
+        /// <returns>The connector pin.</returns>
         public static ConnectorPin ToConnector(this ProcessorPin pin)
         {
             ConnectorPin connectorPin;

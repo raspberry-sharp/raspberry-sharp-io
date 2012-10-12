@@ -6,6 +6,9 @@ using System.IO;
 
 namespace Raspberry.IO.GeneralPurpose
 {
+    /// <summary>
+    /// Represents a connection driver using files.
+    /// </summary>
     public class FileConnectionDriver : IConnectionDriver
     {
         #region Fields
@@ -16,6 +19,11 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Methods
 
+        /// <summary>
+        /// Modified the status of a pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="value">The pin status.</param>
         public void Write(ProcessorPin pin, bool value)
         {
             var gpioId = string.Format("gpio{0}", (int) pin);
@@ -24,6 +32,13 @@ namespace Raspberry.IO.GeneralPurpose
                 streamWriter.Write(value ? "1" : "0");
         }
 
+        /// <summary>
+        /// Reads the status of the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <returns>
+        /// The pin status.
+        /// </returns>
         public bool Read(ProcessorPin pin)
         {
             var gpioId = string.Format("gpio{0}", (int) pin);
@@ -36,6 +51,10 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Exports the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Export(PinConfiguration pin)
         {
             var gpioId = string.Format("gpio{0}", (int) pin.Pin);
@@ -50,6 +69,10 @@ namespace Raspberry.IO.GeneralPurpose
                 streamWriter.Write(pin.Direction == PinDirection.Input ? "in" : "out");
         }
 
+        /// <summary>
+        /// Unexports the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Unexport(PinConfiguration pin)
         {
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))

@@ -1,5 +1,8 @@
 namespace Raspberry.IO.GeneralPurpose
 {
+    /// <summary>
+    /// Represents a connector pin.
+    /// </summary>
     public enum ConnectorPin
     {
         P1Pin3,

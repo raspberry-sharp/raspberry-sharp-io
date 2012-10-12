@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace Raspberry.IO.GeneralPurpose
 {
+    /// <summary>
+    /// Represents the Raspberry Pi mainboard.
+    /// </summary>
     public class Mainboard
     {
         #region Fields
@@ -31,31 +34,52 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Properties
 
+        /// <summary>
+        /// Gets the current mainboard configuration.
+        /// </summary>
         public static Mainboard Current
         {
             get { return board.Value; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is a Raspberry Pi.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is a Raspberry Pi; otherwise, <c>false</c>.
+        /// </value>
         public bool IsRaspberryPi
         {
             get { return Processor == raspberryPiProcessor; }
         }
 
+        /// <summary>
+        /// Gets the processor.
+        /// </summary>
         public string Processor
         {
             get { return settings["Hardware"]; }
         }
 
+        /// <summary>
+        /// Gets the serial number.
+        /// </summary>
         public string SerialNumber
         {
             get { return settings["Serial"]; }
         }
 
+        /// <summary>
+        /// Gets the firmware revision.
+        /// </summary>
         public int FirmwareRevision
         {
             get { return int.Parse(settings["Revision"]); }
         }
 
+        /// <summary>
+        /// Gets the board revision.
+        /// </summary>
         public int BoardRevision
         {
             get

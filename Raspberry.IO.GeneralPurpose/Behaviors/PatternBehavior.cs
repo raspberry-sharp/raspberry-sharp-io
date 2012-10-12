@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
+    /// <summary>
+    /// Represents a pattern behavior.
+    /// </summary>
     public class PatternBehavior : PinsBehavior
     {
         #region Fields
@@ -17,8 +20,18 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         #region Instance Management
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PatternBehavior"/> class.
+        /// </summary>
+        /// <param name="configurations">The configurations.</param>
+        /// <param name="patterns">The patterns.</param>
         public PatternBehavior(IEnumerable<PinConfiguration> configurations, IEnumerable<int> patterns) : this(configurations, patterns.Select(i => (long) i)){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PatternBehavior"/> class.
+        /// </summary>
+        /// <param name="configurations">The configurations.</param>
+        /// <param name="patterns">The patterns.</param>
         public PatternBehavior(IEnumerable<PinConfiguration> configurations, IEnumerable<long> patterns) : base(configurations)
         {
             Patterns = patterns.ToArray();
@@ -28,21 +41,43 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="PatternBehavior"/> must loop.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if loop is enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool Loop { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to roundtrip.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if round-trip is enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool RoundTrip { get; set; }
 
         #endregion
 
         #region Protected Methods
 
-        protected override int FirstStep()
+        /// <summary>
+        /// Gets the first step.
+        /// </summary>
+        /// <returns>
+        /// The first step.
+        /// </returns>
+        protected override int GetFirstStep()
         {
             wayOut = true;
             return 0;
         }
 
-        protected override void Step(int step)
+        /// <summary>
+        /// Processes the step.
+        /// </summary>
+        /// <param name="step">The step.</param>
+        protected override void ProcessStep(int step)
         {
             var pattern = Patterns[step];
 
@@ -50,7 +85,14 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
                 Connection[Configurations[i]] = ((pattern >> i) & 0x1) == 0x1;
         }
 
-        protected override bool TryNextStep(ref int step)
+        /// <summary>
+        /// Tries to get the next step.
+        /// </summary>
+        /// <param name="step">The step.</param>
+        /// <returns>
+        ///   <c>true</c> if the behavior may continue; otherwise behavior will be stopped.
+        /// </returns>
+        protected override bool TryGetNextStep(ref int step)
         {
             if (wayOut)
             {

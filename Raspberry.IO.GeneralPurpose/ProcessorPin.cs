@@ -1,5 +1,8 @@
 namespace Raspberry.IO.GeneralPurpose
 {
+    /// <summary>
+    /// Represents a processor pin.
+    /// </summary>
     public enum ProcessorPin
     {
         Pin0 = 0,

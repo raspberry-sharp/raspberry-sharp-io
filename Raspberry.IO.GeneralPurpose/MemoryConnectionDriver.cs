@@ -7,6 +7,10 @@ using System.Runtime.InteropServices;
 
 namespace Raspberry.IO.GeneralPurpose
 {
+    /// <summary>
+    /// Represents a connection driver that uses memory.
+    /// </summary>
+    /// <remarks>Based on bmc2835_gpio library.</remarks>
     public class MemoryConnectionDriver : IConnectionDriver
     {
         #region Fields
@@ -17,17 +21,33 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Methods
 
+        /// <summary>
+        /// Modified the status of a pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="value">The pin status.</param>
         public void Write(ProcessorPin pin, bool value)
         {
             bcm2835_gpio_write((uint) pin, (uint) (value ? 1 : 0));
         }
 
+        /// <summary>
+        /// Reads the status of the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <returns>
+        /// The pin status.
+        /// </returns>
         public bool Read(ProcessorPin pin)
         {
             var value = bcm2835_gpio_lev((uint) pin);
             return value != 0;
         }
 
+        /// <summary>
+        /// Exports the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Export(PinConfiguration pin)
         {
             if (!initialized.Value)
@@ -47,6 +67,10 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
+        /// <summary>
+        /// Unexports the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
         public void Unexport(PinConfiguration pin)
         {
         }

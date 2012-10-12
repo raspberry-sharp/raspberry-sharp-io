@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace Raspberry.IO.GeneralPurpose.Behaviors
 {
+    /// <summary>
+    /// Represents a chaser behavior.
+    /// </summary>
     public class ChaserBehavior : PinsBehavior
     {
         #region Fields
@@ -17,6 +20,10 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         #region Instance Management
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChaserBehavior"/> class.
+        /// </summary>
+        /// <param name="configurations">The configurations.</param>
         public ChaserBehavior(IEnumerable<PinConfiguration> configurations) : base(configurations)
         {
             Width = 1;
@@ -26,6 +33,12 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to roundtrip.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if roundtrip is enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool RoundTrip
         {
             get { return roundTrip; }
@@ -36,20 +49,43 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="ChaserBehavior"/> must loop.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if loop is enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool Loop { get; set; }
+
+        /// <summary>
+        /// Gets or sets the width of the enlightned leds.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
         public int Width { get; set; }
 
         #endregion
 
         #region Protected Methods
 
-        protected override int FirstStep()
+        /// <summary>
+        /// Gets the first step.
+        /// </summary>
+        /// <returns>
+        /// The first step.
+        /// </returns>
+        protected override int GetFirstStep()
         {
             wayOut = true;
             return WidthBefore;
         }
 
-        protected override void Step(int step)
+        /// <summary>
+        /// Processes the step.
+        /// </summary>
+        /// <param name="step">The step.</param>
+        protected override void ProcessStep(int step)
         {
             var minEnabledStep = step - WidthBefore;
             var maxEnabledStep = step + WidthAfter;
@@ -66,7 +102,14 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
             }
         }
 
-        protected override bool TryNextStep(ref int step)
+        /// <summary>
+        /// Tries to get the next step.
+        /// </summary>
+        /// <param name="step">The step.</param>
+        /// <returns>
+        ///   <c>true</c> if the behavior may continue; otherwise behavior will be stopped.
+        /// </returns>
+        protected override bool TryGetNextStep(ref int step)
         {
             if (wayOut)
             {
