@@ -147,28 +147,34 @@ namespace Raspberry.IO.GeneralPurpose
 
         public void Clear()
         {
-            foreach (var pinConfiguration in pinConfigurations.Values)
-                Unexport(pinConfiguration);
+            lock (pinConfigurations)
+            {
+                foreach (var pinConfiguration in pinConfigurations.Values)
+                    Unexport(pinConfiguration);
 
-            pinConfigurations.Clear();
-            namedPins.Clear();
-            pinRawValues.Clear();
-            pinValues.Clear();
+                pinConfigurations.Clear();
+                namedPins.Clear();
+                pinRawValues.Clear();
+                pinValues.Clear();
+            }
         }
 
         public void Add(PinConfiguration pin)
         {
-            if (pinConfigurations.ContainsKey(pin.Pin))
-                throw new InvalidOperationException("This pin is already present on the connection");
-            if (!string.IsNullOrEmpty(pin.Name) && namedPins.ContainsKey(pin.Name))
-                throw new InvalidOperationException("A pin with the same name is already present on the connection");
+            lock (pinConfigurations)
+            {
+                if (pinConfigurations.ContainsKey(pin.Pin))
+                    throw new InvalidOperationException("This pin is already present on the connection");
+                if (!string.IsNullOrEmpty(pin.Name) && namedPins.ContainsKey(pin.Name))
+                    throw new InvalidOperationException("A pin with the same name is already present on the connection");
 
-            pinConfigurations.Add(pin.Pin, pin);
+                pinConfigurations.Add(pin.Pin, pin);
 
-            if (!string.IsNullOrEmpty(pin.Name))
-                namedPins.Add(pin.Name, pin);
+                if (!string.IsNullOrEmpty(pin.Name))
+                    namedPins.Add(pin.Name, pin);
 
-            Export(pin);
+                Export(pin);
+            }
         }
 
         public bool Contains(string pinName)
@@ -208,14 +214,17 @@ namespace Raspberry.IO.GeneralPurpose
 
         public void Remove(PinConfiguration configuration)
         {
-            Unexport(configuration);
+            lock (pinConfigurations)
+            {
+                Unexport(configuration);
 
-            pinConfigurations.Remove(configuration.Pin);
-            if (!string.IsNullOrEmpty(configuration.Name))
-                namedPins.Remove(configuration.Name);
+                pinConfigurations.Remove(configuration.Pin);
+                if (!string.IsNullOrEmpty(configuration.Name))
+                    namedPins.Remove(configuration.Name);
 
-            pinRawValues.Remove(configuration.Pin);
-            pinValues.Remove(configuration.Pin);
+                pinRawValues.Remove(configuration.Pin);
+                pinValues.Remove(configuration.Pin);
+            }
         }
 
         public void Toggle(string pinName)
@@ -357,10 +366,15 @@ namespace Raspberry.IO.GeneralPurpose
 
         private void CheckInputPins(object state)
         {
-            var newPinValues = pinConfigurations.Values
-                .Where(p => p.Direction == PinDirection.Input)
-                .Select(p => new {p.Pin, Value = Driver.Read(p.Pin)})
-                .ToDictionary(p => p.Pin, p => p.Value);
+            Dictionary<ProcessorPin, bool> newPinValues;
+
+            lock (pinConfigurations)
+            {
+                newPinValues = pinConfigurations.Values
+                    .Where(p => p.Direction == PinDirection.Input)
+                    .Select(p => new {p.Pin, Value = Driver.Read(p.Pin)})
+                    .ToDictionary(p => p.Pin, p => p.Value);
+            }
 
             foreach (var np in newPinValues)
             {
