@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Raspberry.IO.GeneralPurpose</id>
+    <version>1.0.0</version>
+    <title>Raspberry Pi GPIO</title>
+    <authors>Raspberry#</authors>
+    <owners />
+    <projectUrl>https://github.com/raspberry-sharp/raspberry-sharp-io</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides access to Raspberry Pi GPIO features</description>
+    <summary />
+    <language>en-US</language>
+    <tags>Raspberry Mono GPIO</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib" />
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.pdb" target="lib" />
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.xml" target="lib" />
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\libbcm2835.so" target="lib" />
+    <file src="Raspberry.IO.GeneralPurpose\**\*.cs" target="src" />
+  </files>
+</package>
