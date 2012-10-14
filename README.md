@@ -1,6 +1,8 @@
 Raspberry# IO
 =============
 
+See the [Raspberry\# IO Wiki](raspberry-sharp-io/wiki) for full documentation and samples.
+
 Introduction
 ------------
 Raspberry# IO is a .NET/Mono IO Library for Raspberry Pi. This project is an initiative of the [Raspberry#](http://www.raspberry-sharp.org) Community.
@@ -26,5 +28,3 @@ It currently support the following features:
 + Firing of **events when pin status change** (input as well as output)
 + **High-level behaviors** for output pins, including *blink*, *pattern* and *chaser*
 + Controlled use of resources using a IDisposable component
-
-See the [Wiki](https://github.com/raspberry-sharp/raspberry-sharp-io/wiki) for documentation and samples.
