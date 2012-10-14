@@ -509,7 +509,7 @@ namespace Raspberry.IO.GeneralPurpose
             Driver.Allocate(configuration.Pin, configuration.Direction);
             var outputConfiguration = configuration as OutputPinConfiguration;
             if (outputConfiguration != null)
-                this[configuration.Pin] = outputConfiguration.GetEffective(outputConfiguration.Enabled);
+                this[configuration.Pin] = outputConfiguration.Enabled;
             else
             {
                 var pinValue = Driver.Read(configuration.Pin);
