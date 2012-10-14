@@ -26,4 +26,4 @@ It currently support the following features:
 + **High-level behaviors** for output pins, including *blink*, *pattern* and *chaser*
 + Controlled use of resources using a IDisposable component
 
-See the [Wiki](./wiki/) for documentation and samples.
+See the [Wiki](wiki/) for documentation and samples.
