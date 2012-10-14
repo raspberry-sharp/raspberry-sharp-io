@@ -15,6 +15,7 @@ Features
 
 ### Raspberry.IO.GeneralPurpose
 Raspberry.IO.GeneralPurpose provides a convenient way to use Raspberry Pi GPIO pins, while using .NET concepts, syntax and case.
+**You can import a reference in your project using the [Raspberry.IO.GeneralPurpose Nuget](https://www.nuget.org/packages/Raspberry.IO.GeneralPurpose)**
 
 It currently support the following features:
 + Access to GPIO pins through memory (using [libBCM2835 library](http://www.open.com.au/mikem/bcm2835/)) or file (native) drivers
