@@ -493,7 +493,7 @@ namespace Raspberry.IO.GeneralPurpose
                 PinStatusChanged += handler;
             }
 
-            Driver.Export(configuration);
+            Driver.Allocate(configuration.Pin, configuration.Direction);
             var outputConfiguration = configuration as OutputPinConfiguration;
             if (outputConfiguration != null)
                 this[configuration.Pin] = outputConfiguration.GetEffective(outputConfiguration.Enabled);
@@ -524,7 +524,7 @@ namespace Raspberry.IO.GeneralPurpose
                 OnPinStatusChanged(new PinStatusEventArgs { Enabled = false, Configuration = configuration });
             }
 
-            Driver.Unexport(configuration);
+            Driver.Release(configuration.Pin);
 
             EventHandler<PinStatusEventArgs> handler;
             if (pinEvents.TryGetValue(configuration.Pin, out handler))

@@ -45,10 +45,11 @@ namespace Raspberry.IO.GeneralPurpose
         }
 
         /// <summary>
-        /// Exports the specified pin.
+        /// Allocates the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        public void Export(PinConfiguration pin)
+        /// <param name="direction">The direction.</param>
+        public void Allocate(ProcessorPin pin, PinDirection direction)
         {
             if (!initialized.Value)
                 throw new InvalidOperationException("Unabled to initialize driver");
@@ -56,23 +57,20 @@ namespace Raspberry.IO.GeneralPurpose
             // Set the direction on the pin and update the exported list
             // BCM2835_GPIO_FSEL_INPT = 0
             // BCM2835_GPIO_FSEL_OUTP = 1
-            bcm2835_gpio_fsel((uint) pin.Pin, (uint) (pin.Direction == PinDirection.Input ? 0 : 1));
+            bcm2835_gpio_fsel((uint) pin, (uint) (direction == PinDirection.Input ? 0 : 1));
 
-            if (pin.Direction == PinDirection.Input)
+            if (direction == PinDirection.Input)
             {
                 // BCM2835_GPIO_PUD_OFF = 0b00 = 0
                 // BCM2835_GPIO_PUD_DOWN = 0b01 = 1
                 // BCM2835_GPIO_PUD_UP = 0b10 = 2
-                bcm2835_gpio_set_pud((uint) pin.Pin, 0);
+                bcm2835_gpio_set_pud((uint) pin, 0);
             }
         }
-
-        /// <summary>
-        /// Unexports the specified pin.
-        /// </summary>
-        /// <param name="pin">The pin.</param>
-        public void Unexport(PinConfiguration pin)
+        
+        public void Release(ProcessorPin pin)
         {
+            // TODO: Release pin ?
         }
 
         #endregion

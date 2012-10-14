@@ -22,16 +22,17 @@ namespace Raspberry.IO.GeneralPurpose
         bool Read(ProcessorPin pin);
 
         /// <summary>
-        /// Exports the specified pin.
+        /// Allocates the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        void Export(PinConfiguration pin);
+        /// <param name="direction">The direction.</param>
+        void Allocate(ProcessorPin pin, PinDirection direction);
 
         /// <summary>
-        /// Unexports the specified pin.
+        /// Releases the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        void Unexport(PinConfiguration pin);
+        void Release(ProcessorPin pin);
 
         #endregion
     }

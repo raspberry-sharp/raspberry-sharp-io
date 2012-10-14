@@ -52,31 +52,28 @@ namespace Raspberry.IO.GeneralPurpose
         }
 
         /// <summary>
-        /// Exports the specified pin.
+        /// Allocates the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        public void Export(PinConfiguration pin)
+        /// <param name="direction">The direction.</param>
+        public void Allocate(ProcessorPin pin, PinDirection direction)
         {
-            var gpioId = string.Format("gpio{0}", (int) pin.Pin);
+            var gpioId = string.Format("gpio{0}", (int) pin);
             if (Directory.Exists(Path.Combine(gpioPath, gpioId)))
-                Unexport(pin);
+                Release(pin);
 
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "export"), false))
-                streamWriter.Write((int) pin.Pin);
+                streamWriter.Write((int) pin);
 
             var filePath = Path.Combine(gpioId, "direction");
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
-                streamWriter.Write(pin.Direction == PinDirection.Input ? "in" : "out");
+                streamWriter.Write(direction == PinDirection.Input ? "in" : "out");
         }
-
-        /// <summary>
-        /// Unexports the specified pin.
-        /// </summary>
-        /// <param name="pin">The pin.</param>
-        public void Unexport(PinConfiguration pin)
+        
+        public void Release(ProcessorPin pin)
         {
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))
-                streamWriter.Write((int) pin.Pin);
+                streamWriter.Write((int) pin);
         }
 
         #endregion
