@@ -59,7 +59,7 @@ namespace GpioTest
                                };*/
 
             // Declare input (switchButton) interacting with the leds behavior
-            var switchButton = ConnectorPin.P1Pin3.Input().Name("Switch").Revert().Switch().Enable().OnStatusChanged(b => behavior.RoundTrip = !behavior.RoundTrip);
+            var switchButton = ConnectorPin.P1Pin03.Input().Name("Switch").Revert().Switch().Enable().OnStatusChanged(b => behavior.RoundTrip = !behavior.RoundTrip);
 
             // Create connection
             using (var connection = new GpioConnection(driver))
