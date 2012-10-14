@@ -1,22 +1,28 @@
-<h1>Raspberry# IO</h1>
+Raspberry# IO
+=============
 
-<h2>Introduction</h2>
-Raspberry# IO is a .NET/Mono IO Library for Raspberry Pi.
+Introduction
+------------
+Raspberry# IO is a .NET/Mono IO Library for Raspberry Pi. This project is an initiative of the [Raspberry#](http://www.raspberry-sharp.org) Community.
 
-Development is in a preliminary stage, project structure is subject to frequent changes.
-Raspberry# IO currently support basic GPIO input/output.
+Current release is an early public release. Some feature may not have been extensively tested.
+Raspberry# IO currently supports GPIO input/output.
 
-Support for extended IO (such as support for I2C peripherals).
+Support for extended IO (such as support for I2C peripherals) is planned for future releases.
 
-<h2>Features</h2>
-Raspberry# IO provides a convenient way to use Raspberry Pi GPIO, while using .NET concepts, syntax and case.
+Features
+--------
 
-<ul>
- <li>Support for both memory (through libBCM2835 library) and file (native) access to GPIO</li>
- <li>Support for processor and connector pin addressing</li>
- <li>Support aliasing of pins for better customizing</li>
- <li>Support both Raspberry B rev1 and rev2 pins mapping, as well as rev2 P5 connector</li>
- <li>Easy-of-use, declarative configuration of pins</li>
- <li>Support event firing when an input pin status change</li>
- <li>Controlled use of resources using a IDisposable component</li>
-</ul>
+### Raspberry.IO.GeneralPurpose
+Raspberry.IO.GeneralPurpose provides a convenient way to use Raspberry Pi GPIO pins, while using .NET concepts, syntax and case.
+
+It currently support the following features:
++ Access to GPIO pins through memory (using [libBCM2835 library](http://www.open.com.au/mikem/bcm2835/)) or file (native) drivers
++ Addressing through **processor pin number or connector pin number**
++ Giving custom name to pins for more readable code
++ Various Rapsberry Pi revisions, for now **Raspberry B rev1 and rev2**, including rev2 P5 connector
++ Easy-of-use, declarative configuration of pins. Ability to revert the meaning (1/0) of pins; ability to **use an input pin as a switch button**
++ Firing of **events when pin status change** (input as well as output)
++ **High-level behaviors** for output pins, including *blink*, *pattern* and *chaser*
++ Controlled use of resources using a IDisposable component
+
