@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.GeneralPurpose.Behaviors;
 
@@ -59,16 +60,26 @@ namespace GpioTest
                                };*/
 
             // Declare input (switchButton) interacting with the leds behavior
-            var switchButton = ConnectorPin.P1Pin03.Input().Name("Switch").Revert().Switch().Enable().OnStatusChanged(b => behavior.RoundTrip = !behavior.RoundTrip);
+            var switchButton = ConnectorPin.P1Pin03.Input()
+                .Name("Switch")
+                .Revert()
+                .Switch()
+                .Enable()
+                .OnStatusChanged(b =>
+                                     {
+                                         behavior.RoundTrip = !behavior.RoundTrip;
+                                         Console.WriteLine("Button switched {0}", b ? "on" : "off");
+                                     });
 
             // Create connection
-            using (var connection = new GpioConnection(driver))
+            using (var connection = new GpioConnection(driver, leds))
             {
-                connection.Add(switchButton);       
-
                 Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.FirmwareRevision, mainboard.BoardRevision, mainboard.Processor);
                 Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0 / args.GetSpeed());
 
+                Thread.Sleep(1000);
+
+                connection.Add(switchButton);       
                 connection.Start(behavior);     // Starting the behavior automatically registers the pins to the connection, if needed.
 
                 Console.ReadKey(true);
