@@ -1,7 +1,6 @@
 #region References
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -196,7 +195,7 @@ namespace Raspberry.IO.GeneralPurpose
                     return;
 
                 foreach (var pin in pinConfigurations.Values)
-                    Export(pin);
+                    Allocate(pin);
 
                 timer.Change(250, 50);
                 IsOpened = true;
@@ -215,7 +214,7 @@ namespace Raspberry.IO.GeneralPurpose
 
                 timer.Dispose();
                 foreach (var pin in pinConfigurations.Values)
-                    Unexport(pin);
+                    Release(pin);
 
                 IsOpened = false;
             }
@@ -229,7 +228,7 @@ namespace Raspberry.IO.GeneralPurpose
             lock (pinConfigurations)
             {
                 foreach (var pinConfiguration in pinConfigurations.Values)
-                    Unexport(pinConfiguration);
+                    Release(pinConfiguration);
 
                 pinConfigurations.Clear();
                 namedPins.Clear();
@@ -256,7 +255,7 @@ namespace Raspberry.IO.GeneralPurpose
                 if (!string.IsNullOrEmpty(pin.Name))
                     namedPins.Add(pin.Name, pin);
 
-                Export(pin);
+                Allocate(pin);
             }
         }
 
@@ -343,7 +342,7 @@ namespace Raspberry.IO.GeneralPurpose
         {
             lock (pinConfigurations)
             {
-                Unexport(configuration);
+                Release(configuration);
 
                 pinConfigurations.Remove(configuration.Pin);
                 if (!string.IsNullOrEmpty(configuration.Name))
@@ -463,13 +462,27 @@ namespace Raspberry.IO.GeneralPurpose
         }
 
         #endregion
+        
+        #region Internal Methods
 
-        #region Private Helpers
+        internal PinConfiguration GetConfiguration(string pinName)
+        {
+            return namedPins[pinName];
+        }
 
-        private IEnumerable<PinConfiguration> Configurations
+        internal PinConfiguration GetConfiguration(ProcessorPin pin)
+        {
+            return pinConfigurations[pin];
+        }
+
+        internal IEnumerable<PinConfiguration> Configurations
         {
             get { return pinConfigurations.Values; }
         }
+        
+        #endregion
+
+        #region Private Helpers
 
         private static IConnectionDriver GetDefaultDriver()
         {
@@ -480,7 +493,7 @@ namespace Raspberry.IO.GeneralPurpose
                 return new MemoryConnectionDriver();
         }
 
-        private void Export(PinConfiguration configuration)
+        private void Allocate(PinConfiguration configuration)
         {
             if (configuration.StatusChangedAction != null)
             {
@@ -516,7 +529,7 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
-        private void Unexport(PinConfiguration configuration)
+        private void Release(PinConfiguration configuration)
         {
             if (configuration.Direction == PinDirection.Output)
             {
@@ -546,6 +559,7 @@ namespace Raspberry.IO.GeneralPurpose
                     .ToDictionary(p => p.Pin, p => p.Value);
             }
 
+            var notifiedConfigurations = new List<PinConfiguration>();
             foreach (var np in newPinValues)
             {
                 var oldPinValue = pinRawValues[np.Key];
@@ -562,177 +576,20 @@ namespace Raspberry.IO.GeneralPurpose
                         if (pin.GetEffective(newPinValue))
                         {
                             pinValues[np.Key] = !pinValues[np.Key];
-                            OnPinStatusChanged(new PinStatusEventArgs {Configuration = pin, Enabled = pinValues[np.Key]});
+                            notifiedConfigurations.Add(pin);
                         }
                     }
                     else
                     {
                         pinValues[np.Key] = pin.GetEffective(newPinValue);
-                        OnPinStatusChanged(new PinStatusEventArgs {Configuration = pin, Enabled = pinValues[np.Key]});
+                        notifiedConfigurations.Add(pin);
                     }
                 }
             }
-        }
 
-        private PinConfiguration GetConfiguration(string pinName)
-        {
-            return namedPins[pinName];
-        }
-
-        private PinConfiguration GetConfiguration(ProcessorPin pin)
-        {
-            return pinConfigurations[pin];
-        }
-
-        #endregion
-
-        #region Inner Classes
-
-        /// <summary>
-        /// Represents a connected pin.
-        /// </summary>
-        public class ConnectedPin
-        {
-            private readonly GpioConnection connection;
-            private readonly HashSet<EventHandler<PinStatusEventArgs>> events = new HashSet<EventHandler<PinStatusEventArgs>>();
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ConnectedPin"/> class.
-            /// </summary>
-            /// <param name="connection">The connection.</param>
-            /// <param name="pinConfiguration">The pin configuration.</param>
-            public ConnectedPin(GpioConnection connection, PinConfiguration pinConfiguration)
-            {
-                this.connection = connection;
-                Configuration = pinConfiguration;
-            }
-
-            /// <summary>
-            /// Gets the configuration.
-            /// </summary>
-            public PinConfiguration Configuration { get; private set; }
-
-            /// <summary>
-            /// Gets or sets a value indicating whether this <see cref="ConnectedPin"/> is enabled.
-            /// </summary>
-            /// <value>
-            ///   <c>true</c> if enabled; otherwise, <c>false</c>.
-            /// </value>
-            public bool Enabled
-            {
-                get { return connection[Configuration]; }
-                set { connection[Configuration] = value; }
-            }
-
-            /// <summary>
-            /// Toggles this pin.
-            /// </summary>
-            public void Toggle()
-            {
-                connection.Toggle(Configuration);
-            }
-
-            /// <summary>
-            /// Blinks the pin.
-            /// </summary>
-            /// <param name="duration">The blink duration, in millisecond.</param>
-            public void Blink(int duration = DefaultBlinkDuration)
-            {
-                connection.Blink(Configuration, duration);
-            }
-
-            /// <summary>
-            /// Occurs when pin status changed.
-            /// </summary>
-            public event EventHandler<PinStatusEventArgs> StatusChanged
-            {
-                add
-                {
-                    if (events.Count == 0)
-                        connection.PinStatusChanged += ConnectionPinStatusChanged;
-                    events.Add(value);
-                }
-                remove
-                {
-                    events.Remove(value);
-                    if (events.Count == 0)
-                        connection.PinStatusChanged -= ConnectionPinStatusChanged;
-                }
-            }
-
-            private void ConnectionPinStatusChanged(object sender, PinStatusEventArgs pinStatusEventArgs)
-            {
-                if (pinStatusEventArgs.Configuration.Pin != Configuration.Pin)
-                    return;
-
-                foreach (var eventHandler in events)
-                    eventHandler(sender, pinStatusEventArgs);
-            }
-        }
-
-        /// <summary>
-        /// Represents connected pins.
-        /// </summary>
-        public class ConnectedPins : IEnumerable<ConnectedPin>
-        {
-            private readonly GpioConnection connection;
-
-            internal ConnectedPins(GpioConnection connection)
-            {
-                this.connection = connection;
-            }
-
-            /// <summary>
-            /// Gets the status of the specified pin.
-            /// </summary>
-            public ConnectedPin this[ProcessorPin pin]
-            {
-                get { return new ConnectedPin(connection, connection.GetConfiguration(pin)); }
-            }
-
-            /// <summary>
-            /// Gets the status of the specified pin.
-            /// </summary>
-            public ConnectedPin this[string name]
-            {
-                get { return new ConnectedPin(connection, connection.GetConfiguration(name)); }
-            }
-
-            /// <summary>
-            /// Gets the status of the specified pin.
-            /// </summary>
-            public ConnectedPin this[ConnectorPin pin]
-            {
-                get { return this[pin.ToProcessor()]; }
-            }
-
-            /// <summary>
-            /// Gets the status of the specified pin.
-            /// </summary>
-            public ConnectedPin this[PinConfiguration pin]
-            {
-                get { return new ConnectedPin(connection, pin); }
-            }
-
-            /// <summary>
-            /// Returns an enumerator that iterates through a collection.
-            /// </summary>
-            /// <returns>
-            /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-            /// </returns>
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            /// <summary>
-            /// Gets the enumerator.
-            /// </summary>
-            /// <returns>The enumerator.</returns>
-            public IEnumerator<ConnectedPin> GetEnumerator()
-            {
-                return connection.Configurations.Select(c => new ConnectedPin(connection, c)).GetEnumerator();
-            }
+            // Only fires events once all states have been modified.
+            foreach (var pin in notifiedConfigurations)
+                OnPinStatusChanged(new PinStatusEventArgs {Configuration = pin, Enabled = pinValues[pin.Pin]});
         }
 
         #endregion

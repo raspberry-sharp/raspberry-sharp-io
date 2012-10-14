@@ -44,6 +44,8 @@
     <Compile Include="Behaviors\PinsBehavior.cs" />
     <Compile Include="Behaviors\PinsBehaviorExtensionMethods.cs" />
     <Compile Include="Configuration\GpioConnectionConfigurationSection.cs" />
+    <Compile Include="ConnectedPin.cs" />
+    <Compile Include="ConnectedPins.cs" />
     <Compile Include="FileConnectionDriver.cs" />
     <Compile Include="MemoryConnectionDriver.cs" />
     <Compile Include="ConnectorPin.cs" />
