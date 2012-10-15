@@ -255,7 +255,11 @@ namespace Raspberry.IO.GeneralPurpose
                 if (!string.IsNullOrEmpty(pin.Name))
                     namedPins.Add(pin.Name, pin);
 
-                Allocate(pin);
+                lock (timer)
+                {
+                    if (IsOpened)
+                        Allocate(pin);
+                }
             }
         }
 
@@ -342,7 +346,11 @@ namespace Raspberry.IO.GeneralPurpose
         {
             lock (pinConfigurations)
             {
-                Release(configuration);
+                lock (timer)
+                {
+                    if (IsOpened)
+                        Release(configuration);
+                }
 
                 pinConfigurations.Remove(configuration.Pin);
                 if (!string.IsNullOrEmpty(configuration.Name))
