@@ -19,15 +19,15 @@
         <language>en-US</language>
         <tags>Raspberry Pi Mono GPIO</tags>
         <frameworkAssemblies>
-            <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.0" />
-            <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0" />
+            <frameworkAssembly assemblyName="System.Configuration" targetFramework="net40" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="net40" />
         </frameworkAssemblies>
     </metadata>
   <files>
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib" />
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.pdb" target="lib" />
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.xml" target="lib" />
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\libbcm2835.so" target="lib" />
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib\net40" />
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.pdb" target="lib\net40" />
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.xml" target="lib\net40" />
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\libbcm2835.so" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\**\*.cs" target="src" />
   </files>
 </package>

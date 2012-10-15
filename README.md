@@ -12,6 +12,10 @@ Raspberry# IO currently supports GPIO input/output.
 
 Support for extended IO (such as support for I2C peripherals) is planned for future releases.
 
+Programs using Raspberry# IO must be run with elevated privileges, for example the GpioTest console included in project:
+
+    sudo mono GpioTest.exe -loop
+
 Features
 --------
 
