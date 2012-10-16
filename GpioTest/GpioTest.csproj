@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Properties\GPIO-Chaser.fzz" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
@@ -80,6 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\GPIO-Chaser.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
