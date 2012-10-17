@@ -197,7 +197,10 @@ namespace Raspberry.IO.GeneralPurpose
                 foreach (var pin in pinConfigurations.Values)
                     Allocate(pin);
 
-                timer.Change(250, 50);
+                var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
+                var pollInterval = configurationSection != null ? configurationSection.PollInterval : 50;
+
+                timer.Change(10, pollInterval);
                 IsOpened = true;
             }
         }

@@ -1,7 +1,6 @@
 ﻿#region References
 
 using System.Configuration;
-using System.Runtime.Remoting.Messaging;
 
 #endregion
 
@@ -38,6 +37,20 @@ namespace Raspberry.IO.GeneralPurpose.Configuration
         {
             get { return (string) this["boardRevision"]; }
             set { this["boardRevision"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the poll interval, in milliseconds.
+        /// </summary>
+        /// <value>
+        /// The poll interval, in millisecond.
+        /// </value>
+        /// <remarks>Default value is 50ms.</remarks>
+        [ConfigurationProperty("pollInterval", DefaultValue = 50)]
+        public int PollInterval
+        {
+            get { return (int)this["pollInterval"]; }
+            set { this["pollInterval"] = value; }
         }
 
         #endregion
