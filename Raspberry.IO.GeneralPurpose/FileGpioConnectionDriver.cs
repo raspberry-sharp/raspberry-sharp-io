@@ -1,5 +1,6 @@
 #region References
 
+using System;
 using System.IO;
 
 #endregion
@@ -9,7 +10,7 @@ namespace Raspberry.IO.GeneralPurpose
     /// <summary>
     /// Represents a connection driver using files.
     /// </summary>
-    public class FileConnectionDriver : IConnectionDriver
+    public class FileGpioConnectionDriver : IGpioConnectionDriver
     {
         #region Fields
 
@@ -17,6 +18,19 @@ namespace Raspberry.IO.GeneralPurpose
 
         #endregion
 
+        #region Instance Management
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileGpioConnectionDriver"/> class.
+        /// </summary>
+        public FileGpioConnectionDriver()
+        {
+            if (!Host.Current.IsRaspberryPi)
+                throw new NotSupportedException("FileGpioConnectionDriver is only supported on Raspberry Pi");
+        }
+
+        #endregion
+        
         #region Methods
 
         /// <summary>

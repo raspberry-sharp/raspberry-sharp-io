@@ -11,11 +11,24 @@ namespace Raspberry.IO.GeneralPurpose
     /// Represents a connection driver that uses memory.
     /// </summary>
     /// <remarks>Based on bmc2835_gpio library.</remarks>
-    public class MemoryConnectionDriver : IConnectionDriver
+    public class MemoryGpioConnectionDriver : IGpioConnectionDriver
     {
         #region Fields
 
         private static readonly Lazy<bool> initialized = new Lazy<bool>(() => bcm2835_init() != 0);
+
+        #endregion
+
+        #region Instance Management
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MemoryGpioConnectionDriver"/> class.
+        /// </summary>
+        public MemoryGpioConnectionDriver()
+        {
+            if (!Host.Current.IsRaspberryPi)
+                throw new NotSupportedException("MemoryGpioConnectionDriver is only supported on Raspberry Pi");
+        }
 
         #endregion
 

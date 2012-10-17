@@ -46,12 +46,12 @@
     <Compile Include="Configuration\GpioConnectionConfigurationSection.cs" />
     <Compile Include="ConnectedPin.cs" />
     <Compile Include="ConnectedPins.cs" />
-    <Compile Include="FileConnectionDriver.cs" />
-    <Compile Include="MemoryConnectionDriver.cs" />
+    <Compile Include="FileGpioConnectionDriver.cs" />
+    <Compile Include="MemoryGpioConnectionDriver.cs" />
     <Compile Include="ConnectorPin.cs" />
-    <Compile Include="IConnectionDriver.cs" />
+    <Compile Include="IGpioConnectionDriver.cs" />
     <Compile Include="InputPinConfiguration.cs" />
-    <Compile Include="Mainboard.cs" />
+    <Compile Include="Host.cs" />
     <Compile Include="GpioConnection.cs" />
     <Compile Include="OutputPinConfiguration.cs" />
     <Compile Include="PinConfiguration.cs" />

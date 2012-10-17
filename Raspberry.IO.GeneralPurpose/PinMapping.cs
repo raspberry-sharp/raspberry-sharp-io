@@ -2,8 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using Raspberry.IO.GeneralPurpose.Configuration;
 
 #endregion
 
@@ -25,7 +27,14 @@ namespace Raspberry.IO.GeneralPurpose
 
         static PinMapping()
         {
-            var boardRevision = Mainboard.Current.BoardRevision;
+            var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
+
+            int boardRevision;
+            if (configurationSection == null || string.Equals(configurationSection.BoardRevision ?? "auto", "auto", StringComparison.InvariantCultureIgnoreCase))
+                boardRevision = Host.Current.BoardRevision;
+            else
+                boardRevision = int.Parse(configurationSection.BoardRevision);
+
             var mapping = boardRevision == 1
                               ? new[]
                                     {
@@ -92,7 +101,7 @@ namespace Raspberry.IO.GeneralPurpose
             if (processorMappings.TryGetValue(pin, out processorPin))
                 return processorPin;
             else
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Connector pin {0} is not mapped to processor on board revision {1}", pin.ToString().Replace("Pin", "-"), Mainboard.Current.BoardRevision));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Connector pin {0} is not mapped to processor on board revision {1}", pin.ToString().Replace("Pin", "-"), Host.Current.BoardRevision));
         }
 
         /// <summary>
@@ -106,7 +115,7 @@ namespace Raspberry.IO.GeneralPurpose
             if (connectorMappings.TryGetValue(pin, out connectorPin))
                 return connectorPin;
             else
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to connector on board revision {1}", (int) pin, Mainboard.Current.BoardRevision));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to connector on board revision {1}", (int) pin, Host.Current.BoardRevision));
         }
 
         #endregion

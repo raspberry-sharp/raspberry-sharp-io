@@ -1,6 +1,7 @@
 ﻿#region References
 
 using System.Configuration;
+using System.Runtime.Remoting.Messaging;
 
 #endregion
 
@@ -24,6 +25,19 @@ namespace Raspberry.IO.GeneralPurpose.Configuration
         {
             get { return (string) this["driver"]; }
             set { this["driver"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the board revision.
+        /// </summary>
+        /// <value>
+        /// The board revision.
+        /// </value>
+        [ConfigurationProperty("boardRevision")]
+        public string BoardRevision
+        {
+            get { return (string) this["boardRevision"]; }
+            set { this["boardRevision"] = value; }
         }
 
         #endregion

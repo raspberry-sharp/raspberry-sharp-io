@@ -3,7 +3,7 @@ namespace Raspberry.IO.GeneralPurpose
     /// <summary>
     /// Provides an interface for connection drivers.
     /// </summary>
-    public interface IConnectionDriver
+    public interface IGpioConnectionDriver
     {
         #region Methods
 

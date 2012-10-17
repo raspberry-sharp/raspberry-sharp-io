@@ -27,16 +27,16 @@ namespace GpioTest
             return args.SkipWhile(a => a != "-speed").Skip(1).Select(int.Parse).DefaultIfEmpty(250).First();
         }
 
-        public static IConnectionDriver GetDriver(this IEnumerable<string> args)
+        public static IGpioConnectionDriver GetDriver(this IEnumerable<string> args)
         {
             var driverName = args.SkipWhile(a => a != "-driver").Skip(1).DefaultIfEmpty("").First();
 
             switch (driverName)
             {
                 case "memory":
-                    return new MemoryConnectionDriver();
+                    return new MemoryGpioConnectionDriver();
                 case "file":
-                    return new FileConnectionDriver();
+                    return new FileGpioConnectionDriver();
                 case "":
                     return null;
 

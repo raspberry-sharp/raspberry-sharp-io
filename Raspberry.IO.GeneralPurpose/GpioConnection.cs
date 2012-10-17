@@ -52,14 +52,14 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(IConnectionDriver driver, params PinConfiguration[] pins) : this(true, driver, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(IGpioConnectionDriver driver, params PinConfiguration[] pins) : this(true, driver, (IEnumerable<PinConfiguration>) pins){}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GpioConnection"/> class.
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(IConnectionDriver driver, IEnumerable<PinConfiguration> pins) : this(true, driver, pins){}
+        public GpioConnection(IGpioConnectionDriver driver, IEnumerable<PinConfiguration> pins) : this(true, driver, pins){}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GpioConnection"/> class.
@@ -74,7 +74,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
         /// <param name="driver">The driver.</param>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(bool open, IConnectionDriver driver, params PinConfiguration[] pins) : this(open, driver, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(bool open, IGpioConnectionDriver driver, params PinConfiguration[] pins) : this(open, driver, (IEnumerable<PinConfiguration>) pins){}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GpioConnection"/> class.
@@ -89,7 +89,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
         /// <param name="driver">The driver.</param>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(bool open, IConnectionDriver driver, IEnumerable<PinConfiguration> pins)
+        public GpioConnection(bool open, IGpioConnectionDriver driver, IEnumerable<PinConfiguration> pins)
         {
             Driver = driver ?? GetDefaultDriver();
             Pins = new ConnectedPins(this);
@@ -124,7 +124,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Gets the driver.
         /// </summary>
-        public IConnectionDriver Driver { get; private set; }
+        public IGpioConnectionDriver Driver { get; private set; }
 
         /// <summary>
         /// Gets or sets the status of the pin having the specified name.
@@ -492,13 +492,13 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Private Helpers
 
-        private static IConnectionDriver GetDefaultDriver()
+        private static IGpioConnectionDriver GetDefaultDriver()
         {
             var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
             if (configurationSection != null && !string.IsNullOrEmpty(configurationSection.DriverTypeName))
-                return (IConnectionDriver) Activator.CreateInstance(Type.GetType(configurationSection.DriverTypeName, true));
+                return (IGpioConnectionDriver) Activator.CreateInstance(Type.GetType(configurationSection.DriverTypeName, true));
             else
-                return new MemoryConnectionDriver();
+                return new MemoryGpioConnectionDriver();
         }
 
         private void Allocate(PinConfiguration configuration)
