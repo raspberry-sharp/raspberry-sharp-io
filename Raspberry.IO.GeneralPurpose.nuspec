@@ -5,7 +5,6 @@
         <version>0.0.0</version>
         <title>Raspberry.IO.GeneralPurpose</title>
         <authors>Raspberry-Sharp</authors>
-        <owners />
         <licenseUrl>http://opensource.org/licenses/GPL-2.0</licenseUrl>
         <projectUrl>https://github.com/raspberry-sharp/raspberry-sharp-io</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>

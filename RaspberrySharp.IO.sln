@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpioTest", "GpioTest\GpioTe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93E87796-2109-444A-8852-7174C93E6F45}"
 	ProjectSection(SolutionItems) = preProject
+		Icon.png = Icon.png
 		Raspberry.IO.GeneralPurpose.nuspec = Raspberry.IO.GeneralPurpose.nuspec
 		README.md = README.md
 	EndProjectSection
