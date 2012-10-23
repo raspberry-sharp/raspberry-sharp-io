@@ -48,6 +48,8 @@
     <Compile Include="ConnectedPins.cs" />
     <Compile Include="FileGpioConnectionDriver.cs" />
     <Compile Include="Interop.cs" />
+    <Compile Include="ProcessorPinExtensionMethods.cs" />
+    <Compile Include="ProcessorPins.cs" />
     <Compile Include="Time\HighResolutionTimer.cs" />
     <Compile Include="Time\ITimer.cs" />
     <Compile Include="MemoryGpioConnectionDriver.cs" />

@@ -24,7 +24,9 @@ namespace Raspberry.IO.GeneralPurpose
         private readonly ITimer timer;
         private readonly Dictionary<ProcessorPin, bool> pinValues = new Dictionary<ProcessorPin, bool>();
         private readonly Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>> pinEvents = new Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>>();
-        private readonly Dictionary<ProcessorPin, bool> pinRawValues = new Dictionary<ProcessorPin, bool>();
+
+        private ProcessorPins inputPins = ProcessorPins.None;
+        private ProcessorPins pinRawValues = ProcessorPins.None;
 
         /// <summary>
         /// Gets the default blink duration, in milliseconds.
@@ -239,8 +241,10 @@ namespace Raspberry.IO.GeneralPurpose
 
                 pinConfigurations.Clear();
                 namedPins.Clear();
-                pinRawValues.Clear();
                 pinValues.Clear();
+
+                pinRawValues = ProcessorPins.None;
+                inputPins = ProcessorPins.None;
             }
         }
 
@@ -362,9 +366,11 @@ namespace Raspberry.IO.GeneralPurpose
                 pinConfigurations.Remove(configuration.Pin);
                 if (!string.IsNullOrEmpty(configuration.Name))
                     namedPins.Remove(configuration.Name);
-
-                pinRawValues.Remove(configuration.Pin);
                 pinValues.Remove(configuration.Pin);
+
+                var pin = (ProcessorPins)((uint)1 << (int)configuration.Pin);
+                inputPins = inputPins & ~pin;
+                pinRawValues = pinRawValues & ~pin;
             }
         }
 
@@ -528,7 +534,10 @@ namespace Raspberry.IO.GeneralPurpose
             else
             {
                 var pinValue = Driver.Read(configuration.Pin);
-                pinRawValues[configuration.Pin] = pinValue;
+
+                var pin = (ProcessorPins)((uint)1 << (int)configuration.Pin);
+                inputPins = inputPins | pin;
+                pinRawValues = Driver.Read(inputPins);
 
                 var switchConfiguration = configuration as SwitchInputPinConfiguration;
                 if (switchConfiguration != null)
@@ -564,43 +573,41 @@ namespace Raspberry.IO.GeneralPurpose
 
         private void CheckInputPins(object state, EventArgs eventArgs)
         {
-            Dictionary<ProcessorPin, bool> newPinValues;
-
-            lock (pinConfigurations)
-            {
-                newPinValues = pinConfigurations.Values
-                    .Where(p => p.Direction == PinDirection.Input)
-                    .Select(p => new {p.Pin, Value = Driver.Read(p.Pin)})
-                    .ToDictionary(p => p.Pin, p => p.Value);
-            }
+            var newPinValues = Driver.Read(inputPins);
+            
+            var changes = newPinValues ^ pinRawValues;
+            if (changes == ProcessorPins.None)
+                return;
 
             var notifiedConfigurations = new List<PinConfiguration>();
-            foreach (var np in newPinValues)
+            foreach (var np in changes.Enumerate())
             {
-                var oldPinValue = pinRawValues[np.Key];
-                var newPinValue = np.Value;
+                var processorPin = (ProcessorPins) ((uint) 1 << (int) np);
+                var oldPinValue = (pinRawValues & processorPin) != ProcessorPins.None;
+                var newPinValue = (newPinValues & processorPin) != ProcessorPins.None;
 
-                pinRawValues[np.Key] = newPinValue;
                 if (oldPinValue != newPinValue)
                 {
-                    var pin = (InputPinConfiguration) pinConfigurations[np.Key];
+                    var pin = (InputPinConfiguration) pinConfigurations[np];
                     var switchPin = pin as SwitchInputPinConfiguration;
 
                     if (switchPin != null)
                     {
                         if (pin.GetEffective(newPinValue))
                         {
-                            pinValues[np.Key] = !pinValues[np.Key];
+                            pinValues[np] = !pinValues[np];
                             notifiedConfigurations.Add(pin);
                         }
                     }
                     else
                     {
-                        pinValues[np.Key] = pin.GetEffective(newPinValue);
+                        pinValues[np] = pin.GetEffective(newPinValue);
                         notifiedConfigurations.Add(pin);
                     }
                 }
             }
+
+            pinRawValues = newPinValues;
 
             // Only fires events once all states have been modified.
             foreach (var pin in notifiedConfigurations)

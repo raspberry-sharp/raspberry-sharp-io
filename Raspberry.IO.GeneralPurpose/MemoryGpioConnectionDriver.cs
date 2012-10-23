@@ -52,8 +52,28 @@ namespace Raspberry.IO.GeneralPurpose
         /// </returns>
         public bool Read(ProcessorPin pin)
         {
+            var shift = (byte)((int)pin % 32);
+            var value = Interop.bcm2835_gpioperi_read((uint)pin / 32);
+
+            return (value & (1 << shift)) != 0;
+
+            /*
             var value = Interop.bcm2835_gpio_lev((uint)pin);
             return value != 0;
+            */
+        }
+
+        /// <summary>
+        /// Reads the status of the specified pins.
+        /// </summary>
+        /// <param name="pins">The pins.</param>
+        /// <returns>
+        /// The pins status.
+        /// </returns>
+        public ProcessorPins Read(ProcessorPins pins)
+        {
+            var value = Interop.bcm2835_gpioperi_read(0);
+            return (ProcessorPins)((uint)pins & value);
         }
 
         /// <summary>

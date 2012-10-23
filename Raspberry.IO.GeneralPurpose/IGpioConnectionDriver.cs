@@ -22,6 +22,13 @@ namespace Raspberry.IO.GeneralPurpose
         bool Read(ProcessorPin pin);
 
         /// <summary>
+        /// Reads the status of the specified pins.
+        /// </summary>
+        /// <param name="pins">The pins.</param>
+        /// <returns>The pins status.</returns>
+        ProcessorPins Read(ProcessorPins pins);
+
+        /// <summary>
         /// Allocates the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>

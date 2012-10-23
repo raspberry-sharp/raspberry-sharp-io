@@ -9,6 +9,12 @@ namespace Raspberry.IO.GeneralPurpose
         [DllImport("libbcm2835.so", EntryPoint = "bcm2835_init")]
         public static extern int bcm2835_init();
 
+        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_close")]
+        public static extern int bcm2835_close();
+
+        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_gpioperi_read")]
+        public static extern uint bcm2835_gpioperi_read(uint group);
+
         [DllImport("libbcm2835.so", EntryPoint = "bcm2835_gpio_fsel")]
         public static extern void bcm2835_gpio_fsel(uint pin, uint mode);
 

@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 
 #endregion
 
@@ -63,6 +64,22 @@ namespace Raspberry.IO.GeneralPurpose
                 var rawValue = streamReader.ReadToEnd();
                 return !string.IsNullOrEmpty(rawValue) && rawValue[0] == '1';
             }
+        }
+
+        /// <summary>
+        /// Reads the status of the specified pins.
+        /// </summary>
+        /// <param name="pins">The pins.</param>
+        /// <returns>
+        /// The pins status.
+        /// </returns>
+        public ProcessorPins Read(ProcessorPins pins)
+        {
+            return pins.Enumerate()
+                .Select(p => Read(p) ? (ProcessorPins) ((uint) 1 << (int) p) : ProcessorPins.None)
+                .Aggregate(
+                    ProcessorPins.None, 
+                    (a, p) => a | p);
         }
 
         /// <summary>
