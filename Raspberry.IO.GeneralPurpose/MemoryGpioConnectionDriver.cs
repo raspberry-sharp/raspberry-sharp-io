@@ -12,12 +12,6 @@ namespace Raspberry.IO.GeneralPurpose
     /// <remarks>Based on bmc2835_gpio library.</remarks>
     public class MemoryGpioConnectionDriver : IGpioConnectionDriver
     {
-        #region Fields
-
-        private static readonly Lazy<bool> initialized = new Lazy<bool>(() => Interop.bcm2835_init() != 0);
-
-        #endregion
-
         #region Instance Management
 
         /// <summary>
@@ -27,8 +21,19 @@ namespace Raspberry.IO.GeneralPurpose
         {
             if (!Host.Current.IsRaspberryPi)
                 throw new NotSupportedException("MemoryGpioConnectionDriver is only supported on Raspberry Pi");
+
+            Interop.Reference();
         }
 
+        /// <summary>
+        /// Releases unmanaged resources and performs other cleanup operations before the
+        /// <see cref="MemoryGpioConnectionDriver"/> is reclaimed by garbage collection.
+        /// </summary>
+        ~MemoryGpioConnectionDriver()
+        {
+            Interop.Release();
+        }
+        
         #endregion
 
         #region Methods
@@ -83,9 +88,6 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="direction">The direction.</param>
         public void Allocate(ProcessorPin pin, PinDirection direction)
         {
-            if (!initialized.Value)
-                throw new InvalidOperationException("Unabled to initialize driver");
-
             // Set the direction on the pin and update the exported list
             // BCM2835_GPIO_FSEL_INPT = 0
             // BCM2835_GPIO_FSEL_OUTP = 1
