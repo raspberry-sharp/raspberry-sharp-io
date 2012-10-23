@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading;
 using Raspberry.IO.GeneralPurpose.Configuration;
+using Raspberry.IO.GeneralPurpose.Time;
 
 #endregion
 
@@ -21,7 +22,7 @@ namespace Raspberry.IO.GeneralPurpose
         private readonly Dictionary<ProcessorPin, PinConfiguration> pinConfigurations;
         private readonly Dictionary<string, PinConfiguration> namedPins;
 
-        private readonly Timer timer;
+        private readonly ITimer timer;
         private readonly Dictionary<ProcessorPin, bool> pinValues = new Dictionary<ProcessorPin, bool>();
         private readonly Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>> pinEvents = new Dictionary<ProcessorPin, EventHandler<PinStatusEventArgs>>();
         private readonly Dictionary<ProcessorPin, bool> pinRawValues = new Dictionary<ProcessorPin, bool>();
@@ -98,8 +99,13 @@ namespace Raspberry.IO.GeneralPurpose
             pinConfigurations = pinList.ToDictionary(p => p.Pin);
 
             namedPins = pinList.Where(p => !string.IsNullOrEmpty(p.Name)).ToDictionary(p => p.Name);
+            
+            var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
+            var pollInterval = configurationSection != null ? configurationSection.PollInterval : 50;
 
-            timer = new Timer(CheckInputPins, null, Timeout.Infinite, Timeout.Infinite);
+            timer = new StandardTimer {Interval = pollInterval};
+            timer.Elapsed += CheckInputPins;
+
             if (open)
                 Open();
         }
@@ -197,10 +203,7 @@ namespace Raspberry.IO.GeneralPurpose
                 foreach (var pin in pinConfigurations.Values)
                     Allocate(pin);
 
-                var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
-                var pollInterval = configurationSection != null ? configurationSection.PollInterval : 50;
-
-                timer.Change(10, pollInterval);
+                timer.Start(10);
                 IsOpened = true;
             }
         }
@@ -215,7 +218,7 @@ namespace Raspberry.IO.GeneralPurpose
                 if (!IsOpened)
                     return;
 
-                timer.Dispose();
+                timer.Stop();
                 foreach (var pin in pinConfigurations.Values)
                     Release(pin);
 
@@ -558,7 +561,7 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
-        private void CheckInputPins(object state)
+        private void CheckInputPins(object state, EventArgs eventArgs)
         {
             Dictionary<ProcessorPin, bool> newPinValues;
 

@@ -1,8 +1,10 @@
 ﻿#region References
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Raspberry.IO.GeneralPurpose.Time;
 
 #endregion
 
@@ -15,7 +17,7 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
     {
         #region Fields
 
-        private readonly Timer timer;
+        private readonly ITimer timer;
         private int currentStep;
 
         #endregion
@@ -29,9 +31,9 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
         protected PinsBehavior(IEnumerable<PinConfiguration> configurations)
         {
             Configurations = configurations.ToArray();
-            Interval = 250;
 
-            timer = new Timer(OnTimer, null, Timeout.Infinite, Timeout.Infinite);
+            timer = new StandardTimer { Interval = 250 };
+            timer.Elapsed += OnTimer;
         }
 
         #endregion
@@ -49,7 +51,11 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
         /// <value>
         /// The interval.
         /// </value>
-        public int Interval { get; set; }
+        public int Interval
+        {
+            get { return (int)timer.Interval; }
+            set { timer.Interval = value; }
+        }
 
         #endregion
 
@@ -90,12 +96,12 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
                 connection[pinConfiguration] = false;
 
             currentStep = GetFirstStep();
-            timer.Change(0, Interval);
+            timer.Start(0);
         }
 
         internal void Stop()
         {
-            timer.Change(Timeout.Infinite, Timeout.Infinite);
+            timer.Stop();
 
             foreach (var pinConfiguration in Configurations)
                 Connection[pinConfiguration] = false;
@@ -105,7 +111,7 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         #region Private Helpers
 
-        private void OnTimer(object state)
+        private void OnTimer(object state, EventArgs eventArgs)
         {
             ProcessStep(currentStep);
             if (!TryGetNextStep(ref currentStep))
