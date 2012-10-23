@@ -11,6 +11,15 @@ namespace Raspberry.IO.GeneralPurpose.Configuration
     /// </summary>
     public class GpioConnectionConfigurationSection : ConfigurationSection
     {
+        #region Constants
+
+        /// <summary>
+        /// The default poll interval, in milliseconds.
+        /// </summary>
+        public const decimal DefaultPollInterval = 50.0m;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -45,11 +54,14 @@ namespace Raspberry.IO.GeneralPurpose.Configuration
         /// <value>
         /// The poll interval, in millisecond.
         /// </value>
-        /// <remarks>Default value is 50ms.</remarks>
-        [ConfigurationProperty("pollInterval", DefaultValue = 50)]
-        public int PollInterval
+        /// <remarks>
+        /// Default value is 50ms.
+        /// Values lower than 1ms may be specified on Raspberry Pi using decimal notation.
+        /// </remarks>
+        [ConfigurationProperty("pollInterval", DefaultValue = "50")]
+        public decimal PollInterval
         {
-            get { return (int)this["pollInterval"]; }
+            get { return (decimal)this["pollInterval"]; }
             set { this["pollInterval"] = value; }
         }
 

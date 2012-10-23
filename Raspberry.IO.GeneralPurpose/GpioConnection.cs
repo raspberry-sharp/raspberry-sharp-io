@@ -100,7 +100,7 @@ namespace Raspberry.IO.GeneralPurpose
             namedPins = pinList.Where(p => !string.IsNullOrEmpty(p.Name)).ToDictionary(p => p.Name);
             
             var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
-            var pollInterval = configurationSection != null ? configurationSection.PollInterval : 50;
+            var pollInterval = configurationSection != null ? configurationSection.PollInterval : GpioConnectionConfigurationSection.DefaultPollInterval;
 
             timer = Timer.Create();
 
