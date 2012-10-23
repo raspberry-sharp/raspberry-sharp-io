@@ -71,6 +71,7 @@
     <Compile Include="Time\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bcm2835-customizations.txt" />
     <Content Include="libbcm2835.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
