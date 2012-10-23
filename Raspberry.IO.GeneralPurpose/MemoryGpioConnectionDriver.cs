@@ -1,7 +1,6 @@
 #region References
 
 using System;
-using System.Runtime.InteropServices;
 
 #endregion
 
@@ -15,7 +14,7 @@ namespace Raspberry.IO.GeneralPurpose
     {
         #region Fields
 
-        private static readonly Lazy<bool> initialized = new Lazy<bool>(() => bcm2835_init() != 0);
+        private static readonly Lazy<bool> initialized = new Lazy<bool>(() => Interop.bcm2835_init() != 0);
 
         #endregion
 
@@ -41,7 +40,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="value">The pin status.</param>
         public void Write(ProcessorPin pin, bool value)
         {
-            bcm2835_gpio_write((uint) pin, (uint) (value ? 1 : 0));
+            Interop.bcm2835_gpio_write((uint) pin, (uint) (value ? 1 : 0));
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </returns>
         public bool Read(ProcessorPin pin)
         {
-            var value = bcm2835_gpio_lev((uint) pin);
+            var value = Interop.bcm2835_gpio_lev((uint)pin);
             return value != 0;
         }
 
@@ -70,14 +69,14 @@ namespace Raspberry.IO.GeneralPurpose
             // Set the direction on the pin and update the exported list
             // BCM2835_GPIO_FSEL_INPT = 0
             // BCM2835_GPIO_FSEL_OUTP = 1
-            bcm2835_gpio_fsel((uint) pin, (uint) (direction == PinDirection.Input ? 0 : 1));
+            Interop.bcm2835_gpio_fsel((uint)pin, (uint)(direction == PinDirection.Input ? 0 : 1));
 
             if (direction == PinDirection.Input)
             {
                 // BCM2835_GPIO_PUD_OFF = 0b00 = 0
                 // BCM2835_GPIO_PUD_DOWN = 0b01 = 1
                 // BCM2835_GPIO_PUD_UP = 0b10 = 2
-                bcm2835_gpio_set_pud((uint) pin, 0);
+                Interop.bcm2835_gpio_set_pud((uint)pin, 0);
             }
         }
         
@@ -88,23 +87,5 @@ namespace Raspberry.IO.GeneralPurpose
 
         #endregion
 
-        #region Interop Methods
-
-        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_init")]
-        static extern int bcm2835_init();
-
-        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_gpio_fsel")]
-        static extern void bcm2835_gpio_fsel(uint pin, uint mode);
-
-        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_gpio_write")]
-        static extern void bcm2835_gpio_write(uint pin, uint value);
-
-        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_gpio_lev")]
-        static extern uint bcm2835_gpio_lev(uint pin);
-
-        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_gpio_set_pud")]
-        static extern void bcm2835_gpio_set_pud(uint pin, uint pud);
-
-        #endregion
     }
 }
