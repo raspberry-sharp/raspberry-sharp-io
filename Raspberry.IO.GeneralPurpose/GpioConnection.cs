@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Threading;
 using Raspberry.IO.GeneralPurpose.Configuration;
 using Raspberry.IO.GeneralPurpose.Time;
 
@@ -103,7 +102,9 @@ namespace Raspberry.IO.GeneralPurpose
             var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
             var pollInterval = configurationSection != null ? configurationSection.PollInterval : 50;
 
-            timer = new StandardTimer {Interval = pollInterval};
+            timer = Timer.Create();
+
+            timer.Interval = pollInterval;
             timer.Elapsed += CheckInputPins;
 
             if (open)
@@ -411,7 +412,7 @@ namespace Raspberry.IO.GeneralPurpose
         public void Blink(string pinName, int duration = DefaultBlinkDuration)
         {
             Toggle(pinName);
-            Thread.Sleep(duration);
+            Timer.Sleep(duration);
             Toggle(pinName);
         }
 
@@ -423,7 +424,7 @@ namespace Raspberry.IO.GeneralPurpose
         public void Blink(ProcessorPin pin, int duration = DefaultBlinkDuration)
         {
             Toggle(pin);
-            Thread.Sleep(duration);
+            Timer.Sleep(duration);
             Toggle(pin);
         }
 
@@ -435,7 +436,7 @@ namespace Raspberry.IO.GeneralPurpose
         public void Blink(ConnectorPin pin, int duration = DefaultBlinkDuration)
         {
             Toggle(pin);
-            Thread.Sleep(duration);
+            Timer.Sleep(duration);
             Toggle(pin);
         }
 
@@ -447,7 +448,7 @@ namespace Raspberry.IO.GeneralPurpose
         public void Blink(PinConfiguration configuration, int duration = DefaultBlinkDuration)
         {
             Toggle(configuration);
-            Thread.Sleep(duration);
+            Timer.Sleep(duration);
             Toggle(configuration);
         }
 

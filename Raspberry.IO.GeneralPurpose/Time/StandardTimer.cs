@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 
 namespace Raspberry.IO.GeneralPurpose.Time
 {
@@ -8,7 +7,7 @@ namespace Raspberry.IO.GeneralPurpose.Time
         private decimal interval;
 
         private bool isStarted;
-        private Timer timer;
+        private System.Threading.Timer timer;
 
         public decimal Interval
         {
@@ -28,7 +27,7 @@ namespace Raspberry.IO.GeneralPurpose.Time
                 if (!isStarted && interval >= 1.0m)
                 {
                     isStarted = true;
-                    timer = new Timer(OnElapsed, null, (int) delay, (int) interval);
+                    timer = new System.Threading.Timer(OnElapsed, null, (int)delay, (int)interval);
                 }
                 else
                     Stop();
@@ -53,7 +52,7 @@ namespace Raspberry.IO.GeneralPurpose.Time
         private void OnElapsed(object state)
         {
             var elapsed = Elapsed;
-            elapsed(this, new EventArgs());
+            elapsed(this, EventArgs.Empty);
         }
     }
 }
