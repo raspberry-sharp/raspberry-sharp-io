@@ -5,6 +5,7 @@ namespace Raspberry.IO.GeneralPurpose.Time
     internal class StandardTimer : ITimer
     {
         private decimal interval;
+        private Action action;
 
         private bool isStarted;
         private System.Threading.Timer timer;
@@ -17,6 +18,18 @@ namespace Raspberry.IO.GeneralPurpose.Time
                 interval = value;
                 if (isStarted)
                     Start(0);
+            }
+        }
+        
+        public Action Action
+        {
+            get { return action; }
+            set
+            {
+                if (value == null)
+                    Stop();
+
+                action = value;
             }
         }
 
@@ -47,12 +60,11 @@ namespace Raspberry.IO.GeneralPurpose.Time
             }
         }
 
-        public event EventHandler Elapsed;
+        private void NoOp(){}
 
         private void OnElapsed(object state)
         {
-            var elapsed = Elapsed;
-            elapsed(this, EventArgs.Empty);
+            (Action ?? NoOp)();
         }
     }
 }

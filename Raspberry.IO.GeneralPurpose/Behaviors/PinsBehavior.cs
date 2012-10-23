@@ -1,9 +1,7 @@
 ﻿#region References
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Raspberry.IO.GeneralPurpose.Time;
 
 #endregion
@@ -32,8 +30,9 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
         {
             Configurations = configurations.ToArray();
 
-            timer = new StandardTimer { Interval = 250 };
-            timer.Elapsed += OnTimer;
+            timer = Timer.Create();
+            timer.Interval = 250;
+            timer.Action = OnTimer;
         }
 
         #endregion
@@ -111,12 +110,12 @@ namespace Raspberry.IO.GeneralPurpose.Behaviors
 
         #region Private Helpers
 
-        private void OnTimer(object state, EventArgs eventArgs)
+        private void OnTimer()
         {
             ProcessStep(currentStep);
             if (!TryGetNextStep(ref currentStep))
             {
-                Thread.Sleep(Interval);
+                Timer.Sleep(Interval);
                 Stop();
             }
         }

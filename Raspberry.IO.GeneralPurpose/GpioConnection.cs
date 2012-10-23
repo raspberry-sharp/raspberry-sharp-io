@@ -107,7 +107,7 @@ namespace Raspberry.IO.GeneralPurpose
             timer = Timer.Create();
 
             timer.Interval = pollInterval;
-            timer.Elapsed += CheckInputPins;
+            timer.Action = CheckInputPins;
 
             if (open)
                 Open();
@@ -571,7 +571,7 @@ namespace Raspberry.IO.GeneralPurpose
             }
         }
 
-        private void CheckInputPins(object state, EventArgs eventArgs)
+        private void CheckInputPins()
         {
             var newPinValues = Driver.Read(inputPins);
             

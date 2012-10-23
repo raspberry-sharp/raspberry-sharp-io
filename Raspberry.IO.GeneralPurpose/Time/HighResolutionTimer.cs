@@ -5,6 +5,7 @@ namespace Raspberry.IO.GeneralPurpose.Time
 {
     internal class HighResolutionTimer : ITimer
     {
+        private decimal delay;
         private decimal interval;
         private Thread thread;
 
@@ -26,39 +27,67 @@ namespace Raspberry.IO.GeneralPurpose.Time
             }
         }
 
-        public void Start(decimal delay)
+        private Action action;
+        public Action Action
         {
-            thread = new Thread(ThreadProcess);
-
-            Sleep(delay);
-            thread.Start();
-        }
-        
-        public void Stop()
-        {
-            thread.Abort();
-            thread = null;
-        }
-
-        public event EventHandler Elapsed;
-
-        private void ThreadProcess()
-        {
-            var currentThread = thread;
-            while (thread == currentThread)
+            get { return action; }
+            set
             {
-                Interop.bcm2835_delayMicroseconds((uint) interval*1000);
-
-                var elapsed = Elapsed;
-                elapsed(this, EventArgs.Empty);
+                if (value == null)
+                    Stop();
+                
+                action = value;
             }
         }
 
-        public static void Sleep(decimal delay)
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
+        /// <param name="delay">The delay before the first occurence, in milliseconds.</param>
+        public void Start(decimal delay)
         {
             if (delay > uint.MaxValue / 1000)
                 throw new ArgumentOutOfRangeException("delay", delay, "Delay must be lower than or equal to uint.MaxValue / 1000");
 
+            lock (this)
+            {
+                if (thread == null)
+                {
+                    this.delay = delay;
+                    thread = new Thread(ThreadProcess);
+                    thread.Start();
+                }
+            }
+        }
+        
+        public void Stop()
+        {
+            lock (this)
+            {
+                if (thread != null)
+                {
+                    thread.Abort();
+                    thread = null;
+                }
+            }
+        }
+
+        private void ThreadProcess()
+        {
+            var thisThread = thread;
+
+            Sleep(delay);
+            while (thread == thisThread)
+            {
+                (Action ?? NoOp)();
+                Sleep(interval);
+            }
+        }
+
+        private void NoOp(){}
+
+        public static void Sleep(decimal delay)
+        {
             Interop.bcm2835_delayMicroseconds((uint)(delay * 1000));
         }
     }

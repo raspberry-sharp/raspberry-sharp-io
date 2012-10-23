@@ -13,6 +13,14 @@ namespace Raspberry.IO.GeneralPurpose.Time
         decimal Interval { get; set; }
 
         /// <summary>
+        /// Gets or sets the action.
+        /// </summary>
+        /// <value>
+        /// The action.
+        /// </value>
+        Action Action { get; set; }
+
+        /// <summary>
         /// Starts this instance.
         /// </summary>
         /// <param name="delay">The delay before the first occurence, in milliseconds.</param>
@@ -22,7 +30,5 @@ namespace Raspberry.IO.GeneralPurpose.Time
         /// Stops this instance.
         /// </summary>
         void Stop();
-
-        event EventHandler Elapsed;
     }
 }
