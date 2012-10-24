@@ -66,7 +66,8 @@ namespace Raspberry.IO.GeneralPurpose.Time
             {
                 if (thread != null)
                 {
-                    thread.Abort();
+                    if (thread != Thread.CurrentThread)
+                        thread.Abort();
                     thread = null;
                 }
             }
