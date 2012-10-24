@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.GeneralPurpose.Behaviors;
 
-namespace GpioTest
+namespace Gpio.Test.Chaser
 {
     /// <summary>
     /// This is a sample program. Must be modified to match your GPIO project.

@@ -8,8 +8,8 @@
     <ProjectGuid>{5D9D1834-4C4B-4E03-B635-5F205205B6F8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GpioTest</RootNamespace>
-    <AssemblyName>GpioTest</AssemblyName>
+    <RootNamespace>Gpio.Test.Chaser</RootNamespace>
+    <AssemblyName>Gpio.Test.Chaser</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

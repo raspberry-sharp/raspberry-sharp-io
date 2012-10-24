@@ -7,7 +7,7 @@ using System.Linq;
 
 #endregion
 
-namespace GpioTest
+namespace Gpio.Test.Chaser
 {
     /// <summary>
     /// Represents the Raspberry Pi mainboard.
