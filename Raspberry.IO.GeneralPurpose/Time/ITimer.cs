@@ -1,9 +1,15 @@
+#region References
+
 using System;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose.Time
 {
     internal interface ITimer
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets the interval, in milliseconds.
         /// </summary>
@@ -20,6 +26,10 @@ namespace Raspberry.IO.GeneralPurpose.Time
         /// </value>
         Action Action { get; set; }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Starts this instance.
         /// </summary>
@@ -30,5 +40,7 @@ namespace Raspberry.IO.GeneralPurpose.Time
         /// Stops this instance.
         /// </summary>
         void Stop();
+
+        #endregion
     }
 }

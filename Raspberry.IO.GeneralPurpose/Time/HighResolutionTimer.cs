@@ -1,13 +1,25 @@
+#region References
+
 using System;
 using System.Threading;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose.Time
 {
     internal class HighResolutionTimer : ITimer
     {
+        #region Fields
+
         private decimal delay;
         private decimal interval;
+        private Action action;
+
         private Thread thread;
+
+        #endregion
+
+        #region Instance Management
 
         public HighResolutionTimer()
         {
@@ -15,19 +27,34 @@ namespace Raspberry.IO.GeneralPurpose.Time
                 throw new NotSupportedException("Cannot use HighResolutionTimer on a platform different than Raspberry Pi");
         }
 
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the interval, in milliseconds.
+        /// </summary>
+        /// <value>
+        /// The interval, in milliseconds.
+        /// </value>
         public decimal Interval
         {
             get { return interval; }
             set
             {
-                if (value > uint.MaxValue / 1000)
+                if (value > uint.MaxValue/1000)
                     throw new ArgumentOutOfRangeException("Interval", interval, "Interval must be lower than or equal to uint.MaxValue / 1000");
 
                 interval = value;
             }
         }
 
-        private Action action;
+        /// <summary>
+        /// Gets or sets the action.
+        /// </summary>
+        /// <value>
+        /// The action.
+        /// </value>
         public Action Action
         {
             get { return action; }
@@ -35,10 +62,14 @@ namespace Raspberry.IO.GeneralPurpose.Time
             {
                 if (value == null)
                     Stop();
-                
+
                 action = value;
             }
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Starts this instance.
@@ -46,7 +77,7 @@ namespace Raspberry.IO.GeneralPurpose.Time
         /// <param name="delay">The delay before the first occurence, in milliseconds.</param>
         public void Start(decimal delay)
         {
-            if (delay > uint.MaxValue / 1000)
+            if (delay > uint.MaxValue/1000)
                 throw new ArgumentOutOfRangeException("delay", delay, "Delay must be lower than or equal to uint.MaxValue / 1000");
 
             lock (this)
@@ -59,7 +90,10 @@ namespace Raspberry.IO.GeneralPurpose.Time
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Stops this instance.
+        /// </summary>
         public void Stop()
         {
             lock (this)
@@ -72,6 +106,10 @@ namespace Raspberry.IO.GeneralPurpose.Time
                 }
             }
         }
+
+        #endregion
+
+        #region Private Helpers
 
         private void ThreadProcess()
         {
@@ -89,7 +127,9 @@ namespace Raspberry.IO.GeneralPurpose.Time
 
         public static void Sleep(decimal delay)
         {
-            Interop.bcm2835_delayMicroseconds((uint)(delay * 1000));
+            Interop.bcm2835_delayMicroseconds((uint) (delay*1000));
         }
+
+        #endregion
     }
 }
