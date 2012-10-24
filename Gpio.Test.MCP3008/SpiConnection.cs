@@ -1,7 +1,6 @@
 #region References
 
 using System;
-using System.Threading;
 using Raspberry.IO.GeneralPurpose;
 
 #endregion
@@ -12,7 +11,11 @@ namespace Gpio.Test.MCP3008
     {
         #region Fields
 
-        private readonly GpioConnection connection;
+        private readonly MemoryGpioConnectionDriver driver;
+        private readonly ProcessorPin clock;
+        private readonly ProcessorPin cs;
+        private readonly ProcessorPin miso;
+        private readonly ProcessorPin mosi;
         private readonly decimal referenceVoltage;
 
         #endregion
@@ -21,18 +24,22 @@ namespace Gpio.Test.MCP3008
 
         public SpiConnection(ProcessorPin clock, ProcessorPin cs, ProcessorPin miso, ProcessorPin mosi, decimal referenceVoltage)
         {
+            this.clock = clock;
+            this.cs = cs;
+            this.miso = miso;
+            this.mosi = mosi;
             this.referenceVoltage = referenceVoltage;
 
-            var settings = new GpioConnectionSettings {PollInterval = 10, BlinkDuration = 0};
-            var pins = new PinConfiguration[]
-                           {
-                               clock.Output().Name("Clock"),
-                               cs.Output().Name("Cs").Enable(),
-                               mosi.Output().Name("Mosi"),
-                               miso.Input().Name("Miso")
-                           };
+            driver = new MemoryGpioConnectionDriver();
 
-            connection = new GpioConnection(settings, pins);
+            driver.Allocate(clock, PinDirection.Output);
+            driver.Allocate(cs, PinDirection.Output);
+            driver.Allocate(mosi, PinDirection.Output);
+            driver.Allocate(miso, PinDirection.Input);
+
+            driver.Write(clock, false);
+            driver.Write(cs, true);
+            driver.Write(mosi, false);
         }
 
         void IDisposable.Dispose()
@@ -46,7 +53,7 @@ namespace Gpio.Test.MCP3008
 
         public decimal Read(SpiChannel channel)
         {
-            connection["Cs"] = false;
+            driver.Write(cs, false);
             try
             {
                 var command = (int) channel;
@@ -55,9 +62,11 @@ namespace Gpio.Test.MCP3008
 
                 for (var i = 0; i < 5; i++)
                 {
-                    connection["Mosi"] = (command & 0x80) != 0;
+                    driver.Write(mosi, (command & 0x80) != 0);
 
-                    connection.Blink("Clock");
+                    driver.Write(clock, true);
+                    driver.Write(clock, false);
+
                     command = command << 1;
                 }
 
@@ -65,29 +74,31 @@ namespace Gpio.Test.MCP3008
                 // read in one empty bit, one null bit and 10 ADC bits 
                 for (var i = 0; i < 12; i++)
                 {
-                    connection.Blink("Clock");
-
-                    Thread.Sleep(25);
+                    driver.Write(clock, true);
+                    driver.Write(clock, false);
 
                     data = data << 1;
-                    if (connection["Miso"])
+                    if (driver.Read(miso))
                         data |= 0x1;
                 }
 
                 // first bit is 'null', drop it    
                 data = data >> 1;
 
-                return data*referenceVoltage/1023m;
+                return data*referenceVoltage/1024m;
             }
             finally
             {
-                connection["Cs"] = true;
+                driver.Write(cs, true);
             }
         }
 
         public void Close()
         {
-            connection.Close();
+            driver.Release(clock);
+            driver.Release(cs);
+            driver.Release(mosi);
+            driver.Release(miso);
         }
 
         #endregion

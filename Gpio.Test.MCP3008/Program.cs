@@ -37,7 +37,7 @@ namespace Gpio.Test.MCP3008
                     Console.WriteLine("Tc = {0,5:0.0} Celsius\t\tLr = {1,7:0} Ohms", temperature, lightResistor);
                     Console.CursorTop--;
 
-                    Thread.Sleep(150);
+                    Thread.Sleep(250);
                 }
             }
 
