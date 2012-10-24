@@ -41,7 +41,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Gets the default blink duration, in milliseconds.
         /// </summary>
-        public const int DefaultBlinkDuration = 250;
+        public const decimal DefaultBlinkDuration = 250;
 
         #endregion
 
