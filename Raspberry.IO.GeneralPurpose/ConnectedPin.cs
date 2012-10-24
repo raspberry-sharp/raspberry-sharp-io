@@ -64,7 +64,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// Blinks the pin.
         /// </summary>
         /// <param name="duration">The blink duration, in millisecond.</param>
-        public void Blink(int duration = GpioConnection.DefaultBlinkDuration)
+        public void Blink(decimal duration = -1)
         {
             connection.Blink(Configuration, duration);
         }

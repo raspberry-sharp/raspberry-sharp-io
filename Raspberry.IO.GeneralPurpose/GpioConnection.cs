@@ -2,9 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using Raspberry.IO.GeneralPurpose.Configuration;
 using Raspberry.IO.GeneralPurpose.Time;
 
 #endregion
@@ -18,6 +16,8 @@ namespace Raspberry.IO.GeneralPurpose
     {
         #region Fields
 
+        private readonly GpioConnectionSettings settings;
+
         private readonly Dictionary<ProcessorPin, PinConfiguration> pinConfigurations;
         private readonly Dictionary<string, PinConfiguration> namedPins;
 
@@ -28,11 +28,6 @@ namespace Raspberry.IO.GeneralPurpose
         private ProcessorPins inputPins = ProcessorPins.None;
         private ProcessorPins pinRawValues = ProcessorPins.None;
 
-        /// <summary>
-        /// Gets the default blink duration, in milliseconds.
-        /// </summary>
-        public const int DefaultBlinkDuration = 250;
-
         #endregion
 
         #region Instance Management
@@ -41,59 +36,29 @@ namespace Raspberry.IO.GeneralPurpose
         /// Initializes a new instance of the <see cref="GpioConnection"/> class.
         /// </summary>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(params PinConfiguration[] pins) : this(true, null, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(params PinConfiguration[] pins) : this(null, (IEnumerable<PinConfiguration>) pins){}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GpioConnection"/> class.
         /// </summary>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(IEnumerable<PinConfiguration> pins) : this(true, null, pins){}
+        public GpioConnection(IEnumerable<PinConfiguration> pins) : this(null, pins){}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GpioConnection"/> class.
         /// </summary>
-        /// <param name="driver">The driver.</param>
+        /// <param name="settings">The settings.</param>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(IGpioConnectionDriver driver, params PinConfiguration[] pins) : this(true, driver, (IEnumerable<PinConfiguration>) pins){}
+        public GpioConnection(GpioConnectionSettings settings, params PinConfiguration[] pins) : this(settings, (IEnumerable<PinConfiguration>) pins){}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GpioConnection"/> class.
         /// </summary>
-        /// <param name="driver">The driver.</param>
+        /// <param name="settings">The settings.</param>
         /// <param name="pins">The pins.</param>
-        public GpioConnection(IGpioConnectionDriver driver, IEnumerable<PinConfiguration> pins) : this(true, driver, pins){}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
-        /// </summary>
-        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
-        /// <param name="pins">The pins.</param>
-        public GpioConnection(bool open, params PinConfiguration[] pins) : this(open, null, (IEnumerable<PinConfiguration>) pins){}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
-        /// </summary>
-        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
-        /// <param name="driver">The driver.</param>
-        /// <param name="pins">The pins.</param>
-        public GpioConnection(bool open, IGpioConnectionDriver driver, params PinConfiguration[] pins) : this(open, driver, (IEnumerable<PinConfiguration>) pins){}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
-        /// </summary>
-        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
-        /// <param name="pins">The pins.</param>
-        public GpioConnection(bool open, IEnumerable<PinConfiguration> pins) : this(open, null, pins){}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GpioConnection"/> class.
-        /// </summary>
-        /// <param name="open">if set to <c>true</c>, connection is opened on creation.</param>
-        /// <param name="driver">The driver.</param>
-        /// <param name="pins">The pins.</param>
-        public GpioConnection(bool open, IGpioConnectionDriver driver, IEnumerable<PinConfiguration> pins)
+        public GpioConnection(GpioConnectionSettings settings, IEnumerable<PinConfiguration> pins)
         {
-            Driver = driver ?? GetDefaultDriver();
+            this.settings = settings ?? new GpioConnectionSettings();
             Pins = new ConnectedPins(this);
 
             var pinList = pins.ToList();
@@ -101,15 +66,12 @@ namespace Raspberry.IO.GeneralPurpose
 
             namedPins = pinList.Where(p => !string.IsNullOrEmpty(p.Name)).ToDictionary(p => p.Name);
             
-            var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
-            var pollInterval = configurationSection != null ? configurationSection.PollInterval : GpioConnectionConfigurationSection.DefaultPollInterval;
-
             timer = Timer.Create();
 
-            timer.Interval = pollInterval;
+            timer.Interval = this.settings.PollInterval;
             timer.Action = CheckInputPins;
 
-            if (open)
+            if (this.settings.Opened)
                 Open();
         }
 
@@ -129,11 +91,6 @@ namespace Raspberry.IO.GeneralPurpose
         ///   <c>true</c> if connection is opened; otherwise, <c>false</c>.
         /// </value>
         public bool IsOpened { get; private set; }
-
-        /// <summary>
-        /// Gets the driver.
-        /// </summary>
-        public IGpioConnectionDriver Driver { get; private set; }
 
         /// <summary>
         /// Gets or sets the status of the pin having the specified name.
@@ -415,10 +372,10 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         /// <param name="pinName">Name of the pin.</param>
         /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(string pinName, int duration = DefaultBlinkDuration)
+        public void Blink(string pinName, decimal duration = -1)
         {
             Toggle(pinName);
-            Timer.Sleep(duration);
+            Sleep(duration);
             Toggle(pinName);
         }
 
@@ -427,10 +384,10 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         /// <param name="pin">The pin.</param>
         /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(ProcessorPin pin, int duration = DefaultBlinkDuration)
+        public void Blink(ProcessorPin pin, decimal duration = -1)
         {
             Toggle(pin);
-            Timer.Sleep(duration);
+            Sleep(duration);
             Toggle(pin);
         }
 
@@ -439,10 +396,10 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         /// <param name="pin">The pin.</param>
         /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(ConnectorPin pin, int duration = DefaultBlinkDuration)
+        public void Blink(ConnectorPin pin, decimal duration = -1)
         {
             Toggle(pin);
-            Timer.Sleep(duration);
+            Sleep(duration);
             Toggle(pin);
         }
 
@@ -451,10 +408,10 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         /// <param name="configuration">The pin configuration.</param>
         /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(PinConfiguration configuration, int duration = DefaultBlinkDuration)
+        public void Blink(PinConfiguration configuration, decimal duration = -1)
         {
             Toggle(configuration);
-            Timer.Sleep(duration);
+            Sleep(duration);
             Toggle(configuration);
         }
 
@@ -505,13 +462,14 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Private Helpers
 
-        private static IGpioConnectionDriver GetDefaultDriver()
+        private IGpioConnectionDriver Driver
         {
-            var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
-            if (configurationSection != null && !string.IsNullOrEmpty(configurationSection.DriverTypeName))
-                return (IGpioConnectionDriver) Activator.CreateInstance(Type.GetType(configurationSection.DriverTypeName, true));
-            else
-                return new MemoryGpioConnectionDriver();
+            get { return settings.Driver; }
+        }
+
+        private void Sleep(decimal duration)
+        {
+            Timer.Sleep(duration < 0 ? settings.BlinkDuration : duration);
         }
 
         private void Allocate(PinConfiguration configuration)

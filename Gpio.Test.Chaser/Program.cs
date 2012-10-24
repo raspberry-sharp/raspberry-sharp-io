@@ -74,10 +74,12 @@ namespace Gpio.Test.Chaser
 
                 // Create connection
                 Console.WriteLine("Running on Raspberry firmware rev{0}, board rev{1}, processor {2}", mainboard.Firmware, mainboard.Revision, mainboard.Processor);
-                
-                using (var connection = new GpioConnection(driver, leds))
+
+                var settings = new GpioConnectionSettings {Driver = driver};
+
+                using (var connection = new GpioConnection(settings, leds))
                 {
-                    Console.WriteLine("Using {0}, frequency {1:0.##}hz", connection.Driver.GetType().Name, 1000.0/args.GetSpeed());
+                    Console.WriteLine("Using {0}, frequency {1:0.##}hz", settings.Driver.GetType().Name, 1000.0/args.GetSpeed());
 
                     Thread.Sleep(1000);
 

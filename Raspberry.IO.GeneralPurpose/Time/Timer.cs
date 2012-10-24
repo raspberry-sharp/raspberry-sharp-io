@@ -30,10 +30,13 @@ namespace Raspberry.IO.GeneralPurpose.Time
         /// <param name="time">The time, in milliseconds.</param>
         public static void Sleep(decimal time)
         {
+            if (time < 0)
+                return;
+            
             if (Host.Current.IsRaspberryPi)
                 HighResolutionTimer.Sleep(time);
             else
-                Thread.Sleep((int) time);
+                Thread.Sleep((int)time);
         }
 
         #endregion
