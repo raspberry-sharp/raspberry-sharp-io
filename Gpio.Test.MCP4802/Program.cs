@@ -18,9 +18,7 @@ namespace Gpio.Test.MCP4802
 
             using (var dacConnection = new Mcp4802SpiConnection(dacClock, dacCs, dacMosi, 1))
             {
-                Console.CursorVisible = false;
                 Console.WriteLine("MC4802 Sample: Write a changing value on Channel 1");
-                Console.WriteLine();
 
                 const decimal minimum = 0.0001m;
                 var ticks = minimum;
@@ -46,9 +44,6 @@ namespace Gpio.Test.MCP4802
                     Thread.Sleep(100);
                 }
             }
-
-            Console.CursorTop++;
-            Console.CursorVisible = true;
         }
     }
 }
