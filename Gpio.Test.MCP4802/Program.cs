@@ -4,6 +4,10 @@ using Raspberry.IO.GeneralPurpose;
 
 namespace Gpio.Test.MCP4802
 {
+    /// <summary>
+    /// Freely adapted from http://www.skpang.co.uk/blog/archives/689
+    /// Connected pins are custom.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
