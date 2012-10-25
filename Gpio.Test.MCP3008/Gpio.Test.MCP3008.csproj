@@ -53,6 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Properties\Gpio.Test.MCP3008.fzz" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\Gpio.Test.MCP3008.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
