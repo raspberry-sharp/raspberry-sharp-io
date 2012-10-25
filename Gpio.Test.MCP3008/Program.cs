@@ -32,9 +32,9 @@ namespace Gpio.Test.MCP3008
                 while (!Console.KeyAvailable)
                 {
                     var temperature = connection.Read(SpiChannel.Channel0).ToCelsius();
-                    var lightResistor = connection.Read(SpiChannel.Channel1).ToOhms();
+                    var lightResistor = connection.Read(SpiChannel.Channel1).ToOhms(voltage);
 
-                    Console.WriteLine("Tc = {0,5:0.0} Celsius\t\tLr = {1,7:0} Ohms", temperature, lightResistor);
+                    Console.WriteLine("Tc = {0,5:0.0} Celsius\t\tLr = {1,5:0.0} Lux", temperature, lightResistor);
                     Console.CursorTop--;
 
                     Thread.Sleep(250);
