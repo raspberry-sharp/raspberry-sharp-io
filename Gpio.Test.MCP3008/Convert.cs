@@ -8,7 +8,7 @@ namespace Gpio.Test.MCP3008
             return 100 * volts - 50;
         }
 
-        public static decimal ToOhms(this decimal volts, decimal referenceVoltage)
+        public static decimal ToLux(this decimal volts, decimal referenceVoltage)
         {
             // See http://learn.adafruit.com/photocells/using-a-photocell
             // and http://www.emant.com/316002.page

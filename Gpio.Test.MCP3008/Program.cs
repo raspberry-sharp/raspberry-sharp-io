@@ -16,14 +16,14 @@ namespace Gpio.Test.MCP3008
     {
         static void Main(string[] args)
         {
-            var clock = ConnectorPin.P1Pin12.ToProcessor();
-            var miso = ConnectorPin.P1Pin16.ToProcessor();
-            var mosi = ConnectorPin.P1Pin18.ToProcessor();
-            var cs = ConnectorPin.P1Pin22.ToProcessor();
+            var adcClock = ConnectorPin.P1Pin12.ToProcessor();
+            var adcMiso = ConnectorPin.P1Pin16.ToProcessor();
+            var adcMosi = ConnectorPin.P1Pin18.ToProcessor();
+            var adcCs = ConnectorPin.P1Pin22.ToProcessor();
 
             const decimal voltage = 3.3m;
 
-            using (var connection = new SpiConnection(clock, cs, miso, mosi, voltage))
+            using (var adcConnection = new Mcp3008SpiConnection(adcClock, adcCs, adcMiso, adcMosi, voltage))
             {
                 Console.CursorVisible = false;
                 Console.WriteLine("MCP3008 Sample: Reading temperature on Channel 0 and light resistor on Channel 1");
@@ -31,13 +31,13 @@ namespace Gpio.Test.MCP3008
 
                 while (!Console.KeyAvailable)
                 {
-                    var temperature = connection.Read(SpiChannel.Channel0).ToCelsius();
-                    var lightResistor = connection.Read(SpiChannel.Channel1).ToOhms(voltage);
+                    var temperature = adcConnection.Read(SpiChannel.Channel0).ToCelsius();
+                    var lux = adcConnection.Read(SpiChannel.Channel1).ToLux(voltage);
 
-                    Console.WriteLine("Tc = {0,5:0.0} Celsius\t\tLr = {1,5:0.0} Lux", temperature, lightResistor);
+                    Console.WriteLine("Tc = {0,5:0.0} Celsius\t\tLr = {1,5:0.0} Lux", temperature, lux);
                     Console.CursorTop--;
 
-                    Thread.Sleep(250);
+                    Thread.Sleep(100);
                 }
             }
 

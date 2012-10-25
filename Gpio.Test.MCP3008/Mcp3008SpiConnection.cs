@@ -7,7 +7,7 @@ using Raspberry.IO.GeneralPurpose;
 
 namespace Gpio.Test.MCP3008
 {
-    public class SpiConnection : IDisposable
+    public class Mcp3008SpiConnection : IDisposable
     {
         #region Fields
 
@@ -16,19 +16,19 @@ namespace Gpio.Test.MCP3008
         private readonly ProcessorPin cs;
         private readonly ProcessorPin miso;
         private readonly ProcessorPin mosi;
-        private readonly decimal referenceVoltage;
+        private readonly decimal scale;
 
         #endregion
 
         #region Instance Management
 
-        public SpiConnection(ProcessorPin clock, ProcessorPin cs, ProcessorPin miso, ProcessorPin mosi, decimal referenceVoltage)
+        public Mcp3008SpiConnection(ProcessorPin clock, ProcessorPin cs, ProcessorPin miso, ProcessorPin mosi, decimal scale)
         {
             this.clock = clock;
             this.cs = cs;
             this.miso = miso;
             this.mosi = mosi;
-            this.referenceVoltage = referenceVoltage;
+            this.scale = scale;
 
             driver = new MemoryGpioConnectionDriver();
 
@@ -85,7 +85,7 @@ namespace Gpio.Test.MCP3008
                 // first bit is 'null', drop it    
                 data = data >> 1;
 
-                return data*referenceVoltage/1024m;
+                return data*scale/1024m;
             }
             finally
             {
