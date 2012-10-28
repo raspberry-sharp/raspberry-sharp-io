@@ -1,6 +1,6 @@
 namespace Gpio.Test.MCP4802
 {
-    public enum SpiChannel
+    public enum Mcp4802Channel
     {
         Channel0 = 0,
         Channel1 = 1,

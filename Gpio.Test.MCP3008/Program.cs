@@ -26,15 +26,15 @@ namespace Gpio.Test.MCP3008
             using (var adcConnection = new Mcp3008SpiConnection(adcClock, adcCs, adcMiso, adcMosi, voltage))
             {
                 Console.CursorVisible = false;
-                Console.WriteLine("MCP3008 Sample: Reading temperature on Channel 0 and light resistor on Channel 1");
+                Console.WriteLine("MCP3008 Sample: Reading temperature on Channel 0 and luminosity on Channel 1");
                 Console.WriteLine();
 
                 while (!Console.KeyAvailable)
                 {
-                    var temperature = adcConnection.Read(SpiChannel.Channel0).ToCelsius();
-                    var lux = adcConnection.Read(SpiChannel.Channel1).ToLux(voltage);
+                    var temperature = adcConnection.Read(Mcp3008Channel.Channel0).ToCelsius();
+                    var lux = adcConnection.Read(Mcp3008Channel.Channel1).ToLux(voltage);
 
-                    Console.WriteLine("Tc = {0,5:0.0} Celsius\t\tLr = {1,5:0.0} Lux", temperature, lux);
+                    Console.WriteLine("Temperature = {0,5:0.0} Celsius\t\tLuminosity = {1,5:0.0} Lux", temperature, lux);
                     Console.CursorTop--;
 
                     Thread.Sleep(100);

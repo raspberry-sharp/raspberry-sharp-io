@@ -26,7 +26,7 @@ namespace Gpio.Test.MCP4802
 
                 while (!Console.KeyAvailable)
                 {
-                    dacConnection.WriteData(SpiChannel.Channel0, ticks);
+                    dacConnection.WriteData(Mcp4802Channel.Channel0, ticks);
 
                     if (up)
                     {

@@ -45,7 +45,7 @@ namespace Gpio.Test.MCP4802
             driver.Release(mosi);
         }
 
-        public void WriteData(SpiChannel channel, decimal data)
+        public void WriteData(Mcp4802Channel channel, decimal data)
         {
             driver.Write(cs, false);
             try

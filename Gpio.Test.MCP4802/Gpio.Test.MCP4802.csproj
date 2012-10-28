@@ -47,7 +47,7 @@
     <Compile Include="Mcp4802SpiConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpiChannel.cs" />
+    <Compile Include="Mcp4802Channel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
