@@ -6,7 +6,7 @@ using Raspberry.IO.GeneralPurpose;
 
 #endregion
 
-namespace Gpio.Test.MCP3008
+namespace Raspberry.IO.SerialPeripheralInterface
 {
     public class SpiConnection : IDisposable
     {
@@ -15,8 +15,8 @@ namespace Gpio.Test.MCP3008
         private readonly MemoryGpioConnectionDriver driver;
         private readonly ProcessorPin clock;
         private readonly ProcessorPin ss;
-        private readonly ProcessorPin miso;
-        private readonly ProcessorPin mosi;
+        private readonly ProcessorPin? miso;
+        private readonly ProcessorPin? mosi;
 
         private readonly Endianness endianness = Endianness.LittleEndian;
 
@@ -24,7 +24,7 @@ namespace Gpio.Test.MCP3008
 
         #region Instance Management
 
-        public SpiConnection(ProcessorPin clock, ProcessorPin ss, ProcessorPin miso, ProcessorPin mosi, Endianness endianness)
+        public SpiConnection(ProcessorPin clock, ProcessorPin ss, ProcessorPin? miso, ProcessorPin? mosi, Endianness endianness)
         {
             this.clock = clock;
             this.ss = ss;
@@ -35,13 +35,19 @@ namespace Gpio.Test.MCP3008
             driver = new MemoryGpioConnectionDriver();
 
             driver.Allocate(clock, PinDirection.Output);
-            driver.Allocate(ss, PinDirection.Output);
-            driver.Allocate(mosi, PinDirection.Output);
-            driver.Allocate(miso, PinDirection.Input);
-
             driver.Write(clock, false);
+
+            driver.Allocate(ss, PinDirection.Output);
             driver.Write(ss, true);
-            driver.Write(mosi, false);
+
+            if (mosi.HasValue)
+            {
+                driver.Allocate(mosi.Value, PinDirection.Output);
+                driver.Write(mosi.Value, false);
+            }
+
+            if (miso.HasValue)
+                driver.Allocate(miso.Value, PinDirection.Input);
         }
 
         void IDisposable.Dispose()
@@ -57,8 +63,10 @@ namespace Gpio.Test.MCP3008
         {
             driver.Release(clock);
             driver.Release(ss);
-            driver.Release(mosi);
-            driver.Release(miso);
+            if (mosi.HasValue)
+                driver.Release(mosi.Value);
+            if (miso.HasValue)
+                driver.Release(miso.Value);
         }
 
         public void SelectSlave()
@@ -80,7 +88,10 @@ namespace Gpio.Test.MCP3008
 
         public void Write(bool data)
         {
-            driver.Write(mosi, data);
+            if (!mosi.HasValue)
+                throw new NotSupportedException("No MOSI pin has been provided");
+
+            driver.Write(mosi.Value, data);
             Synchronize();
         }
 
@@ -118,8 +129,11 @@ namespace Gpio.Test.MCP3008
 
         public bool Read()
         {
+            if (!miso.HasValue)
+                throw new NotSupportedException("No MISO pin has been provided");
+
             Synchronize();
-            return driver.Read(miso);
+            return driver.Read(miso.Value);
         }
 
         public ulong Read(int bitCount)

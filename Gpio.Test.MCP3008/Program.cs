@@ -3,6 +3,7 @@
 using System;
 using System.Threading;
 using Raspberry.IO.GeneralPurpose;
+using Raspberry.IO.SerialPeripheralInterface.Components;
 
 #endregion
 

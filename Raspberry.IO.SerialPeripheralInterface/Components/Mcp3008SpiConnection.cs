@@ -5,7 +5,7 @@ using Raspberry.IO.GeneralPurpose;
 
 #endregion
 
-namespace Gpio.Test.MCP3008
+namespace Raspberry.IO.SerialPeripheralInterface.Components
 {
     /// <summary>
     /// Represents a connection to MCP3004/3008 ADC converter.

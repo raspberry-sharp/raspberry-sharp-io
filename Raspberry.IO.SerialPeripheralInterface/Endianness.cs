@@ -1,4 +1,4 @@
-namespace Gpio.Test.MCP3008
+namespace Raspberry.IO.SerialPeripheralInterface
 {
     public enum Endianness
     {

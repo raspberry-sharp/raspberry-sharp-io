@@ -14,7 +14,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gpio.Test.MCP3008", "Gpio.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gpio.Test.Chaser", "Gpio.Test.Chaser\Gpio.Test.Chaser.csproj", "{5D9D1834-4C4B-4E03-B635-5F205205B6F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gpio.Test.MCP4802", "Gpio.Test.MCP4802\Gpio.Test.MCP4802.csproj", "{54075457-7C1D-4C8F-BE7D-CFCA34F11228}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.SerialPeripheralInterface", "Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj", "{326342E5-0411-40E8-9F2D-563D6B192568}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gpio.Test.MCP4822", "Gpio.Test.MCP4822\Gpio.Test.MCP4822.csproj", "{54075457-7C1D-4C8F-BE7D-CFCA34F11228}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +60,16 @@ Global
 		{5D9D1834-4C4B-4E03-B635-5F205205B6F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5D9D1834-4C4B-4E03-B635-5F205205B6F8}.Release|x86.ActiveCfg = Release|x86
 		{5D9D1834-4C4B-4E03-B635-5F205205B6F8}.Release|x86.Build.0 = Release|x86
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{326342E5-0411-40E8-9F2D-563D6B192568}.Release|x86.ActiveCfg = Release|Any CPU
 		{54075457-7C1D-4C8F-BE7D-CFCA34F11228}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{54075457-7C1D-4C8F-BE7D-CFCA34F11228}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{54075457-7C1D-4C8F-BE7D-CFCA34F11228}.Debug|Mixed Platforms.Build.0 = Debug|x86

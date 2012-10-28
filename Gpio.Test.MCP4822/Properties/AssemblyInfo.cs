@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Gpio.Test.MCP3008")]
+[assembly: AssemblyTitle("Gpio.Test.MCP4822")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Gpio.Test.MCP3008")]
+[assembly: AssemblyProduct("Gpio.Test.MCP4822")]
 [assembly: AssemblyCopyright("www.raspberry-sharp.org, 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("72ce3a1e-982d-4a8f-bb3c-422d7c00b816")]
+[assembly: Guid("81a0aa1c-37b4-429d-9e95-d049372ef9df")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
 using Raspberry.IO.GeneralPurpose;
+using Raspberry.IO.SerialPeripheralInterface.Components;
 
-namespace Gpio.Test.MCP4802
+namespace Gpio.Test.MCP4822
 {
     /// <summary>
     /// Freely adapted from http://www.skpang.co.uk/blog/archives/689
@@ -16,9 +17,9 @@ namespace Gpio.Test.MCP4802
             var dacCs = ConnectorPin.P1Pin13.ToProcessor();
             var dacMosi = ConnectorPin.P1Pin15.ToProcessor();
 
-            using (var dacConnection = new Mcp4802SpiConnection(dacClock, dacCs, dacMosi, 1))
+            using (var dacConnection = new Mcp4822SpiConnection(dacClock, dacCs, dacMosi, 1))
             {
-                Console.WriteLine("MC4802 Sample: Write a changing value on Channel 1");
+                Console.WriteLine("MC4822 Sample: Write a changing value on Channel A");
 
                 const decimal minimum = 0.0001m;
                 var ticks = minimum;
@@ -26,7 +27,7 @@ namespace Gpio.Test.MCP4802
 
                 while (!Console.KeyAvailable)
                 {
-                    dacConnection.WriteData(Mcp4802Channel.Channel0, ticks);
+                    dacConnection.Write(Mcp4822Channel.ChannelA, ticks);
 
                     if (up)
                     {

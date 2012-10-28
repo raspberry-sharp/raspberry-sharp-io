@@ -1,4 +1,4 @@
-namespace Gpio.Test.MCP3008
+namespace Raspberry.IO.SerialPeripheralInterface.Components
 {
     public enum Mcp3008Channel
     {

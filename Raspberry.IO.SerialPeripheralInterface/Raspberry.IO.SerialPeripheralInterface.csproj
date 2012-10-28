@@ -2,21 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{54075457-7C1D-4C8F-BE7D-CFCA34F11228}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{326342E5-0411-40E8-9F2D-563D6B192568}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gpio.Test.MCP4802</RootNamespace>
-    <AssemblyName>Gpio.Test.MCP4802</AssemblyName>
+    <RootNamespace>Raspberry.IO.SerialPeripheralInterface</RootNamespace>
+    <AssemblyName>Raspberry.IO.SerialPeripheralInterface</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,11 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mcp4802SpiConnection.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Components\Mcp3008Channel.cs" />
+    <Compile Include="Components\Mcp3008SpiConnection.cs" />
+    <Compile Include="Components\Mcp4822Channel.cs" />
+    <Compile Include="Components\Mcp4822SpiConnection.cs" />
+    <Compile Include="Endianness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mcp4802Channel.cs" />
+    <Compile Include="SpiConnection.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
