@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region Fields
+
+using System;
 using System.Threading;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.SerialPeripheralInterface.Components;
+
+#endregion
 
 namespace Gpio.Test.MCP4822
 {

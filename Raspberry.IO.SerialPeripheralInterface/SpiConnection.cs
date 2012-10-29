@@ -69,12 +69,13 @@ namespace Raspberry.IO.SerialPeripheralInterface
                 driver.Release(miso.Value);
         }
 
-        public void SelectSlave()
+        public SpiSlaveSelection SelectSlave()
         {
             driver.Write(ss, false);
+            return new SpiSlaveSelection(this);
         }
-
-        public void DeselectSlave()
+        
+        internal void DeselectSlave()
         {
             driver.Write(ss, true);
         }

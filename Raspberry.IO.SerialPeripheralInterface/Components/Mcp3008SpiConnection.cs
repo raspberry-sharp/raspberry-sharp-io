@@ -41,8 +41,7 @@ namespace Raspberry.IO.SerialPeripheralInterface.Components
 
         public decimal Read(Mcp3008Channel channel)
         {
-            spiConnection.SelectSlave();
-            try
+            using(spiConnection.SelectSlave())
             {
                 // Start bit
                 spiConnection.Write(true);
@@ -60,10 +59,6 @@ namespace Raspberry.IO.SerialPeripheralInterface.Components
                 var data = spiConnection.Read(10);
                 
                 return data*scale/1024m;
-            }
-            finally
-            {
-                spiConnection.DeselectSlave();
             }
         }
 

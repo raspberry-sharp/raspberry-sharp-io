@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.SerialPeripher
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gpio.Test.MCP4822", "Gpio.Test.MCP4822\Gpio.Test.MCP4822.csproj", "{54075457-7C1D-4C8F-BE7D-CFCA34F11228}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gpio.Test.HDD44780", "Gpio.Test.HDD44780\Gpio.Test.HDD44780.csproj", "{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,16 @@ Global
 		{54075457-7C1D-4C8F-BE7D-CFCA34F11228}.Release|Mixed Platforms.Build.0 = Release|x86
 		{54075457-7C1D-4C8F-BE7D-CFCA34F11228}.Release|x86.ActiveCfg = Release|x86
 		{54075457-7C1D-4C8F-BE7D-CFCA34F11228}.Release|x86.Build.0 = Release|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Debug|x86.ActiveCfg = Debug|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Debug|x86.Build.0 = Debug|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|Any CPU.ActiveCfg = Release|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|x86.ActiveCfg = Release|x86
+		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

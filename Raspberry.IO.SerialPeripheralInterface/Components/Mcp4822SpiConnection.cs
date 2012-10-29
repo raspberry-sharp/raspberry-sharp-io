@@ -1,5 +1,9 @@
+#region References
+
 using System;
 using Raspberry.IO.GeneralPurpose;
+
+#endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface.Components
 {
@@ -16,6 +20,8 @@ namespace Raspberry.IO.SerialPeripheralInterface.Components
 
         #endregion
 
+        #region Instance Management
+
         public Mcp4822SpiConnection(ProcessorPin clock, ProcessorPin ss, ProcessorPin mosi, decimal scale)
         {
             spiConnection = new SpiConnection(clock, ss, null, mosi, Endianness.LittleEndian);
@@ -27,20 +33,23 @@ namespace Raspberry.IO.SerialPeripheralInterface.Components
             Close();
         }
 
-        private void Close()
+        #endregion
+
+        #region Methods
+
+        public void Close()
         {
             spiConnection.Close();
         }
 
         public void Write(Mcp4822Channel channel, decimal data)
         {
-            spiConnection.SelectSlave();
-            try
+            using (spiConnection.SelectSlave())
             {
                 var value = (uint) (data*4096m/scale);
                 if (value > 0xFFF)
                     value = 0xFFF;
-                
+
                 // Set active channel
                 spiConnection.Write(channel == Mcp4822Channel.ChannelB);
 
@@ -56,10 +65,8 @@ namespace Raspberry.IO.SerialPeripheralInterface.Components
                 // Write 12 bits data (some lower bits are ignored by MCP4802/4812
                 spiConnection.Write(value, 12);
             }
-            finally
-            {
-                spiConnection.DeselectSlave();
-            }
         }
+
+        #endregion
     }
 }
