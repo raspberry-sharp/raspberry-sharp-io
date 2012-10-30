@@ -3,8 +3,8 @@
 using System;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Threading;
 using Raspberry.IO.GeneralPurpose;
+using Raspberry.Timers;
 
 #endregion
 
@@ -30,7 +30,7 @@ namespace Gpio.Test.HDD44780
 
                 connection.WriteLine("R# IP Config");
                 connection.WriteLine(Environment.OSVersion);
-                Thread.Sleep(2000);
+                Timer.Sleep(2000);
 
                 const char download = (char) 126;
                 const char upload = (char) 127;
@@ -43,13 +43,13 @@ namespace Gpio.Test.HDD44780
                         connection.WriteLine("{0}: {1}", i.Name, i.OperationalStatus);
                         connection.Write(i.GetIPProperties().UnicastAddresses.Select(a => a.Address.ToString()).FirstOrDefault() ?? "(unassigned)");
 
-                        Thread.Sleep(2000);
+                        Timer.Sleep(2000);
                         
                         connection.Clear();
                         connection.WriteLine(i.GetPhysicalAddress());
                         connection.Write("{0}{1} {2}{3}", download, FormatByteCount(i.GetIPv4Statistics().BytesReceived), upload, FormatByteCount(i.GetIPv4Statistics().BytesSent));
 
-                        Thread.Sleep(2000);
+                        Timer.Sleep(2000);
 
                         if (Console.KeyAvailable)
                             return;

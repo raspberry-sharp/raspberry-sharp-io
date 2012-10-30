@@ -4,7 +4,8 @@
     <id>Raspberry.IO.GeneralPurpose</id>
     <version>0.0.0</version>
     <title>Raspberry.IO.GeneralPurpose</title>
-    <authors>Raspberry-Sharp</authors>
+    <authors>Eric Bézine</authors>
+    <owners>Raspberry-Sharp</owners>
     <licenseUrl>http://opensource.org/licenses/GPL-2.0</licenseUrl>
     <projectUrl>https://github.com/raspberry-sharp/raspberry-sharp-io/wiki/Raspberry.IO.GeneralPurpose</projectUrl>
     <iconUrl>https://raw.github.com/raspberry-sharp/raspberry-sharp-io/master/Icon.png</iconUrl>
@@ -24,6 +25,9 @@
       <frameworkAssembly assemblyName="System.Configuration" targetFramework="net40" />
       <frameworkAssembly assemblyName="System.Core" targetFramework="net40" />
     </frameworkAssemblies>
+    <dependencies>
+      <dependency id="Raspberry.System" version="1.0.1" />
+    </dependencies>
   </metadata>
   <files>
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib\net40" />

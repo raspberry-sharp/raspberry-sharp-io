@@ -2,8 +2,8 @@
 
 using System;
 using System.Text;
-using System.Threading;
 using Raspberry.IO.GeneralPurpose;
+using Raspberry.Timers;
 
 #endregion
 
@@ -226,7 +226,7 @@ namespace Gpio.Test.HDD44780
 
         private void Sleep(decimal delay)
         {
-            Thread.Sleep(delay < 1 ? 1 : (int)delay);
+            Timer.Sleep(delay < 1 ? 1 : (int)delay);
         }
 
         private void WriteCommand(Command command, int parameter = 0)

@@ -31,7 +31,7 @@ namespace Raspberry.IO.GeneralPurpose
 
             int boardRevision;
             if (configurationSection == null || string.Equals(configurationSection.BoardRevision ?? "auto", "auto", StringComparison.InvariantCultureIgnoreCase))
-                boardRevision = Host.Current.BoardRevision;
+                boardRevision = Board.Current.Revision;
             else
                 boardRevision = int.Parse(configurationSection.BoardRevision);
 
@@ -101,7 +101,7 @@ namespace Raspberry.IO.GeneralPurpose
             if (processorMappings.TryGetValue(pin, out processorPin))
                 return processorPin;
             else
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Connector pin {0} is not mapped to processor on board revision {1}", pin.ToString().Replace("Pin", "-"), Host.Current.BoardRevision));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Connector pin {0} is not mapped to processor on board revision {1}", pin.ToString().Replace("Pin", "-"), Board.Current.Revision));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Raspberry.IO.GeneralPurpose
             if (connectorMappings.TryGetValue(pin, out connectorPin))
                 return connectorPin;
             else
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to connector on board revision {1}", (int) pin, Host.Current.BoardRevision));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to connector on board revision {1}", (int)pin, Board.Current.Revision));
         }
 
         #endregion

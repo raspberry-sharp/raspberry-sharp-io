@@ -48,9 +48,6 @@ namespace Raspberry.IO.GeneralPurpose
         [DllImport("libbcm2835.so", EntryPoint = "bcm2835_gpio_set_pud")]
         public static extern void bcm2835_gpio_set_pud(uint pin, uint pud);
 
-        [DllImport("libbcm2835.so", EntryPoint = "bcm2835_delayMicroseconds")]
-        public static extern void bcm2835_delayMicroseconds(uint microseconds);
-
         #endregion
     }
 }

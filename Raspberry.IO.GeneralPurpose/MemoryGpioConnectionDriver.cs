@@ -19,7 +19,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         public MemoryGpioConnectionDriver()
         {
-            if (!Host.Current.IsRaspberryPi)
+            if (!Board.Current.IsRaspberryPi)
                 throw new NotSupportedException("MemoryGpioConnectionDriver is only supported on Raspberry Pi");
 
             Interop.Reference();
