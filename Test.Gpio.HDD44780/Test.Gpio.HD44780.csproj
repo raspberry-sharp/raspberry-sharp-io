@@ -48,8 +48,9 @@
     <Compile Include="DisplayFlags.cs" />
     <Compile Include="EntryModeFlags.cs" />
     <Compile Include="Functions.cs" />
-    <Compile Include="HD44780LcdConnection.cs" />
-    <Compile Include="HD44780LcdJapaneseEncoding.cs" />
+    <Compile Include="Hd44780LcdConnection.cs" />
+    <Compile Include="Hd44780LcdConnectionSettings.cs" />
+    <Compile Include="Hd44780LcdJapaneseEncoding.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 #region References
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Raspberry.IO.GeneralPurpose;
@@ -12,75 +13,118 @@ namespace Test.Gpio.HD44780
 {
     /// <summary>
     /// Based on https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_CharLCD/Adafruit_CharLCD.py
-    /// and http://lcd-linux.sourceforge.net/pdfdocs/hd44780.pdf
-    /// and http://www.quinapalus.com/hd44780udg.html
-    /// and http://robo.fe.uni-lj.si/~kamnikr/sola/urac/vaja3_display/How%20to%20control%20HD44780%20display.pdf 
+    ///      and http://lcd-linux.sourceforge.net/pdfdocs/hd44780.pdf
+    ///      and http://www.quinapalus.com/hd44780udg.html
+    ///      and http://robo.fe.uni-lj.si/~kamnikr/sola/urac/vaja3_display/How%20to%20control%20HD44780%20display.pdf 
     /// </summary>
-    public class HD44780LcdConnection : IDisposable
+    public class Hd44780LcdConnection : IDisposable
     {
         #region Fields
 
         private readonly IGpioConnectionDriver connectionDriver;
 
-        private readonly ProcessorPin registerSelect;
-        private readonly ProcessorPin clock;
-        private readonly ProcessorPin data1;
-        private readonly ProcessorPin data2;
-        private readonly ProcessorPin data3;
-        private readonly ProcessorPin data4;
+        private readonly ProcessorPin registerSelectPin;
+        private readonly ProcessorPin clockPin;
+        private readonly ProcessorPin[] dataPins;
+
         private readonly int width;
         private readonly int height;
 
         private readonly Functions functions;
-
         private readonly Encoding encoding;
-
+        private readonly EntryModeFlags entryModeFlags;
+        
         private DisplayFlags displayFlags = DisplayFlags.DisplayOn | DisplayFlags.BlinkOff | DisplayFlags.CursorOff;
-        private EntryModeFlags entryModeFlags = EntryModeFlags.EntryLeft | EntryModeFlags.EntryShiftDecrement;
-
         private int currentRow;
         private int currentColumn;
 
         #endregion
 
         #region Instance Management
-        
-        public HD44780LcdConnection(
-            ProcessorPin registerSelect, ProcessorPin clock,
-            ProcessorPin data1, ProcessorPin data2, ProcessorPin data3, ProcessorPin data4,
-            int width, int height)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// </summary>
+        /// <param name="registerSelectPin">The register select pin.</param>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="dataPins">The data pins.</param>
+        public Hd44780LcdConnection(ProcessorPin registerSelectPin, ProcessorPin clockPin, params ProcessorPin[] dataPins) : this(null, registerSelectPin, clockPin, (IEnumerable<ProcessorPin>)dataPins) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// </summary>
+        /// <param name="registerSelectPin">The register select pin.</param>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="dataPins">The data pins.</param>
+        public Hd44780LcdConnection(ProcessorPin registerSelectPin, ProcessorPin clockPin, IEnumerable<ProcessorPin> dataPins) : this(null, registerSelectPin, clockPin, dataPins) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="registerSelectPin">The register select pin.</param>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="dataPins">The data pins.</param>
+        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, ProcessorPin registerSelectPin, ProcessorPin clockPin, params ProcessorPin[] dataPins) : this (settings, registerSelectPin, clockPin, (IEnumerable<ProcessorPin>)dataPins) {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="registerSelectPin">The register select pin.</param>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="dataPins">The data pins.</param>
+        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, ProcessorPin registerSelectPin, ProcessorPin clockPin, IEnumerable<ProcessorPin> dataPins)
         {
-            this.registerSelect = registerSelect;
-            this.clock = clock;
-            this.data1 = data1;
-            this.data2 = data2;
-            this.data3 = data3;
-            this.data4 = data4;
+            settings = settings ?? new Hd44780LcdConnectionSettings();
 
-            this.width = width;
-            this.height = height;
-            functions = Functions.Matrix5x7 | (height == 1 ? Functions.OneLine : Functions.TwoLines);
+            this.registerSelectPin = registerSelectPin;
+            this.clockPin = clockPin;
+            this.dataPins = dataPins.ToArray();
 
-            encoding = new HD44780LcdJapaneseEncoding();
+            if (this.dataPins.Length != 4 && this.dataPins.Length != 8)
+                throw new ArgumentOutOfRangeException("dataPins", this.dataPins.Length, "There must be either 4 or 8 data pins");
+            
+            width = settings.ScreenWidth;
+            height = settings.ScreenHeight;
+            if (height < 1 || height > 2)
+                throw new ArgumentOutOfRangeException("ScreenHeight", height, "Screen must have either 1 or 2 rows");
+            if (width * height > 80)
+                throw new ArgumentException("At most 80 characters are allowed");
+
+            if (settings.PatternWidth != 5)
+                throw new ArgumentOutOfRangeException("PatternWidth", settings.PatternWidth, "Pattern must be 5 pixels width");
+            if (settings.PatternHeight != 8 && settings.PatternHeight != 10)
+                throw new ArgumentOutOfRangeException("PatternHeight", settings.PatternWidth, "Pattern must be either 7 or 10 pixels height");
+            if (settings.PatternHeight == 10 && height == 2)
+                throw new ArgumentException("10 pixels height pattern cannot be used with 2 rows");
+
+            functions = (settings.PatternHeight == 8 ? Functions.Matrix5x8 : Functions.Matrix5x10) 
+                | (height == 1 ? Functions.OneLine : Functions.TwoLines)
+                | (this.dataPins.Length == 4 ? Functions.Data4bits : Functions.Data8bits);
+
+            entryModeFlags = /*settings.RightToLeft 
+                ? EntryModeFlags.EntryRight | EntryModeFlags.EntryShiftDecrement
+                :*/ EntryModeFlags.EntryLeft | EntryModeFlags.EntryShiftDecrement;
+
+            encoding = settings.Encoding;
 
             connectionDriver = new MemoryGpioConnectionDriver();
 
-            connectionDriver.Allocate(registerSelect, PinDirection.Output);
-            connectionDriver.Allocate(clock, PinDirection.Output);
-            connectionDriver.Allocate(data1, PinDirection.Output);
-            connectionDriver.Allocate(data2, PinDirection.Output);
-            connectionDriver.Allocate(data3, PinDirection.Output);
-            connectionDriver.Allocate(data4, PinDirection.Output);
+            connectionDriver.Allocate(registerSelectPin, PinDirection.Output);
+            connectionDriver.Write(registerSelectPin, false);
 
-            connectionDriver.Write(registerSelect, false);
-            connectionDriver.Write(clock, false);
-            connectionDriver.Write(data1, false);
-            connectionDriver.Write(data2, false);
-            connectionDriver.Write(data3, false);
-            connectionDriver.Write(data4, false);
+            connectionDriver.Allocate(clockPin, PinDirection.Output);
+            connectionDriver.Write(clockPin, false);
+            
+            foreach (var dataPin in this.dataPins)
+            {
+                connectionDriver.Allocate(dataPin, PinDirection.Output);
+                connectionDriver.Write(dataPin, false);
+            }
 
-            Write4Bits(0x33, false); // Initialize
-            Write4Bits(0x32, false);
+            WriteByte(0x33, false); // Initialize
+            WriteByte(0x32, false);
 
             WriteCommand(Command.SetFunctions, (int) functions);
             WriteCommand(Command.SetDisplayFlags, (int) displayFlags);
@@ -126,7 +170,7 @@ namespace Test.Gpio.HD44780
             }
         }
 
-        public bool BlinkEnabled
+        public bool CursorBlinking
         {
             get { return (displayFlags & DisplayFlags.BlinkOn) == DisplayFlags.BlinkOn; }
             set
@@ -148,12 +192,10 @@ namespace Test.Gpio.HD44780
         {
             Clear();
 
-            connectionDriver.Release(registerSelect);
-            connectionDriver.Release(clock);
-            connectionDriver.Release(data1);
-            connectionDriver.Release(data2);
-            connectionDriver.Release(data3);
-            connectionDriver.Release(data4);
+            connectionDriver.Release(registerSelectPin);
+            connectionDriver.Release(clockPin);
+            foreach (var dataPin in dataPins)
+                connectionDriver.Release(dataPin);
         }
 
         public void Home()
@@ -174,14 +216,34 @@ namespace Test.Gpio.HD44780
             Sleep(3); // Clearing the display takes a long time
         }
 
-        public void WriteLine(object value)
+        public void Move(int offset)
         {
-            WriteLine("{0}", value);
+            var count = offset > 0 ? offset : -offset;
+            for (var i = 0; i < count; i++)
+                WriteCommand(Command.MoveCursor, (int)(CursorShiftFlags.DisplayMove | (offset < 0 ? CursorShiftFlags.MoveLeft : CursorShiftFlags.MoveRight)));
         }
 
-        public void WriteLine(string text)
+        public void SetCustomCharacter(byte character, byte[] pattern)
         {
-            Write(text + Environment.NewLine);
+            if ((functions & Functions.Matrix5x8) == Functions.Matrix5x8)
+                Set5x8CustomCharacter(character, pattern);
+            else
+                Set5x10CustomCharacter(character, pattern);
+        }
+
+        public void WriteLine(object value, decimal animationDelay = 0m)
+        {
+            WriteLine("{0}", value, animationDelay);
+        }
+
+        public void WriteLine(string text, decimal animationDelay = 0m)
+        {
+            Write(text + Environment.NewLine, animationDelay);
+        }
+
+        public void Write(object value, decimal animationDelay = 0m)
+        {
+            Write("{0}", value, animationDelay);
         }
 
         public void WriteLine(string format, params object[] values)
@@ -189,15 +251,22 @@ namespace Test.Gpio.HD44780
             WriteLine(string.Format(format, values));
         }
 
-        public void SetCustomCharacter(byte character, byte[] pattern)
+        public void Write(string format, params object[] values)
         {
-            if ((functions & Functions.Matrix5x7) == Functions.Matrix5x7)
-                Set5x7CustomCharacter(character, pattern);
-            else
-                Set5x10CustomCharacter(character, pattern);
+            Write(string.Format(format, values));
         }
 
-        public void Write(string text)
+        public void WriteLine(string format, decimal animationDelay, params object[] values)
+        {
+            WriteLine(string.Format(format, values), animationDelay);
+        }
+
+        public void Write(string format, decimal animationDelay, params object[] values)
+        {
+            Write(string.Format(format, values), animationDelay);
+        }
+
+        public void Write(string text, decimal animationDelay = 0m)
         {
             var lines = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
 
@@ -210,30 +279,23 @@ namespace Test.Gpio.HD44780
                 foreach (var b in bytes)
                 {
                     if (currentColumn < width)
-                        Write4Bits(b, true);
+                        WriteByte(b, true);
+
+                    if (animationDelay > 0m)
+                        Timer.Sleep(animationDelay);
 
                     currentColumn++;
                 }
 
                 if (currentRow == 0 && height > 1)
                 {
-                    Write4Bits(0xC0, false);
+                    WriteByte(0xC0, false);
                     currentColumn = 0;
                     currentRow++;
                 }
                 else
                     break;
             }
-        }
-
-        public void Write(object value)
-        {
-            Write("{0}", value);
-        }
-
-        public void Write(string format, params object[] values)
-        {
-            Write(string.Format(format, values));
         }
 
         #endregion
@@ -248,7 +310,7 @@ namespace Test.Gpio.HD44780
         private void WriteCommand(Command command, int parameter = 0)
         {
             var bits = (int) command | parameter;
-            Write4Bits(bits, false);
+            WriteByte(bits, false);
         }
 
         private void Set5x10CustomCharacter(byte character, byte[] pattern)
@@ -260,11 +322,11 @@ namespace Test.Gpio.HD44780
 
             WriteCommand(Command.SetCGRamAddr, character << 3);
             for (var i = 0; i < 7; i++)
-                Write4Bits(pattern[i], true);
-            Write4Bits(0, true);
+                WriteByte(pattern[i], true);
+            WriteByte(0, true);
         }
 
-        private void Set5x7CustomCharacter(byte character, byte[] pattern)
+        private void Set5x8CustomCharacter(byte character, byte[] pattern)
         {
             if (character > 7)
                 throw new ArgumentOutOfRangeException("character", character, "character must be lower or equal to 7");
@@ -273,38 +335,45 @@ namespace Test.Gpio.HD44780
 
             WriteCommand(Command.SetCGRamAddr, character << 3);
             for (var i = 0; i < 7; i++)
-                Write4Bits(pattern[i], true);
-            Write4Bits(0, true);
+                WriteByte(pattern[i], true);
+            WriteByte(0, true);
         }
 
-        private void Write4Bits(int bits, bool charMode)
+        private void WriteByte(int bits, bool charMode)
         {
-            connectionDriver.Write(registerSelect, charMode);
+            if (dataPins.Length == 4)
+                WriteByte4Pins(bits, charMode);
+            else
+                throw new NotImplementedException("8 bits mode is currently not implemented");
+        }
 
-            connectionDriver.Write(data1, (bits & 0x10) != 0);
-            connectionDriver.Write(data2, (bits & 0x20) != 0);
-            connectionDriver.Write(data3, (bits & 0x40) != 0);
-            connectionDriver.Write(data4, (bits & 0x80) != 0);
+        private void WriteByte4Pins(int bits, bool charMode)
+        {
+            connectionDriver.Write(registerSelectPin, charMode);
+
+            connectionDriver.Write(dataPins[0], (bits & 0x10) != 0);
+            connectionDriver.Write(dataPins[1], (bits & 0x20) != 0);
+            connectionDriver.Write(dataPins[2], (bits & 0x40) != 0);
+            connectionDriver.Write(dataPins[3], (bits & 0x80) != 0);
 
             Synchronize();
 
-            connectionDriver.Write(data1, (bits & 0x01) != 0);
-            connectionDriver.Write(data2, (bits & 0x02) != 0);
-            connectionDriver.Write(data3, (bits & 0x04) != 0);
-            connectionDriver.Write(data4, (bits & 0x08) != 0);
+            connectionDriver.Write(dataPins[0], (bits & 0x01) != 0);
+            connectionDriver.Write(dataPins[1], (bits & 0x02) != 0);
+            connectionDriver.Write(dataPins[2], (bits & 0x04) != 0);
+            connectionDriver.Write(dataPins[3], (bits & 0x08) != 0);
 
             Synchronize();
-
         }
 
         private void Synchronize()
         {
             Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
 
-            connectionDriver.Write(clock, true);
+            connectionDriver.Write(clockPin, true);
             Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
 
-            connectionDriver.Write(clock, false);
+            connectionDriver.Write(clockPin, false);
             Sleep(0.001m); // commands need > 37us to settle
         }
 

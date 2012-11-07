@@ -7,12 +7,13 @@ namespace Test.Gpio.HD44780
     {
         None = 0,
 
-        Matrix5x7 = 0,
-        OneLine = 0,
-
+        Matrix5x8 = 0,
         Matrix5x10 = 0x04,
+
+        OneLine = 0,
         TwoLines = 0x08,
 
-        //LCD_8BITMODE = 0x10,
+        Data4bits = 0x0,
+        Data8bits = 0x10,
     }
 }

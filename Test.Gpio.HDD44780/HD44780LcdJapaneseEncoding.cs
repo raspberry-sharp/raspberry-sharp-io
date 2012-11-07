@@ -9,7 +9,7 @@ namespace Test.Gpio.HD44780
     /// Represents encoding for HD44780 LCD with Japanese character set (ROM code A00)
     /// Based on http://lcd-linux.sourceforge.net/pdfdocs/hd44780.pdf
     /// </summary>
-    public class HD44780LcdJapaneseEncoding : Encoding
+    public class Hd44780LcdJapaneseEncoding : Encoding
     {
         private static readonly Dictionary<char, byte> charMap = GetMap().GroupBy(p => p.Key, p => p.Value).ToDictionary(g => g.Key, g => g.First());
         private static readonly Dictionary<byte, char> byteMap = GetMap().GroupBy(p => p.Value, p => p.Key).ToDictionary(g => g.Key, g => g.First());
