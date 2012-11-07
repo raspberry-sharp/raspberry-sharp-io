@@ -8,13 +8,13 @@ Introduction
 Raspberry# IO is a .NET/Mono IO Library for Raspberry Pi. This project is an initiative of the [Raspberry#](http://www.raspberry-sharp.org) Community.
 
 Current release is an early public release. Some features may not have been extensively tested.
-Raspberry# IO currently supports GPIO input/output, and an SPI sample for MCP3008 ADC is provided.
+Raspberry# IO currently supports GPIO input/output, and samples with SPI (for MCP3008 ADC or MCP4822 DAC), and HD44780 LCD display are provided.
 
 Support for extended IO (such as support for PWM or I2C peripherals) is planned for future releases.
 
-Programs using Raspberry# IO must be run with elevated privileges, for example the Gpio.Test.Chaser program included in solution:
+Programs using Raspberry# IO must be run with elevated privileges, for example the Test.Gpio.Chaser program included in solution:
 
-    sudo mono Gpio.Test.Chaser.exe -loop
+    sudo mono Test.Gpio.Chaser.exe -loop
 
 Features
 --------
@@ -33,4 +33,5 @@ It currently support the following features:
 + **High-level behaviors** for output pins, including *blink*, *pattern* and *chaser*
 + Controlled use of resources using a IDisposable component
 + Support sub-millisecond polling of input pins
-+ Includes a SPI samples for MCP3008 ADC
++ Preliminary support for SPI through Raspberry.IO.SerialPeripheralInterface assembly
++ Includes SPI samples for MCP3008 ADC and MCP4822 DAC, as well as for HD44780 LCD display
