@@ -56,6 +56,11 @@
             The action.
             </value>
         </member>
+        <member name="M:Raspberry.Timers.HighResolutionTimer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.Timers.HighResolutionTimer"/> class.
+            </summary>
+        </member>
         <member name="M:Raspberry.Timers.HighResolutionTimer.Sleep(System.Decimal)">
             <summary>
             Sleeps the specified delay.

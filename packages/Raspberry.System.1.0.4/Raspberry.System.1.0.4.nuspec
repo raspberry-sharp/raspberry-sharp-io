@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Raspberry.System</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <title>Raspberry.System</title>
     <authors>Eric Bézine</authors>
     <owners>Eric Bézine</owners>
@@ -13,8 +13,6 @@
     <description>Raspberry.System is a Mono/.NET assembly providing access to Raspberry Pi system features.
 
       It is an initiative of the Raspberry# Community, aimed at providing tools and information concerning use of Raspberry Pi boards with Mono/.NET framework.
-      Parts of this work are based on [BCM2835 C library](http://www.open.com.au/mikem/bcm2835/).
-
       Visit project [Github site](https://github.com/raspberry-sharp/raspberry-sharp-system/) for documentation and samples.</description>
     <summary>Raspberry.System is a Mono/.NET assembly providing access to Raspberry Pi system features.</summary>
     <language>en-US</language>
