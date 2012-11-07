@@ -1,18 +1,22 @@
 #region References
 
 using System;
+using System.Linq;
 using System.Text;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
 #endregion
 
-namespace Gpio.Test.HDD44780
+namespace Test.Gpio.HD44780
 {
     /// <summary>
     /// Based on https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_CharLCD/Adafruit_CharLCD.py
+    /// and http://lcd-linux.sourceforge.net/pdfdocs/hd44780.pdf
+    /// and http://www.quinapalus.com/hd44780udg.html
+    /// and http://robo.fe.uni-lj.si/~kamnikr/sola/urac/vaja3_display/How%20to%20control%20HD44780%20display.pdf 
     /// </summary>
-    public class Hdd44780LcdConnection : IDisposable
+    public class HD44780LcdConnection : IDisposable
     {
         #region Fields
 
@@ -29,6 +33,8 @@ namespace Gpio.Test.HDD44780
 
         private readonly Functions functions;
 
+        private readonly Encoding encoding;
+
         private DisplayFlags displayFlags = DisplayFlags.DisplayOn | DisplayFlags.BlinkOff | DisplayFlags.CursorOff;
         private EntryModeFlags entryModeFlags = EntryModeFlags.EntryLeft | EntryModeFlags.EntryShiftDecrement;
 
@@ -39,7 +45,7 @@ namespace Gpio.Test.HDD44780
 
         #region Instance Management
 
-        public Hdd44780LcdConnection(
+        public HD44780LcdConnection(
             ProcessorPin registerSelect, ProcessorPin clock,
             ProcessorPin data1, ProcessorPin data2, ProcessorPin data3, ProcessorPin data4,
             int width, int height)
@@ -54,6 +60,8 @@ namespace Gpio.Test.HDD44780
             this.width = width;
             this.height = height;
             functions = Functions.Matrix5x7 | (height == 1 ? Functions.OneLine : Functions.TwoLines);
+
+            encoding = new HD44780LcdJapaneseEncoding();
 
             connectionDriver = new MemoryGpioConnectionDriver();
 
@@ -154,7 +162,7 @@ namespace Gpio.Test.HDD44780
             currentRow = 0;
             currentColumn = 0;
 
-            Sleep(3.0m);
+            Sleep(3);
         }
 
         public void Clear()
@@ -163,7 +171,7 @@ namespace Gpio.Test.HDD44780
             currentRow = 0;
             currentColumn = 0;
 
-            Sleep(3.0m); // Clearing the display takes a long time
+            Sleep(3); // Clearing the display takes a long time
         }
 
         public void WriteLine(object value)
@@ -181,6 +189,14 @@ namespace Gpio.Test.HDD44780
             WriteLine(string.Format(format, values));
         }
 
+        public void SetCustomCharacter(byte character, byte[] pattern)
+        {
+            if ((functions & Functions.Matrix5x7) == Functions.Matrix5x7)
+                Set5x7CustomCharacter(character, pattern);
+            else
+                Set5x10CustomCharacter(character, pattern);
+        }
+
         public void Write(string text)
         {
             var lines = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
@@ -190,7 +206,7 @@ namespace Gpio.Test.HDD44780
                 if (string.IsNullOrEmpty(line))
                     continue;
 
-                var bytes = Encoding.ASCII.GetBytes(line);
+                var bytes = encoding.GetBytes(line);
                 foreach (var b in bytes)
                 {
                     if (currentColumn < width)
@@ -226,13 +242,39 @@ namespace Gpio.Test.HDD44780
 
         private void Sleep(decimal delay)
         {
-            Timer.Sleep(delay < 1 ? 1 : (int)delay);
+            Timer.Sleep(delay);
         }
 
         private void WriteCommand(Command command, int parameter = 0)
         {
             var bits = (int) command | parameter;
             Write4Bits(bits, false);
+        }
+
+        private void Set5x10CustomCharacter(byte character, byte[] pattern)
+        {
+            if (character > 7 || (character & 0x1) != 0x1)
+                throw new ArgumentOutOfRangeException("character", character, "character must be lower or equal to 7, and not an odd number");
+            if (pattern.Length != 10)
+                throw new ArgumentOutOfRangeException("pattern", pattern, "pattern must be 10 rows long");
+
+            WriteCommand(Command.SetCGRamAddr, character << 3);
+            for (var i = 0; i < 7; i++)
+                Write4Bits(pattern[i], true);
+            Write4Bits(0, true);
+        }
+
+        private void Set5x7CustomCharacter(byte character, byte[] pattern)
+        {
+            if (character > 7)
+                throw new ArgumentOutOfRangeException("character", character, "character must be lower or equal to 7");
+            if (pattern.Length != 7)
+                throw new ArgumentOutOfRangeException("pattern", pattern, "pattern must be 7 rows long");
+
+            WriteCommand(Command.SetCGRamAddr, character << 3);
+            for (var i = 0; i < 7; i++)
+                Write4Bits(pattern[i], true);
+            Write4Bits(0, true);
         }
 
         private void Write4Bits(int bits, bool charMode)

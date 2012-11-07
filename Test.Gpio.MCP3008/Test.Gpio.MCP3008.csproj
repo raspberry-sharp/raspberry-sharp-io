@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}</ProjectGuid>
+    <ProjectGuid>{B28253A7-BB93-40F7-B41C-B4AE369174ED}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gpio.Test.HDD44780</RootNamespace>
-    <AssemblyName>Gpio.Test.HDD44780</AssemblyName>
+    <RootNamespace>Test.Gpio.MCP3008</RootNamespace>
+    <AssemblyName>Test.Gpio.MCP3008</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -35,20 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Raspberry.System">
-      <HintPath>..\packages\Raspberry.System.1.0.1\lib\net40\Raspberry.System.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
-    <Compile Include="CursorShiftFlags.cs" />
-    <Compile Include="DisplayFlags.cs" />
-    <Compile Include="EntryModeFlags.cs" />
-    <Compile Include="Functions.cs" />
-    <Compile Include="Hdd44780LcdConnection.cs" />
+    <Compile Include="Convert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,9 +49,16 @@
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj">
+      <Project>{326342E5-0411-40E8-9F2D-563D6B192568}</Project>
+      <Name>Raspberry.IO.SerialPeripheralInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="Properties\Gpio.Test.MCP3008.fzz" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\Gpio.Test.MCP3008.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

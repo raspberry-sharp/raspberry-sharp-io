@@ -1,6 +1,6 @@
 using System;
 
-namespace Gpio.Test.HDD44780
+namespace Test.Gpio.HD44780
 {
     [Flags]
     internal enum DisplayFlags

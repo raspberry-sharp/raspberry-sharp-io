@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Raspberry.IO.GeneralPurpose;
 
-namespace Gpio.Test.Chaser
+namespace Test.Gpio.Chaser
 {
     internal static class Helpers
     {

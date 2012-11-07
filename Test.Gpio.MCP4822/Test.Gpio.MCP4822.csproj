@@ -8,8 +8,8 @@
     <ProjectGuid>{54075457-7C1D-4C8F-BE7D-CFCA34F11228}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gpio.Test.MCP4822</RootNamespace>
-    <AssemblyName>Gpio.Test.MCP4822</AssemblyName>
+    <RootNamespace>Test.Gpio.MCP4822</RootNamespace>
+    <AssemblyName>Test.Gpio.MCP4822</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

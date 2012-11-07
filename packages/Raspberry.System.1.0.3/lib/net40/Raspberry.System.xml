@@ -24,6 +24,11 @@
             </summary>
             <param name="time">The time, in milliseconds.</param>
         </member>
+        <member name="T:Raspberry.Timers.HighResolutionTimer">
+            <summary>
+            Represents a high-resolution timer.
+            </summary>
+        </member>
         <member name="M:Raspberry.Timers.ITimer.Start(System.Decimal)">
             <summary>
             Starts this instance.
@@ -50,6 +55,12 @@
             <value>
             The action.
             </value>
+        </member>
+        <member name="M:Raspberry.Timers.HighResolutionTimer.Sleep(System.Decimal)">
+            <summary>
+            Sleeps the specified delay.
+            </summary>
+            <param name="delay">The delay.</param>
         </member>
         <member name="M:Raspberry.Timers.HighResolutionTimer.Start(System.Decimal)">
             <summary>

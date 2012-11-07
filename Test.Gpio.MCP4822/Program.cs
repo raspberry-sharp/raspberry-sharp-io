@@ -7,7 +7,7 @@ using Raspberry.IO.SerialPeripheralInterface.Components;
 
 #endregion
 
-namespace Gpio.Test.MCP4822
+namespace Test.Gpio.MCP4822
 {
     /// <summary>
     /// Freely adapted from http://www.skpang.co.uk/blog/archives/689

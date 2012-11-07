@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Raspberry.System</id>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <title>Raspberry.System</title>
     <authors>Eric Bézine</authors>
     <owners>Eric Bézine</owners>

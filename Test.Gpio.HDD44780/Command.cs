@@ -1,4 +1,4 @@
-namespace Gpio.Test.HDD44780
+namespace Test.Gpio.HD44780
 {
     internal enum Command
     {
@@ -8,7 +8,7 @@ namespace Gpio.Test.HDD44780
         SetDisplayFlags = 0x08,
         MoveCursor = 0x10,
         SetFunctions = 0x20,
-        //SetCGRamAddr = 0x40,
+        SetCGRamAddr = 0x40,
         //SetDDRamAddr = 0x80
     }
 }

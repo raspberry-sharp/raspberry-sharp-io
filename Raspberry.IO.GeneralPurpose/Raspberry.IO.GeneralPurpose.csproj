@@ -33,8 +33,8 @@
     <DocumentationFile>bin\Release\Raspberry.IO.GeneralPurpose.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Raspberry.System">
-      <HintPath>..\packages\Raspberry.System.1.0.1\lib\net40\Raspberry.System.dll</HintPath>
+    <Reference Include="Raspberry.System, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Raspberry.System.1.0.3\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

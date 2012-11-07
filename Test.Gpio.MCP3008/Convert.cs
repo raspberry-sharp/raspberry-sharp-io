@@ -1,4 +1,4 @@
-namespace Gpio.Test.MCP3008
+namespace Test.Gpio.MCP3008
 {
     internal static class Convert
     {

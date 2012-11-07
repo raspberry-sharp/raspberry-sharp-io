@@ -7,7 +7,7 @@ using Raspberry.IO.SerialPeripheralInterface.Components;
 
 #endregion
 
-namespace Gpio.Test.MCP3008
+namespace Test.Gpio.MCP3008
 {
     /// <summary>
     /// Freely adapted from http://learn.adafruit.com/reading-a-analog-in-and-controlling-audio-volume-with-the-raspberry-pi/overview

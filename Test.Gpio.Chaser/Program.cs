@@ -4,7 +4,7 @@ using Raspberry;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.GeneralPurpose.Behaviors;
 
-namespace Gpio.Test.Chaser
+namespace Test.Gpio.Chaser
 {
     /// <summary>
     /// This is a sample program. Must be modified to match your GPIO project.

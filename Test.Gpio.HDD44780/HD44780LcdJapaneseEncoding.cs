@@ -1,0 +1,376 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+
+namespace Test.Gpio.HD44780
+{
+    /// <summary>
+    /// Represents encoding for HD44780 LCD with Japanese character set (ROM code A00)
+    /// Based on http://lcd-linux.sourceforge.net/pdfdocs/hd44780.pdf
+    /// </summary>
+    public class HD44780LcdJapaneseEncoding : Encoding
+    {
+        private static readonly Dictionary<char, byte> charMap = GetMap().GroupBy(p => p.Key, p => p.Value).ToDictionary(g => g.Key, g => g.First());
+        private static readonly Dictionary<byte, char> byteMap = GetMap().GroupBy(p => p.Value, p => p.Key).ToDictionary(g => g.Key, g => g.First());
+
+        private const byte missingChar = 0x3F;
+        private const char missingByte = '\uFFFD';
+
+        public override int GetByteCount(char[] chars, int index, int count)
+        {
+            return count;
+        }
+
+        public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
+        {
+            Array.Copy(
+                chars
+                    .Skip(charIndex)
+                    .Take(charCount)
+                    .Select(c =>
+                                {
+                                    byte b;
+                                    return charMap.TryGetValue(c, out b) ? b : missingChar;
+                                })
+                    .ToArray(),
+                0,
+                bytes,
+                byteIndex, 
+                charCount);
+
+            return charCount;
+        }
+
+        public override int GetCharCount(byte[] bytes, int index, int count)
+        {
+            return count;
+        }
+
+        public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex)
+        {
+            Array.Copy(
+                bytes
+                    .Skip(byteIndex)
+                    .Take(byteCount)
+                    .Select(b =>
+                    {
+                        char c;
+                        return byteMap.TryGetValue(b, out c) ? c : missingByte;
+                    })
+                    .ToArray(),
+                0,
+                chars,
+                charIndex,
+                byteCount);
+
+            return byteCount;
+        }
+
+        public override int GetMaxByteCount(int charCount)
+        {
+            return charCount;
+        }
+
+        public override int GetMaxCharCount(int byteCount)
+        {
+            return byteCount;
+        }
+
+        private static IEnumerable<KeyValuePair<char, byte>> GetMap()
+        {
+            // Custom characters
+            yield return new KeyValuePair<char, byte>('\u0000', 0x00);
+            yield return new KeyValuePair<char, byte>('\u0001', 0x01);
+            yield return new KeyValuePair<char, byte>('\u0002', 0x02);
+            yield return new KeyValuePair<char, byte>('\u0003', 0x03);
+            yield return new KeyValuePair<char, byte>('\u0004', 0x04);
+            yield return new KeyValuePair<char, byte>('\u0005', 0x05);
+            yield return new KeyValuePair<char, byte>('\u0006', 0x06);
+            yield return new KeyValuePair<char, byte>('\u0007', 0x07);
+
+            /* Missing 0x0A to 0x1F */
+
+            yield return new KeyValuePair<char, byte>(' ', 0x20);
+            // Variants
+            yield return new KeyValuePair<char, byte>('\u0009', 0x20);
+            yield return new KeyValuePair<char, byte>('\u000A', 0x20);
+            yield return new KeyValuePair<char, byte>('\u000B', 0x20);
+            yield return new KeyValuePair<char, byte>('\u000C', 0x20);
+            yield return new KeyValuePair<char, byte>('\u000D', 0x20);
+            yield return new KeyValuePair<char, byte>('\u0085', 0x20);
+            yield return new KeyValuePair<char, byte>('\u00A0', 0x20);
+            yield return new KeyValuePair<char, byte>('\u1680', 0x20);
+            yield return new KeyValuePair<char, byte>('\u180E', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2000', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2001', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2002', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2003', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2004', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2005', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2006', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2007', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2008', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2009', 0x20);
+            yield return new KeyValuePair<char, byte>('\u200A', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2028', 0x20);
+            yield return new KeyValuePair<char, byte>('\u2029', 0x20);
+            yield return new KeyValuePair<char, byte>('\u202F', 0x20);
+            yield return new KeyValuePair<char, byte>('\u205F', 0x20);
+            yield return new KeyValuePair<char, byte>('\u3000', 0x20);
+
+            yield return new KeyValuePair<char, byte>('!', 0x21);
+            
+            yield return new KeyValuePair<char, byte>('"', 0x22);
+            //Variants
+            yield return new KeyValuePair<char, byte>('“', 0x22);
+            yield return new KeyValuePair<char, byte>('”', 0x22);
+            yield return new KeyValuePair<char, byte>('„', 0x22);
+            yield return new KeyValuePair<char, byte>('‟', 0x22);
+
+            yield return new KeyValuePair<char, byte>('#', 0x23);
+            yield return new KeyValuePair<char, byte>('$', 0x24);
+            yield return new KeyValuePair<char, byte>('%', 0x25);
+            yield return new KeyValuePair<char, byte>('&', 0x26);
+            
+            yield return new KeyValuePair<char, byte>('\'',0x27);
+            // Variants
+            yield return new KeyValuePair<char, byte>('‘', 0x2F);
+            yield return new KeyValuePair<char, byte>('’', 0x2F);
+            yield return new KeyValuePair<char, byte>('‛', 0x2F);
+            yield return new KeyValuePair<char, byte>('′', 0x2F);
+
+            yield return new KeyValuePair<char, byte>('(', 0x28);
+            yield return new KeyValuePair<char, byte>(')', 0x29);
+            yield return new KeyValuePair<char, byte>('*', 0x2A);
+            yield return new KeyValuePair<char, byte>('+', 0x2B);
+            yield return new KeyValuePair<char, byte>(',', 0x2C);
+
+            yield return new KeyValuePair<char, byte>('-', 0x2D);
+            // Variants
+            yield return new KeyValuePair<char, byte>('‐', 0x2D);
+            yield return new KeyValuePair<char, byte>('‒', 0x2D);
+            yield return new KeyValuePair<char, byte>('–', 0x2D);
+            yield return new KeyValuePair<char, byte>('—', 0x2D);
+            yield return new KeyValuePair<char, byte>('―', 0x2D);
+            
+            yield return new KeyValuePair<char, byte>('.', 0x2E);
+
+            yield return new KeyValuePair<char, byte>('/', 0x2F);
+            // Variants
+            yield return new KeyValuePair<char, byte>('⁄', 0x2F);
+
+            yield return new KeyValuePair<char, byte>('0', 0x30);
+            yield return new KeyValuePair<char, byte>('1', 0x31);
+            yield return new KeyValuePair<char, byte>('2', 0x32);
+            yield return new KeyValuePair<char, byte>('3', 0x33);
+            yield return new KeyValuePair<char, byte>('4', 0x34);
+            yield return new KeyValuePair<char, byte>('5', 0x35);
+            yield return new KeyValuePair<char, byte>('6', 0x36);
+            yield return new KeyValuePair<char, byte>('7', 0x37);
+            yield return new KeyValuePair<char, byte>('8', 0x38);
+            yield return new KeyValuePair<char, byte>('9', 0x39);
+            yield return new KeyValuePair<char, byte>(':', 0x3A);
+            yield return new KeyValuePair<char, byte>(';', 0x3B);
+            
+            yield return new KeyValuePair<char, byte>('<', 0x3C);
+            // Variant
+            yield return new KeyValuePair<char, byte>('‹', 0x3C);
+            
+            yield return new KeyValuePair<char, byte>('=', 0x3D);
+            
+            yield return new KeyValuePair<char, byte>('>', 0x3E);
+            // Variant
+            yield return new KeyValuePair<char, byte>('›', 0x3E);
+            
+            yield return new KeyValuePair<char, byte>('?', 0x3F);
+            // Variant
+            yield return new KeyValuePair<char, byte>('¿', 0x3F);
+
+            yield return new KeyValuePair<char, byte>('@', 0x40);
+            yield return new KeyValuePair<char, byte>('A', 0x41);
+            yield return new KeyValuePair<char, byte>('B', 0x42);
+            yield return new KeyValuePair<char, byte>('C', 0x43);
+            yield return new KeyValuePair<char, byte>('D', 0x44);
+            yield return new KeyValuePair<char, byte>('E', 0x45);
+            yield return new KeyValuePair<char, byte>('F', 0x46);
+            yield return new KeyValuePair<char, byte>('G', 0x47);
+            yield return new KeyValuePair<char, byte>('H', 0x48);
+            yield return new KeyValuePair<char, byte>('I', 0x49);
+            yield return new KeyValuePair<char, byte>('J', 0x4A);
+            yield return new KeyValuePair<char, byte>('K', 0x4B);
+            yield return new KeyValuePair<char, byte>('L', 0x4C);
+            yield return new KeyValuePair<char, byte>('M', 0x4D);
+            yield return new KeyValuePair<char, byte>('N', 0x4E);
+            yield return new KeyValuePair<char, byte>('O', 0x4F);
+
+            yield return new KeyValuePair<char, byte>('P', 0x50);
+            yield return new KeyValuePair<char, byte>('Q', 0x51);
+            yield return new KeyValuePair<char, byte>('R', 0x52);
+            yield return new KeyValuePair<char, byte>('S', 0x53);
+            yield return new KeyValuePair<char, byte>('T', 0x54);
+            yield return new KeyValuePair<char, byte>('U', 0x55);
+            yield return new KeyValuePair<char, byte>('V', 0x56);
+            yield return new KeyValuePair<char, byte>('W', 0x57);
+            yield return new KeyValuePair<char, byte>('X', 0x58);
+            yield return new KeyValuePair<char, byte>('Y', 0x59);
+            yield return new KeyValuePair<char, byte>('Z', 0x5A);
+            yield return new KeyValuePair<char, byte>('[', 0x5B);
+            yield return new KeyValuePair<char, byte>('¥', 0x5C);
+            yield return new KeyValuePair<char, byte>(']', 0x5D);
+            yield return new KeyValuePair<char, byte>('^', 0x5E);
+            
+            yield return new KeyValuePair<char, byte>('_', 0x5F);
+            // Variant
+            yield return new KeyValuePair<char, byte>('‗', 0x5F);
+
+            yield return new KeyValuePair<char, byte>('`', 0x60);
+            yield return new KeyValuePair<char, byte>('a', 0x61);
+            yield return new KeyValuePair<char, byte>('b', 0x62);
+            yield return new KeyValuePair<char, byte>('c', 0x63);
+            yield return new KeyValuePair<char, byte>('d', 0x64);
+            yield return new KeyValuePair<char, byte>('e', 0x65);
+            yield return new KeyValuePair<char, byte>('f', 0x66);
+            yield return new KeyValuePair<char, byte>('g', 0x67);
+            yield return new KeyValuePair<char, byte>('h', 0x68);
+            yield return new KeyValuePair<char, byte>('i', 0x69);
+            yield return new KeyValuePair<char, byte>('j', 0x6A);
+            yield return new KeyValuePair<char, byte>('k', 0x6B);
+            yield return new KeyValuePair<char, byte>('l', 0x6C);
+            yield return new KeyValuePair<char, byte>('m', 0x6D);
+            yield return new KeyValuePair<char, byte>('n', 0x6E);
+            yield return new KeyValuePair<char, byte>('o', 0x6F);
+
+            yield return new KeyValuePair<char, byte>('p', 0x70);
+            yield return new KeyValuePair<char, byte>('q', 0x71);
+            yield return new KeyValuePair<char, byte>('r', 0x72);
+            yield return new KeyValuePair<char, byte>('s', 0x73);
+            yield return new KeyValuePair<char, byte>('t', 0x74);
+            yield return new KeyValuePair<char, byte>('u', 0x75);
+            yield return new KeyValuePair<char, byte>('v', 0x76);
+            yield return new KeyValuePair<char, byte>('w', 0x77);
+            yield return new KeyValuePair<char, byte>('x', 0x78);
+            yield return new KeyValuePair<char, byte>('y', 0x79);
+            yield return new KeyValuePair<char, byte>('z', 0x7A);
+            yield return new KeyValuePair<char, byte>('{', 0x7B);
+            yield return new KeyValuePair<char, byte>('|', 0x7C);
+            yield return new KeyValuePair<char, byte>('}', 0x7D);
+            yield return new KeyValuePair<char, byte>('→', 0x7E);
+            yield return new KeyValuePair<char, byte>('←', 0x7F);
+
+            // Missing 0x80 to 0x9F
+
+            yield return new KeyValuePair<char, byte>(' ', 0xA0);
+            yield return new KeyValuePair<char, byte>('▫', 0xA1);
+/*
+            yield return new KeyValuePair<char, byte>('', 0xA2);
+            yield return new KeyValuePair<char, byte>('', 0xA3);
+            yield return new KeyValuePair<char, byte>('', 0xA4);
+            yield return new KeyValuePair<char, byte>('', 0xA5);
+            yield return new KeyValuePair<char, byte>('', 0xA6);
+            yield return new KeyValuePair<char, byte>('', 0xA7);
+            yield return new KeyValuePair<char, byte>('', 0xA8);
+            yield return new KeyValuePair<char, byte>('', 0xA9);
+            yield return new KeyValuePair<char, byte>('', 0xAA);
+            yield return new KeyValuePair<char, byte>('', 0xAB);
+            yield return new KeyValuePair<char, byte>('', 0xAC);
+            yield return new KeyValuePair<char, byte>('', 0xAD);
+            yield return new KeyValuePair<char, byte>('', 0xAE);
+            yield return new KeyValuePair<char, byte>('', 0xAF);
+
+            yield return new KeyValuePair<char, byte>('', 0xB0);
+            yield return new KeyValuePair<char, byte>('', 0xB1);
+            yield return new KeyValuePair<char, byte>('', 0xB2);
+            yield return new KeyValuePair<char, byte>('', 0xB3);
+            yield return new KeyValuePair<char, byte>('', 0xB4);
+            yield return new KeyValuePair<char, byte>('', 0xB5);
+            yield return new KeyValuePair<char, byte>('', 0xB6);
+            yield return new KeyValuePair<char, byte>('', 0xB7);
+            yield return new KeyValuePair<char, byte>('', 0xB8);
+            yield return new KeyValuePair<char, byte>('', 0xB9);
+            yield return new KeyValuePair<char, byte>('', 0xBA);
+            yield return new KeyValuePair<char, byte>('', 0xBB);
+            yield return new KeyValuePair<char, byte>('', 0xBC);
+            yield return new KeyValuePair<char, byte>('', 0xBD);
+            yield return new KeyValuePair<char, byte>('', 0xBE);
+            yield return new KeyValuePair<char, byte>('', 0xBF);
+
+            yield return new KeyValuePair<char, byte>('', 0xC0);
+            yield return new KeyValuePair<char, byte>('', 0xC1);
+            yield return new KeyValuePair<char, byte>('', 0xC2);
+            yield return new KeyValuePair<char, byte>('', 0xC3);
+            yield return new KeyValuePair<char, byte>('', 0xC4);
+            yield return new KeyValuePair<char, byte>('', 0xC5);
+            yield return new KeyValuePair<char, byte>('', 0xC6);
+            yield return new KeyValuePair<char, byte>('', 0xC7);
+            yield return new KeyValuePair<char, byte>('', 0xC8);
+            yield return new KeyValuePair<char, byte>('', 0xC9);
+            yield return new KeyValuePair<char, byte>('', 0xCA);
+            yield return new KeyValuePair<char, byte>('', 0xCB);
+            yield return new KeyValuePair<char, byte>('', 0xCC);
+            yield return new KeyValuePair<char, byte>('', 0xCD);
+            yield return new KeyValuePair<char, byte>('', 0xCE);
+            yield return new KeyValuePair<char, byte>('', 0xCF);
+
+            yield return new KeyValuePair<char, byte>('', 0xD0);
+            yield return new KeyValuePair<char, byte>('', 0xD1);
+            yield return new KeyValuePair<char, byte>('', 0xD2);
+            yield return new KeyValuePair<char, byte>('', 0xD3);
+            yield return new KeyValuePair<char, byte>('', 0xD4);
+            yield return new KeyValuePair<char, byte>('', 0xD5);
+            yield return new KeyValuePair<char, byte>('', 0xD6);
+            yield return new KeyValuePair<char, byte>('', 0xD7);
+            yield return new KeyValuePair<char, byte>('', 0xD8);
+            yield return new KeyValuePair<char, byte>('', 0xD9);
+            yield return new KeyValuePair<char, byte>('', 0xDA);
+            yield return new KeyValuePair<char, byte>('', 0xDB);
+            yield return new KeyValuePair<char, byte>('', 0xDC);
+            yield return new KeyValuePair<char, byte>('', 0xDD);
+            yield return new KeyValuePair<char, byte>('', 0xDE);
+            yield return new KeyValuePair<char, byte>('', 0xDF);
+*/
+            yield return new KeyValuePair<char, byte>('α', 0xE0);
+            yield return new KeyValuePair<char, byte>('ӓ', 0xE1);
+            yield return new KeyValuePair<char, byte>('β', 0xE2);
+            yield return new KeyValuePair<char, byte>('ε', 0xE3);
+            yield return new KeyValuePair<char, byte>('μ', 0xE4);
+            yield return new KeyValuePair<char, byte>('σ', 0xE5);
+            yield return new KeyValuePair<char, byte>('ρ', 0xE6);
+            yield return new KeyValuePair<char, byte>('ɡ', 0xE7);
+            yield return new KeyValuePair<char, byte>('√', 0xE8);
+//            yield return new KeyValuePair<char, byte>('', 0xE9);
+            yield return new KeyValuePair<char, byte>('ј', 0xEA);
+//            yield return new KeyValuePair<char, byte>('', 0xEB);
+
+            yield return new KeyValuePair<char, byte>('¢', 0xEC);
+            // Variants
+            yield return new KeyValuePair<char, byte>('\u023B', 0xEC);
+            yield return new KeyValuePair<char, byte>('￠', 0xEC);
+
+//            yield return new KeyValuePair<char, byte>('', 0xED);
+            yield return new KeyValuePair<char, byte>('ñ', 0xEE);
+            yield return new KeyValuePair<char, byte>('ö', 0xEF);
+
+            yield return new KeyValuePair<char, byte>('ρ', 0xF0);
+//            yield return new KeyValuePair<char, byte>('', 0xF1);
+            yield return new KeyValuePair<char, byte>('θ', 0xF2);
+            yield return new KeyValuePair<char, byte>('∞', 0xF3);
+            yield return new KeyValuePair<char, byte>('Ω', 0xF4);
+            yield return new KeyValuePair<char, byte>('ü', 0xF5);
+            yield return new KeyValuePair<char, byte>('Σ', 0xF6);
+            yield return new KeyValuePair<char, byte>('π', 0xF7);
+//            yield return new KeyValuePair<char, byte>('', 0xF8);
+
+            yield return new KeyValuePair<char, byte>('У', 0xF9);
+            // Variant
+            yield return new KeyValuePair<char, byte>('у', 0xF9);
+
+//            yield return new KeyValuePair<char, byte>('', 0xFA);
+//            yield return new KeyValuePair<char, byte>('', 0xFB);
+//            yield return new KeyValuePair<char, byte>('', 0xFC);
+            yield return new KeyValuePair<char, byte>('÷', 0xFD);
+            yield return new KeyValuePair<char, byte>(' ', 0xFE);
+            yield return new KeyValuePair<char, byte>('█', 0xFF);
+        }
+    }
+}
