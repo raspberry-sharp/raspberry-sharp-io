@@ -38,22 +38,49 @@ namespace Test.Gpio.HD44780
 
                 while (true)
                 {
-                    foreach (var i in NetworkInterface.GetAllNetworkInterfaces().Where(i => i.NetworkInterfaceType != NetworkInterfaceType.Loopback).Reverse())
+                    foreach (var t in NetworkInterface.GetAllNetworkInterfaces()
+                        .Where(i => i.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                        .SelectMany(i => new[]
+                                             {
+                                                 string.Format("{0}: {1}", i.Name, i.OperationalStatus)
+                                                 + Environment.NewLine
+                                                 + (i.GetIPProperties().UnicastAddresses.Select(a => a.Address.ToString()).FirstOrDefault() ?? "(unassigned)"),
+
+                                                 i.GetPhysicalAddress().ToString()
+                                                 + Environment.NewLine
+                                                 + string.Format("\u0001{0} \u0002{1}", FormatByteCount(i.GetIPv4Statistics().BytesReceived), FormatByteCount(i.GetIPv4Statistics().BytesSent))
+                                             }))
                     {
                         connection.Clear();
-                        connection.WriteLine("{0}: {1}", i.Name, i.OperationalStatus);
-                        connection.Write(i.GetIPProperties().UnicastAddresses.Select(a => a.Address.ToString()).FirstOrDefault() ?? "(unassigned)");
+                        connection.Write(t);
 
                         if (Console.KeyAvailable)
-                            return;
-                        Timer.Sleep(2000);
-                        
-                        connection.Clear();
-                        connection.WriteLine(i.GetPhysicalAddress());
-                        connection.Write("\u0001{0} \u0002{1}", FormatByteCount(i.GetIPv4Statistics().BytesReceived), FormatByteCount(i.GetIPv4Statistics().BytesSent));
+                        {
+                            var c = Console.ReadKey(true).KeyChar;
 
-                        if (Console.KeyAvailable)
-                            return;
+                            switch (c)
+                            {
+                                case 'e':
+                                    connection.Clear();
+                                    break;
+
+                                case 'b':
+                                    connection.BlinkEnabled = !connection.BlinkEnabled;
+                                    break;
+
+                                case 'c':
+                                    connection.CursorEnabled = !connection.CursorEnabled;
+                                    break;
+
+                                case 'd':
+                                    connection.DisplayEnabled = !connection.DisplayEnabled;
+                                    break;
+
+                                default:
+                                    return;
+                            }
+                        }
+
                         Timer.Sleep(2000);
                     }
                 }

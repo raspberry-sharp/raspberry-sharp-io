@@ -44,7 +44,7 @@ namespace Test.Gpio.HD44780
         #endregion
 
         #region Instance Management
-
+        
         public HD44780LcdConnection(
             ProcessorPin registerSelect, ProcessorPin clock,
             ProcessorPin data1, ProcessorPin data2, ProcessorPin data3, ProcessorPin data4,
