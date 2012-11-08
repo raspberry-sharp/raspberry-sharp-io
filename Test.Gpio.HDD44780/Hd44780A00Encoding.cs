@@ -14,7 +14,7 @@ namespace Test.Gpio.HD44780
     /// Based on http://lcd-linux.sourceforge.net/pdfdocs/hd44780.pdf
     /// And http://en.wikipedia.org/wiki/Katakana
     /// </summary>
-    public class Hd44780LcdJapaneseEncoding : Encoding
+    public class Hd44780A00Encoding : Encoding
     {
         #region Fields
 

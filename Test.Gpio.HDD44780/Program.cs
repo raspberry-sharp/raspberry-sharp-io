@@ -111,7 +111,7 @@ namespace Test.Gpio.HD44780
         private static void DisplayCharMap(Hd44780LcdConnection connection)
         {
             var idx = 0;
-            foreach (var group in Hd44780LcdJapaneseEncoding.SupportedCharacters.GroupBy(c => (idx++/40)))
+            foreach (var group in Hd44780A00Encoding.SupportedCharacters.GroupBy(c => (idx++/40)))
             {
                 var s1 = new string(@group.Take(20).ToArray());
                 var s2 = new string(@group.Skip(20).Take(20).ToArray());

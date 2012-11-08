@@ -50,7 +50,7 @@
     <Compile Include="Functions.cs" />
     <Compile Include="Hd44780LcdConnection.cs" />
     <Compile Include="Hd44780LcdConnectionSettings.cs" />
-    <Compile Include="Hd44780LcdJapaneseEncoding.cs" />
+    <Compile Include="Hd44780A00Encoding.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

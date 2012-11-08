@@ -11,7 +11,7 @@ namespace Test.Gpio.HD44780
             PatternWidth = 5;
             PatternHeight = 8;
 
-            Encoding = new Hd44780LcdJapaneseEncoding();
+            Encoding = new Hd44780A00Encoding();
             //RightToLeft = false;
         }
 
