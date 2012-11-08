@@ -35,9 +35,12 @@ namespace Test.Gpio.HD44780
 
                 connection.Clear();
 
-                connection.WriteLine("R# IP Config", 50.0m);
-                connection.WriteLine(Environment.OSVersion, 50.0m);
+                connection.WriteLine("R# IP Config");
+                connection.WriteLine(Environment.OSVersion);
                 Timer.Sleep(2000);
+
+                // DisplayCharMap(connection);
+                var delay = 0m;
 
                 while (true)
                 {
@@ -55,7 +58,7 @@ namespace Test.Gpio.HD44780
                                              }))
                     {
                         connection.Clear();
-                        connection.Write(t, 50.0m);
+                        connection.Write(t, delay);
 
                         for (var i = 0; i < 20; i++)
                         {
@@ -89,6 +92,10 @@ namespace Test.Gpio.HD44780
                                         connection.Move(1);
                                         break;
 
+                                    case ConsoleKey.F11:
+                                        delay = 50.0m - delay;
+                                        break;
+
                                     default:
                                         return;
                                 }
@@ -98,6 +105,23 @@ namespace Test.Gpio.HD44780
                         }
                     }
                 }
+            }
+        }
+
+        private static void DisplayCharMap(Hd44780LcdConnection connection)
+        {
+            var idx = 0;
+            foreach (var group in Hd44780LcdJapaneseEncoding.SupportedCharacters.GroupBy(c => (idx++/40)))
+            {
+                var s1 = new string(@group.Take(20).ToArray());
+                var s2 = new string(@group.Skip(20).Take(20).ToArray());
+
+                connection.Clear();
+                
+                connection.WriteLine(s1);
+                connection.WriteLine(s2);
+
+                Timer.Sleep(2000);
             }
         }
 
