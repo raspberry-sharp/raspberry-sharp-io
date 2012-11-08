@@ -321,7 +321,7 @@ namespace Test.Gpio.HD44780
                 throw new ArgumentOutOfRangeException("pattern", pattern, "pattern must be 10 rows long");
 
             WriteCommand(Command.SetCGRamAddr, character << 3);
-            for (var i = 0; i < 7; i++)
+            for (var i = 0; i < 10; i++)
                 WriteByte(pattern[i], true);
             WriteByte(0, true);
         }
