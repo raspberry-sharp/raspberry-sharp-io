@@ -8,7 +8,7 @@ using Raspberry.IO.GeneralPurpose;
 namespace Raspberry.IO.SerialPeripheralInterface.Components
 {
     /// <summary>
-    /// Represents a SPI connection to a MCP4802/4012/4022 DAC.
+    /// Represents a SPI connection to a MCP4802/4812/4822 DAC.
     /// </summary>
     /// <remarks>See http://ww1.microchip.com/downloads/en/DeviceDoc/22249A.pdf for specifications.</remarks>
     public class Mcp4822SpiConnection : IDisposable
