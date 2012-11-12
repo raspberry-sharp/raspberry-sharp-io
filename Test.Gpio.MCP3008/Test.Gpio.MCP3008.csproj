@@ -55,10 +55,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\Gpio.Test.MCP3008.fzz" />
+    <None Include="Properties\Test.Gpio.MCP3008.fzz" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Properties\Gpio.Test.MCP3008.png" />
+    <None Include="Properties\Test.Gpio.MCP3008.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
