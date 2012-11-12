@@ -1,4 +1,4 @@
-namespace Test.Gpio.HD44780
+namespace Raspberry.IO.Display.Components
 {
     internal enum Command
     {

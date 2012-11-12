@@ -9,7 +9,7 @@ using Raspberry.Timers;
 
 #endregion
 
-namespace Test.Gpio.HD44780
+namespace Raspberry.IO.Display.Components
 {
     /// <summary>
     /// Based on https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_CharLCD/Adafruit_CharLCD.py

@@ -1,6 +1,6 @@
 using System;
 
-namespace Test.Gpio.HD44780
+namespace Raspberry.IO.Display.Components
 {
     [Flags]
     internal enum Functions

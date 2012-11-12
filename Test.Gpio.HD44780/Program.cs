@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Net.NetworkInformation;
+using Raspberry.IO.Display.Components;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
@@ -20,7 +21,8 @@ namespace Test.Gpio.HD44780
                                    ScreenHeight = 2,
                                };
 
-            using (var connection = new Hd44780LcdConnection(settings,
+            using (var connection = new Hd44780LcdConnection(
+                settings,
                 ConnectorPin.P1Pin22.ToProcessor(),
 
                 ConnectorPin.P1Pin18.ToProcessor(),

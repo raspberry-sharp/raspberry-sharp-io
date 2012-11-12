@@ -1,0 +1,1017 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Raspberry.IO.GeneralPurpose</name>
+    </assembly>
+    <members>
+        <member name="T:Raspberry.IO.GeneralPurpose.FileGpioConnectionDriver">
+            <summary>
+            Represents a connection driver using files.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.IGpioConnectionDriver">
+            <summary>
+            Provides an interface for connection drivers.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.IGpioConnectionDriver.Write(Raspberry.IO.GeneralPurpose.ProcessorPin,System.Boolean)">
+            <summary>
+            Modified the status of a pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="value">The pin status.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.IGpioConnectionDriver.Read(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Reads the status of the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>The pin status.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.IGpioConnectionDriver.Read(Raspberry.IO.GeneralPurpose.ProcessorPins)">
+            <summary>
+            Reads the status of the specified pins.
+            </summary>
+            <param name="pins">The pins.</param>
+            <returns>The pins status.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.IGpioConnectionDriver.Allocate(Raspberry.IO.GeneralPurpose.ProcessorPin,Raspberry.IO.GeneralPurpose.PinDirection)">
+            <summary>
+            Allocates the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="direction">The direction.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.IGpioConnectionDriver.Release(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Releases the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.FileGpioConnectionDriver.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.FileGpioConnectionDriver"/> class.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.FileGpioConnectionDriver.Write(Raspberry.IO.GeneralPurpose.ProcessorPin,System.Boolean)">
+            <summary>
+            Modified the status of a pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="value">The pin status.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.FileGpioConnectionDriver.Read(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Reads the status of the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>
+            The pin status.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.FileGpioConnectionDriver.Read(Raspberry.IO.GeneralPurpose.ProcessorPins)">
+            <summary>
+            Reads the status of the specified pins.
+            </summary>
+            <param name="pins">The pins.</param>
+            <returns>
+            The pins status.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.FileGpioConnectionDriver.Allocate(Raspberry.IO.GeneralPurpose.ProcessorPin,Raspberry.IO.GeneralPurpose.PinDirection)">
+            <summary>
+            Allocates the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="direction">The direction.</param>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.Behaviors.BlinkBehavior">
+            <summary>
+            Represents a simple blink behavior.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior">
+            <summary>
+            Represents the pins behavior base class.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior.#ctor(System.Collections.Generic.IEnumerable{Raspberry.IO.GeneralPurpose.PinConfiguration})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior"/> class.
+            </summary>
+            <param name="configurations">The configurations.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior.GetFirstStep">
+            <summary>
+            Gets the first step.
+            </summary>
+            <returns>The first step.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior.ProcessStep(System.Int32)">
+            <summary>
+            Processes the step.
+            </summary>
+            <param name="step">The step.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior.TryGetNextStep(System.Int32@)">
+            <summary>
+            Tries to get the next step.
+            </summary>
+            <param name="step">The step.</param>
+            <returns><c>true</c> if the behavior may continue; otherwise behavior will be stopped.</returns>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior.Configurations">
+            <summary>
+            Gets the configurations.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior.Interval">
+            <summary>
+            Gets or sets the interval.
+            </summary>
+            <value>
+            The interval.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior.Connection">
+            <summary>
+            Gets the connection.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.BlinkBehavior.#ctor(System.Collections.Generic.IEnumerable{Raspberry.IO.GeneralPurpose.PinConfiguration})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.BlinkBehavior"/> class.
+            </summary>
+            <param name="configurations">The configurations.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.BlinkBehavior.GetFirstStep">
+            <summary>
+            Gets the first step.
+            </summary>
+            <returns>
+            The first step.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.BlinkBehavior.ProcessStep(System.Int32)">
+            <summary>
+            Processes the step.
+            </summary>
+            <param name="step">The step.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.BlinkBehavior.TryGetNextStep(System.Int32@)">
+            <summary>
+            Tries to get the next step.
+            </summary>
+            <param name="step">The step.</param>
+            <returns>
+              <c>true</c> if the behavior may continue; otherwise behavior will be stopped.
+            </returns>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.BlinkBehavior.Count">
+            <summary>
+            Gets or sets the number of times the behavior may blink.
+            </summary>
+            <value>
+            The number of times the behavior may blink.
+            </value>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.PinMapping">
+            <summary>
+            Provides helper methods for mapping pins between processor and connectors
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinMapping.ToProcessor(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Convert the specified connector pin to a processor pin.
+            </summary>
+            <param name="pin">The connector pin.</param>
+            <returns>The processor pin.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinMapping.ToConnector(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Convert the specified processor pin to a connector pin.
+            </summary>
+            <param name="pin">The processor pin.</param>
+            <returns>The connector pin.</returns>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.ProcessorPinExtensionMethods">
+            <summary>
+            Provides extension methods for <see cref="T:Raspberry.IO.GeneralPurpose.ProcessorPin"/> and <see cref="T:Raspberry.IO.GeneralPurpose.ProcessorPins"/> objects.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.ProcessorPinExtensionMethods.Enumerate(Raspberry.IO.GeneralPurpose.ProcessorPins)">
+            <summary>
+            Enumerates the specified pins.
+            </summary>
+            <param name="pins">The pins.</param>
+            <returns>The pins.</returns>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.ProcessorPin">
+            <summary>
+            Represents a processor pin.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.PinConfiguration">
+            <summary>
+            Represents the configuration of a pin.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfiguration.#ctor(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.PinConfiguration"/> class.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.PinConfiguration.Pin">
+            <summary>
+            Gets the pin.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.PinConfiguration.Direction">
+            <summary>
+            Gets the direction.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.PinConfiguration.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.PinConfiguration.Reversed">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.PinConfiguration"/> is reversed.
+            </summary>
+            <value>
+              <c>true</c> if reversed; otherwise, <c>false</c>.
+            </value>
+            <remarks>If set to <c>true</c>, pin value will be enabled when no signal is present, and disabled when a signal is present.</remarks>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.PinConfiguration.StatusChangedAction">
+            <summary>
+            Gets or sets the status changed action.
+            </summary>
+            <value>
+            The status changed action.
+            </value>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.GpioConnection">
+            <summary>
+            Represents a connection to the GPIO pins.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.#ctor(Raspberry.IO.GeneralPurpose.PinConfiguration[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.GpioConnection"/> class.
+            </summary>
+            <param name="pins">The pins.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.#ctor(System.Collections.Generic.IEnumerable{Raspberry.IO.GeneralPurpose.PinConfiguration})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.GpioConnection"/> class.
+            </summary>
+            <param name="pins">The pins.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.#ctor(Raspberry.IO.GeneralPurpose.GpioConnectionSettings,Raspberry.IO.GeneralPurpose.PinConfiguration[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.GpioConnection"/> class.
+            </summary>
+            <param name="settings">The settings.</param>
+            <param name="pins">The pins.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.#ctor(Raspberry.IO.GeneralPurpose.GpioConnectionSettings,System.Collections.Generic.IEnumerable{Raspberry.IO.GeneralPurpose.PinConfiguration})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.GpioConnection"/> class.
+            </summary>
+            <param name="settings">The settings.</param>
+            <param name="pins">The pins.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Open">
+            <summary>
+            Opens the connection.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Close">
+            <summary>
+            Closes the connection.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Clear">
+            <summary>
+            Clears pin attached to this connection.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Add(Raspberry.IO.GeneralPurpose.PinConfiguration)">
+            <summary>
+            Adds the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Contains(System.String)">
+            <summary>
+            Determines whether the connection contains the specified pin.
+            </summary>
+            <param name="pinName">Name of the pin.</param>
+            <returns>
+              <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Contains(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Determines whether the connection contains the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>
+              <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Contains(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Determines whether the connection contains the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>
+              <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Contains(Raspberry.IO.GeneralPurpose.PinConfiguration)">
+            <summary>
+            Determines whether the connection contains the specified pin.
+            </summary>
+            <param name="configuration">The pin configuration.</param>
+            <returns>
+              <c>true</c> if the connection contains the specified pin; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Remove(System.String)">
+            <summary>
+            Removes the specified pin.
+            </summary>
+            <param name="pinName">Name of the pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Remove(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Removes the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Remove(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Removes the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Remove(Raspberry.IO.GeneralPurpose.PinConfiguration)">
+            <summary>
+            Removes the specified pin.
+            </summary>
+            <param name="configuration">The pin configuration.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Toggle(System.String)">
+            <summary>
+            Toggles the specified pin.
+            </summary>
+            <param name="pinName">Name of the pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Toggle(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Toggles the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Toggle(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Toggles the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Toggle(Raspberry.IO.GeneralPurpose.PinConfiguration)">
+            <summary>
+            Toggles the specified pin.
+            </summary>
+            <param name="configuration">The pin configuration.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Blink(System.String,System.Decimal)">
+            <summary>
+            Blinks the specified pin.
+            </summary>
+            <param name="pinName">Name of the pin.</param>
+            <param name="duration">The duration, in millisecond.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Blink(Raspberry.IO.GeneralPurpose.ProcessorPin,System.Decimal)">
+            <summary>
+            Blinks the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="duration">The duration, in millisecond.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Blink(Raspberry.IO.GeneralPurpose.ConnectorPin,System.Decimal)">
+            <summary>
+            Blinks the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="duration">The duration, in millisecond.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.Blink(Raspberry.IO.GeneralPurpose.PinConfiguration,System.Decimal)">
+            <summary>
+            Blinks the specified pin.
+            </summary>
+            <param name="configuration">The pin configuration.</param>
+            <param name="duration">The duration, in millisecond.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnection.OnPinStatusChanged(Raspberry.IO.GeneralPurpose.PinStatusEventArgs)">
+            <summary>
+            Raises the <see cref="E:Raspberry.IO.GeneralPurpose.GpioConnection.PinStatusChanged"/> event.
+            </summary>
+            <param name="e">The <see cref="T:Raspberry.IO.GeneralPurpose.PinStatusEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnection.IsOpened">
+            <summary>
+            Gets a value indicating whether connection is opened.
+            </summary>
+            <value>
+              <c>true</c> if connection is opened; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnection.Item(System.String)">
+            <summary>
+            Gets or sets the status of the pin having the specified name.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnection.Item(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Gets or sets the status of the specified pin.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnection.Item(Raspberry.IO.GeneralPurpose.PinConfiguration)">
+            <summary>
+            Gets or sets the status of the specified pin.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnection.Item(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Gets or sets the status of the specified pin.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnection.Pins">
+            <summary>
+            Gets the pins.
+            </summary>
+        </member>
+        <member name="E:Raspberry.IO.GeneralPurpose.GpioConnection.PinStatusChanged">
+            <summary>
+            Occurs when the status of a pin changed.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior">
+            <summary>
+            Represents a chaser behavior.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior.#ctor(System.Collections.Generic.IEnumerable{Raspberry.IO.GeneralPurpose.PinConfiguration})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior"/> class.
+            </summary>
+            <param name="configurations">The configurations.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior.GetFirstStep">
+            <summary>
+            Gets the first step.
+            </summary>
+            <returns>
+            The first step.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior.ProcessStep(System.Int32)">
+            <summary>
+            Processes the step.
+            </summary>
+            <param name="step">The step.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior.TryGetNextStep(System.Int32@)">
+            <summary>
+            Tries to get the next step.
+            </summary>
+            <param name="step">The step.</param>
+            <returns>
+              <c>true</c> if the behavior may continue; otherwise behavior will be stopped.
+            </returns>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior.RoundTrip">
+            <summary>
+            Gets or sets a value indicating whether to roundtrip.
+            </summary>
+            <value>
+              <c>true</c> if roundtrip is enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior.Loop">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior"/> must loop.
+            </summary>
+            <value>
+              <c>true</c> if loop is enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.ChaserBehavior.Width">
+            <summary>
+            Gets or sets the width of the enlightned leds.
+            </summary>
+            <value>
+            The width.
+            </value>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.ConnectedPin">
+            <summary>
+            Represents a connected pin.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.ConnectedPin.Toggle">
+            <summary>
+            Toggles this pin.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.ConnectedPin.Blink(System.Decimal)">
+            <summary>
+            Blinks the pin.
+            </summary>
+            <param name="duration">The blink duration, in millisecond.</param>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.ConnectedPin.Configuration">
+            <summary>
+            Gets the configuration.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.ConnectedPin.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.ConnectedPin"/> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="E:Raspberry.IO.GeneralPurpose.ConnectedPin.StatusChanged">
+            <summary>
+            Occurs when pin status changed.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.PinStatusEventArgs">
+            <summary>
+            Represents event arguments related to pin status.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.PinStatusEventArgs.Configuration">
+            <summary>
+            Gets the configuration.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.PinStatusEventArgs.Enabled">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.PinStatusEventArgs"/> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.ConnectedPins">
+            <summary>
+            Represents connected pins.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.ConnectedPins.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.ConnectedPins.GetEnumerator">
+            <summary>
+            Gets the enumerator.
+            </summary>
+            <returns>The enumerator.</returns>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.ConnectedPins.Item(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Gets the status of the specified pin.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.ConnectedPins.Item(System.String)">
+            <summary>
+            Gets the status of the specified pin.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.ConnectedPins.Item(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Gets the status of the specified pin.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.ConnectedPins.Item(Raspberry.IO.GeneralPurpose.PinConfiguration)">
+            <summary>
+            Gets the status of the specified pin.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver">
+            <summary>
+            Represents a connection driver that uses memory.
+            </summary>
+            <remarks>Based on bmc2835_gpio library.</remarks>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver"/> class.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver.Finalize">
+            <summary>
+            Releases unmanaged resources and performs other cleanup operations before the
+            <see cref="T:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver"/> is reclaimed by garbage collection.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver.Write(Raspberry.IO.GeneralPurpose.ProcessorPin,System.Boolean)">
+            <summary>
+            Modified the status of a pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="value">The pin status.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver.Read(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Reads the status of the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>
+            The pin status.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver.Read(Raspberry.IO.GeneralPurpose.ProcessorPins)">
+            <summary>
+            Reads the status of the specified pins.
+            </summary>
+            <param name="pins">The pins.</param>
+            <returns>
+            The pins status.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.MemoryGpioConnectionDriver.Allocate(Raspberry.IO.GeneralPurpose.ProcessorPin,Raspberry.IO.GeneralPurpose.PinDirection)">
+            <summary>
+            Allocates the specified pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <param name="direction">The direction.</param>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.PinDirection">
+            <summary>
+            Represents the direction of a pin.
+            </summary>
+        </member>
+        <member name="F:Raspberry.IO.GeneralPurpose.PinDirection.Input">
+            <summary>
+            Pin is an input pin.
+            </summary>
+        </member>
+        <member name="F:Raspberry.IO.GeneralPurpose.PinDirection.Output">
+            <summary>
+            Pin is an output pin.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.ConnectorPin">
+            <summary>
+            Represents a connector pin.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.InputPinConfiguration">
+            <summary>
+            Represents configuration of an input pin.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.InputPinConfiguration.#ctor(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.InputPinConfiguration"/> class.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.InputPinConfiguration.Direction">
+            <summary>
+            Gets the direction.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration">
+            <summary>
+            Represents the configuration of an input pin acting as a switch.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration.#ctor(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration"/> class.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration.Direction">
+            <summary>
+            Gets the direction.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration"/> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods">
+            <summary>
+            Provides extension methods for pin configuration.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Input(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Configures the specified pin as an input pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Output(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Configures the specified pin as an output pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Input(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Configures the specified pin as an input pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Output(Raspberry.IO.GeneralPurpose.ConnectorPin)">
+            <summary>
+            Configures the specified pin as an output pin.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Switch(Raspberry.IO.GeneralPurpose.InputPinConfiguration)">
+            <summary>
+            Configures the specified input pin as a switch.
+            </summary>
+            <param name="pin">The pin.</param>
+            <returns>The pin configuration</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.OnStatusChanged``1(``0,System.Action{System.Boolean})">
+            <summary>
+            Configures an action executed when the pin status changes.
+            </summary>
+            <typeparam name="T">The configuration type.</typeparam>
+            <param name="configuration">The configuration.</param>
+            <param name="action">The action.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Name``1(``0,System.String)">
+            <summary>
+            Configures the name of the specified pin configuration.
+            </summary>
+            <typeparam name="T">The configuration type.</typeparam>
+            <param name="configuration">The configuration.</param>
+            <param name="name">The name.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Revert``1(``0)">
+            <summary>
+            Reverts the bit value of the specified pin.
+            </summary>
+            <typeparam name="T">The configuration type.</typeparam>
+            <param name="configuration">The configuration.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Enable(Raspberry.IO.GeneralPurpose.OutputPinConfiguration)">
+            <summary>
+            Indicates the specified pin is enabled on connection.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Disable(Raspberry.IO.GeneralPurpose.OutputPinConfiguration)">
+            <summary>
+            Indicates the specified pin is disabled on connection.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Enable(Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration)">
+            <summary>
+            Indicates the specified pin is enabled on connection.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.PinConfigurationExtensionMethods.Disable(Raspberry.IO.GeneralPurpose.SwitchInputPinConfiguration)">
+            <summary>
+            Indicates the specified pin is disabled on connection.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns>The pin configuration.</returns>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.Configuration.GpioConnectionConfigurationSection">
+            <summary>
+            Represents the configuration of the GPIO connection.
+            </summary>
+        </member>
+        <member name="F:Raspberry.IO.GeneralPurpose.Configuration.GpioConnectionConfigurationSection.DefaultPollInterval">
+            <summary>
+            The default poll interval, in milliseconds.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Configuration.GpioConnectionConfigurationSection.DriverTypeName">
+            <summary>
+            Gets or sets the name of the driver type.
+            </summary>
+            <value>
+            The name of the driver type.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Configuration.GpioConnectionConfigurationSection.BoardRevision">
+            <summary>
+            Gets or sets the board revision.
+            </summary>
+            <value>
+            The board revision.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Configuration.GpioConnectionConfigurationSection.PollInterval">
+            <summary>
+            Gets or sets the poll interval, in milliseconds.
+            </summary>
+            <value>
+            The poll interval, in millisecond.
+            </value>
+            <remarks>
+            Default value is 50ms.
+            Values lower than 1ms may be specified on Raspberry Pi using decimal notation.
+            </remarks>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehaviorExtensionMethods">
+            <summary>
+            Provides extension methods for <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior"/>.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehaviorExtensionMethods.Start(Raspberry.IO.GeneralPurpose.GpioConnection,Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior)">
+            <summary>
+            Starts the specified behavior on the connection.
+            </summary>
+            <param name="connection">The connection.</param>
+            <param name="behavior">The behavior.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PinsBehaviorExtensionMethods.Stop(Raspberry.IO.GeneralPurpose.GpioConnection,Raspberry.IO.GeneralPurpose.Behaviors.PinsBehavior)">
+            <summary>
+            Stops the specified behavior.
+            </summary>
+            <param name="connection">The connection.</param>
+            <param name="behavior">The behavior.</param>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.OutputPinConfiguration">
+            <summary>
+            Represents the configuration of an output pin.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.OutputPinConfiguration.#ctor(Raspberry.IO.GeneralPurpose.ProcessorPin)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.OutputPinConfiguration"/> class.
+            </summary>
+            <param name="pin">The pin.</param>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.OutputPinConfiguration.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.OutputPinConfiguration"/> is enabled on connection.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.OutputPinConfiguration.Direction">
+            <summary>
+            Gets the direction.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.GpioConnectionSettings">
+            <summary>
+            Represents settings for <see cref="T:Raspberry.IO.GeneralPurpose.GpioConnection"/>.
+            </summary>
+        </member>
+        <member name="F:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.DefaultBlinkDuration">
+            <summary>
+            Gets the default blink duration, in milliseconds.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.GpioConnectionSettings"/> class.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.Opened">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.GpioConnectionSettings"/> is opened on initialization.
+            </summary>
+            <value>
+              <c>true</c> if opened on initialization; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.BlinkDuration">
+            <summary>
+            Gets or sets the duration of the blink.
+            </summary>
+            <value>
+            The duration of the blink, in milliseconds.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.Driver">
+            <summary>
+            Gets or sets the driver.
+            </summary>
+            <value>
+            The driver.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.PollInterval">
+            <summary>
+            Gets or sets the poll interval.
+            </summary>
+            <value>
+            The poll interval, in milliseconds.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.DefaultPollInterval">
+            <summary>
+            Gets the default poll interval, in milliseconds.
+            </summary>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.GpioConnectionSettings.DefaultDriver">
+            <summary>
+            Gets the default driver.
+            </summary>
+        </member>
+        <member name="T:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior">
+            <summary>
+            Represents a pattern behavior.
+            </summary>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior.#ctor(System.Collections.Generic.IEnumerable{Raspberry.IO.GeneralPurpose.PinConfiguration},System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior"/> class.
+            </summary>
+            <param name="configurations">The configurations.</param>
+            <param name="patterns">The patterns.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior.#ctor(System.Collections.Generic.IEnumerable{Raspberry.IO.GeneralPurpose.PinConfiguration},System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior"/> class.
+            </summary>
+            <param name="configurations">The configurations.</param>
+            <param name="patterns">The patterns.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior.GetFirstStep">
+            <summary>
+            Gets the first step.
+            </summary>
+            <returns>
+            The first step.
+            </returns>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior.ProcessStep(System.Int32)">
+            <summary>
+            Processes the step.
+            </summary>
+            <param name="step">The step.</param>
+        </member>
+        <member name="M:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior.TryGetNextStep(System.Int32@)">
+            <summary>
+            Tries to get the next step.
+            </summary>
+            <param name="step">The step.</param>
+            <returns>
+              <c>true</c> if the behavior may continue; otherwise behavior will be stopped.
+            </returns>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior.Loop">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior"/> must loop.
+            </summary>
+            <value>
+              <c>true</c> if loop is enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Raspberry.IO.GeneralPurpose.Behaviors.PatternBehavior.RoundTrip">
+            <summary>
+            Gets or sets a value indicating whether to roundtrip.
+            </summary>
+            <value>
+              <c>true</c> if round-trip is enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+    </members>
+</doc>

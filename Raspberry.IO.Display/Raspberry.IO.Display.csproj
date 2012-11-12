@@ -2,21 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{F3E6F476-7088-4169-8E09-AE19EBE46C0E}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test.Gpio.HD44780</RootNamespace>
-    <AssemblyName>Test.Gpio.HD44780</AssemblyName>
+    <RootNamespace>Raspberry.IO.Display</RootNamespace>
+    <AssemblyName>Raspberry.IO.Display</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -35,33 +31,34 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Raspberry.System, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Raspberry.IO.GeneralPurpose">
+      <HintPath>..\packages\Raspberry.IO.GeneralPurpose.1.5.2\lib\net40\Raspberry.IO.GeneralPurpose.dll</HintPath>
+    </Reference>
+    <Reference Include="Raspberry.System">
       <HintPath>..\packages\Raspberry.System.1.0.4\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Components\Command.cs" />
+    <Compile Include="Components\CursorShiftFlags.cs" />
+    <Compile Include="Components\DisplayFlags.cs" />
+    <Compile Include="Components\Functions.cs" />
+    <Compile Include="Components\Hd44780A00Encoding.cs" />
+    <Compile Include="Components\Hd44780LcdConnection.cs" />
+    <Compile Include="Components\Hd44780LcdConnectionSettings.cs" />
+    <Compile Include="Components\EntryModeFlags.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Raspberry.IO.Display\Raspberry.IO.Display.csproj">
-      <Project>{F3E6F476-7088-4169-8E09-AE19EBE46C0E}</Project>
-      <Name>Raspberry.IO.Display</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
-      <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
-      <Name>Raspberry.IO.GeneralPurpose</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\Test.Gpio.HD44780.fzz" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\Test.Gpio.HD44780.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
