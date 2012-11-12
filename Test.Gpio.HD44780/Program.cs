@@ -1,11 +1,12 @@
 ﻿#region References
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Threading;
 using Raspberry.IO.Display.Components;
 using Raspberry.IO.GeneralPurpose;
-using Raspberry.Timers;
 
 #endregion
 
@@ -21,16 +22,21 @@ namespace Test.Gpio.HD44780
                                    ScreenHeight = 2,
                                };
 
+            var registerSelectPin = ConnectorPin.P1Pin22.ToProcessor();
+            var clockPin = ConnectorPin.P1Pin18.ToProcessor();
+            var dataPins = (IEnumerable<ProcessorPin>)new[]
+                               {
+                                   ConnectorPin.P1Pin16.ToProcessor(),
+                                   ConnectorPin.P1Pin15.ToProcessor(),
+                                   ConnectorPin.P1Pin13.ToProcessor(),
+                                   ConnectorPin.P1Pin11.ToProcessor()
+                               };
+
             using (var connection = new Hd44780LcdConnection(
                 settings,
-                ConnectorPin.P1Pin22.ToProcessor(),
-
-                ConnectorPin.P1Pin18.ToProcessor(),
-
-                ConnectorPin.P1Pin16.ToProcessor(),
-                ConnectorPin.P1Pin15.ToProcessor(),
-                ConnectorPin.P1Pin13.ToProcessor(),
-                ConnectorPin.P1Pin11.ToProcessor()))
+                registerSelectPin,
+                clockPin,
+                dataPins))
             {
                 connection.SetCustomCharacter(1, new byte[] {0x0, 0x0, 0x04, 0xe, 0x1f, 0x0, 0x0});
                 connection.SetCustomCharacter(2, new byte[] {0x0, 0x0, 0x1f, 0xe, 0x04, 0x0, 0x0});
@@ -39,7 +45,7 @@ namespace Test.Gpio.HD44780
 
                 connection.WriteLine("R# IP Config");
                 connection.WriteLine(Environment.OSVersion);
-                Timer.Sleep(2000);
+                Thread.Sleep(2000);
 
                 // DisplayCharMap(connection);
                 var delay = 0m;
@@ -103,7 +109,7 @@ namespace Test.Gpio.HD44780
                                 }
                             }
 
-                            Timer.Sleep(100);
+                            Thread.Sleep(100);
                         }
                     }
                 }
@@ -123,7 +129,7 @@ namespace Test.Gpio.HD44780
                 connection.WriteLine(s1);
                 connection.WriteLine(s2);
 
-                Timer.Sleep(2000);
+                Thread.Sleep(2000);
             }
         }
 

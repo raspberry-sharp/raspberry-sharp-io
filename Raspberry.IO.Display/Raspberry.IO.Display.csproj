@@ -31,20 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Raspberry.IO.GeneralPurpose">
-      <HintPath>..\packages\Raspberry.IO.GeneralPurpose.1.5.2\lib\net40\Raspberry.IO.GeneralPurpose.dll</HintPath>
-    </Reference>
     <Reference Include="Raspberry.System">
       <HintPath>..\packages\Raspberry.System.1.0.4\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Command.cs" />
@@ -59,6 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
+      <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
+      <Name>Raspberry.IO.GeneralPurpose</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

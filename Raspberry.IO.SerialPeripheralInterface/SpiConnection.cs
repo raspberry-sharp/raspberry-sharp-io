@@ -1,8 +1,8 @@
 #region References
 
 using System;
-using System.Threading;
 using Raspberry.IO.GeneralPurpose;
+using Raspberry.Timers;
 
 #endregion
 
@@ -83,7 +83,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         public void Synchronize()
         {
             driver.Write(clock, true);
-            Thread.Sleep(1);
+            Timer.Sleep(1);
             driver.Write(clock, false);
         }
 

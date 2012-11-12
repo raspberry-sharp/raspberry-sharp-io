@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Raspberry.System, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Raspberry.System.1.0.4\lib\net40\Raspberry.System.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -45,6 +42,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Test.Gpio.HD44780.fzz" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Test.Gpio.HD44780.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.Display\Raspberry.IO.Display.csproj">
@@ -55,13 +58,6 @@
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Properties\Test.Gpio.HD44780.fzz" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\Test.Gpio.HD44780.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

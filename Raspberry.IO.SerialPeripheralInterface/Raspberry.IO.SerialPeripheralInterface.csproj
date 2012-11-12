@@ -31,13 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Raspberry.System, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Raspberry.System.1.0.4\lib\net40\Raspberry.System.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Mcp3008Channel.cs" />
@@ -49,7 +48,9 @@
     <Compile Include="SpiConnection.cs" />
     <Compile Include="SpiSlaveSelection.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
