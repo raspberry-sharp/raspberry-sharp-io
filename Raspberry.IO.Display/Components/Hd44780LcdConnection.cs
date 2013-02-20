@@ -275,6 +275,7 @@ namespace Raspberry.IO.Display.Components
                 if (string.IsNullOrEmpty(line))
                     continue;
 
+                Console.WriteLine(line);
                 var bytes = encoding.GetBytes(line);
                 foreach (var b in bytes)
                 {
