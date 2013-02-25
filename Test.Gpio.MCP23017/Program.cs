@@ -1,6 +1,6 @@
 using System;
 using System.Threading;
-using Raspberry.IO.Components.Expander.Mcp23017;
+using Raspberry.IO.Components.Expanders.Mcp23017;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.InterIntegratedCircuit;
 

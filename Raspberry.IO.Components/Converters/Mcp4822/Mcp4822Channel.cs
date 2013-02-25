@@ -1,4 +1,4 @@
-namespace Raspberry.IO.Components.Converter.Mcp4822
+namespace Raspberry.IO.Components.Converters.Mcp4822
 {
     public enum Mcp4822Channel
     {

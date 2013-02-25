@@ -7,7 +7,7 @@ using System.Linq;
 
 #endregion
 
-namespace Raspberry.IO.Components.Display.Hd44780
+namespace Raspberry.IO.Components.Displays.Hd44780
 {
     /// <summary>
     /// Represents encoding for HD44780 LCD with Japanese character set (ROM code A00)

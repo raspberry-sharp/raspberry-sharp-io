@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
-using Raspberry.IO.Components.Display.Hd44780;
+using Raspberry.IO.Components.Displays.Hd44780;
 using Raspberry.IO.GeneralPurpose;
 
 #endregion

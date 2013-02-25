@@ -2,7 +2,7 @@
 
 using System;
 using System.Threading;
-using Raspberry.IO.Components.Converter.Mcp4822;
+using Raspberry.IO.Components.Converters.Mcp4822;
 using Raspberry.IO.GeneralPurpose;
 
 #endregion

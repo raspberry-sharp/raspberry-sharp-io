@@ -1,6 +1,6 @@
 using System;
 
-namespace Raspberry.IO.Components.Display.Hd44780
+namespace Raspberry.IO.Components.Displays.Hd44780
 {
     [Flags]
     internal enum CursorShiftFlags

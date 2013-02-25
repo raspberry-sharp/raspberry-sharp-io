@@ -1,6 +1,6 @@
 using Raspberry.IO.InterIntegratedCircuit;
 
-namespace Raspberry.IO.Components.Expander.Mcp23017
+namespace Raspberry.IO.Components.Expanders.Mcp23017
 {
     /// <summary>
     /// Represents a I2C connection to a MCP23017 I/O Expander.

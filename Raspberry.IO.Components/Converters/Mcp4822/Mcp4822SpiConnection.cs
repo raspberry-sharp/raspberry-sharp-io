@@ -6,7 +6,7 @@ using Raspberry.IO.SerialPeripheralInterface;
 
 #endregion
 
-namespace Raspberry.IO.Components.Converter.Mcp4822
+namespace Raspberry.IO.Components.Converters.Mcp4822
 {
     /// <summary>
     /// Represents a SPI connection to a MCP4802/4812/4822 DAC.

@@ -2,7 +2,7 @@
 
 using System;
 using System.Threading;
-using Raspberry.IO.Components.Converter.Mcp3008;
+using Raspberry.IO.Components.Converters.Mcp3008;
 using Raspberry.IO.GeneralPurpose;
 
 #endregion

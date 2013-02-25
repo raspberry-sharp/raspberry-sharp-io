@@ -6,7 +6,7 @@ using Raspberry.IO.SerialPeripheralInterface;
 
 #endregion
 
-namespace Raspberry.IO.Components.Converter.Mcp3008
+namespace Raspberry.IO.Components.Converters.Mcp3008
 {
     /// <summary>
     /// Represents a connection to MCP3004/3008 ADC converter.
