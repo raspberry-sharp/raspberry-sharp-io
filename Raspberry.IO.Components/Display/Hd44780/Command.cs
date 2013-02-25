@@ -1,4 +1,4 @@
-namespace Raspberry.IO.Display.Components
+namespace Raspberry.IO.Components.Display.Hd44780
 {
     internal enum Command
     {

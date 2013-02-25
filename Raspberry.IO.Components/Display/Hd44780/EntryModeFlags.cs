@@ -1,6 +1,6 @@
 using System;
 
-namespace Raspberry.IO.Display.Components
+namespace Raspberry.IO.Components.Display.Hd44780
 {
     [Flags]
     internal enum EntryModeFlags

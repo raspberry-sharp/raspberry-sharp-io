@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
+using Raspberry.IO.Components.Expander.Mcp23017;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.InterIntegratedCircuit;
-using Raspberry.IO.InterIntegratedCircuit.Components;
 
 namespace Test.Gpio.MCP23017
 {

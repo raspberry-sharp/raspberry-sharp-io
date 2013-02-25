@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Icon.png = Icon.png
 		Raspberry.IO.GeneralPurpose.nuspec = Raspberry.IO.GeneralPurpose.nuspec
 		README.md = README.md
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.SerialPeripheralInterface", "Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj", "{326342E5-0411-40E8-9F2D-563D6B192568}"
@@ -20,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.MCP4822", "Test.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.HD44780", "Test.Gpio.HD44780\Test.Gpio.HD44780.csproj", "{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.Display", "Raspberry.IO.Display\Raspberry.IO.Display.csproj", "{F3E6F476-7088-4169-8E09-AE19EBE46C0E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.HCSR04", "Test.Gpio.HCSR04\Test.Gpio.HCSR04.csproj", "{0A18AC47-CA6D-442C-A31C-6864F7DDD97D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{15ECD485-B3FD-4B6F-8491-7489DFFC89BC}"
@@ -29,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.MCP23017", "Test.Gpio.MCP23017\Test.Gpio.MCP23017.csproj", "{266EDDBC-F741-48F8-83B7-2CD37BACE62B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.InterIntegratedCircuit", "Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj", "{63B8403E-BC56-43F9-A045-F61ECC3871F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.Components", "Raspberry.IO.Components\Raspberry.IO.Components.csproj", "{8388CFCA-E3DB-43F7-B049-2CB195211CE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,16 +103,6 @@ Global
 		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|Mixed Platforms.Build.0 = Release|x86
 		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|x86.ActiveCfg = Release|x86
 		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC}.Release|x86.Build.0 = Release|x86
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F3E6F476-7088-4169-8E09-AE19EBE46C0E}.Release|x86.ActiveCfg = Release|Any CPU
 		{0A18AC47-CA6D-442C-A31C-6864F7DDD97D}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{0A18AC47-CA6D-442C-A31C-6864F7DDD97D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{0A18AC47-CA6D-442C-A31C-6864F7DDD97D}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -142,6 +133,16 @@ Global
 		{63B8403E-BC56-43F9-A045-F61ECC3871F3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{63B8403E-BC56-43F9-A045-F61ECC3871F3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{63B8403E-BC56-43F9-A045-F61ECC3871F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

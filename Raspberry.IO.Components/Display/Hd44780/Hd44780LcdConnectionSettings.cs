@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Raspberry.IO.Display.Components
+namespace Raspberry.IO.Components.Display.Hd44780
 {
     public class Hd44780LcdConnectionSettings
     {

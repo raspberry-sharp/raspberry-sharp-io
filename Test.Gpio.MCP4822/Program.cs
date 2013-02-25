@@ -2,8 +2,8 @@
 
 using System;
 using System.Threading;
+using Raspberry.IO.Components.Converter.Mcp4822;
 using Raspberry.IO.GeneralPurpose;
-using Raspberry.IO.SerialPeripheralInterface.Components;
 
 #endregion
 

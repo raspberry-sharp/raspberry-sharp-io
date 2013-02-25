@@ -1,4 +1,4 @@
-namespace Raspberry.IO.SerialPeripheralInterface.Components
+namespace Raspberry.IO.Components.Converter.Mcp3008
 {
     public enum Mcp3008Channel
     {

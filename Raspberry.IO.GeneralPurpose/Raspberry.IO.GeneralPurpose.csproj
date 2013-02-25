@@ -41,6 +41,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Behaviors\BlinkBehavior.cs" />
     <Compile Include="Behaviors\ChaserBehavior.cs" />
     <Compile Include="Behaviors\PatternBehavior.cs" />

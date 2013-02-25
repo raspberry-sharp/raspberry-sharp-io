@@ -5,7 +5,7 @@ using Raspberry.IO.GeneralPurpose;
 
 namespace Test.Gpio.Chaser
 {
-    internal static class Helpers
+    internal static class CommandLineExtensionMethods
     {
         public static bool GetLoop(this IEnumerable<string> args)
         {

@@ -44,11 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Mcp23017I2cConnection.cs" />
-    <Compile Include="Components\Mcp23017Pin.cs" />
-    <Compile Include="Components\Mcp23017PinDirection.cs" />
-    <Compile Include="Components\Mcp23017PinPolarity.cs" />
-    <Compile Include="Components\Mcp23017PinResistor.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="I2cDeviceConnection.cs" />
     <Compile Include="I2cDriver.cs" />
     <Compile Include="Interop.cs" />

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F3E6F476-7088-4169-8E09-AE19EBE46C0E}</ProjectGuid>
+    <ProjectGuid>{8388CFCA-E3DB-43F7-B049-2CB195211CE8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Raspberry.IO.Display</RootNamespace>
-    <AssemblyName>Raspberry.IO.Display</AssemblyName>
+    <RootNamespace>Raspberry.IO.Components</RootNamespace>
+    <AssemblyName>Raspberry.IO.Components</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,27 +35,48 @@
       <HintPath>..\packages\Raspberry.System.1.0.4\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Command.cs" />
-    <Compile Include="Components\CursorShiftFlags.cs" />
-    <Compile Include="Components\DisplayFlags.cs" />
-    <Compile Include="Components\Functions.cs" />
-    <Compile Include="Components\Hd44780A00Encoding.cs" />
-    <Compile Include="Components\Hd44780LcdConnection.cs" />
-    <Compile Include="Components\Hd44780LcdConnectionSettings.cs" />
-    <Compile Include="Components\EntryModeFlags.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Converter\Mcp3008\Mcp3008Channel.cs" />
+    <Compile Include="Converter\Mcp3008\Mcp3008SpiConnection.cs" />
+    <Compile Include="Converter\Mcp4822\Mcp4822Channel.cs" />
+    <Compile Include="Converter\Mcp4822\Mcp4822SpiConnection.cs" />
+    <Compile Include="Display\Hd44780\Command.cs" />
+    <Compile Include="Display\Hd44780\CursorShiftFlags.cs" />
+    <Compile Include="Display\Hd44780\DisplayFlags.cs" />
+    <Compile Include="Display\Hd44780\EntryModeFlags.cs" />
+    <Compile Include="Display\Hd44780\Functions.cs" />
+    <Compile Include="Display\Hd44780\Hd44780A00Encoding.cs" />
+    <Compile Include="Display\Hd44780\Hd44780LcdConnection.cs" />
+    <Compile Include="Display\Hd44780\Hd44780LcdConnectionSettings.cs" />
+    <Compile Include="Expander\Mcp23017\Mcp23017I2cConnection.cs" />
+    <Compile Include="Expander\Mcp23017\Mcp23017Pin.cs" />
+    <Compile Include="Expander\Mcp23017\Mcp23017PinDirection.cs" />
+    <Compile Include="Expander\Mcp23017\Mcp23017PinPolarity.cs" />
+    <Compile Include="Expander\Mcp23017\Mcp23017PinResistor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
+      <Project>{63B8403E-BC56-43F9-A045-F61ECC3871F3}</Project>
+      <Name>Raspberry.IO.InterIntegratedCircuit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj">
+      <Project>{326342E5-0411-40E8-9F2D-563D6B192568}</Project>
+      <Name>Raspberry.IO.SerialPeripheralInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

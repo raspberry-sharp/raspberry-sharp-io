@@ -39,10 +39,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Mcp3008Channel.cs" />
-    <Compile Include="Components\Mcp3008SpiConnection.cs" />
-    <Compile Include="Components\Mcp4822Channel.cs" />
-    <Compile Include="Components\Mcp4822SpiConnection.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Endianness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpiConnection.cs" />
