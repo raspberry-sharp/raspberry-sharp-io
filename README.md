@@ -28,10 +28,11 @@ It currently support the following features:
 + Addressing through **processor pin number or connector pin number**
 + Giving custom name to pins for more readable code
 + Various Raspberry Pi revisions, for now **Raspberry B rev1 and rev2**, including rev2 P5 connector
-+ Easy-of-use, declarative configuration of pins. Ability to revert the meaning (1/0) of pins; ability to **use an input pin as a switch button**
++ Easy-of-use, declarative configuration of pins. Ability to revert the polarity (1/0) of pins; ability to **use an input pin as a switch button**
 + Firing of **events when pin status change** (input as well as output)
 + **High-level behaviors** for output pins, including *blink*, *pattern* and *chaser*
 + Controlled use of resources using a IDisposable component
 + Support sub-millisecond polling of input pins
 + Preliminary support for SPI through Raspberry.IO.SerialPeripheralInterface assembly
-+ Includes SPI samples for MCP3008 ADC and MCP4822 DAC, as well as for HD44780 LCD display
++ Preliminary support for I2C through Raspberry.IO.InterIntegratedCircuit assembly
++ Includes SPI samples for MCP3008 ADC and MCP4822 DAC, I2C sample for MCP23017 I/O expander, as well as samples for HD44780 LCD display and HC-SR04 distance detector
