@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyCompany("Raspberry-Sharp")]
-[assembly: AssemblyProduct("Raspberry.IO.GeneralPurpose")]
+[assembly: AssemblyProduct("Raspberry.IO")]
 [assembly: AssemblyCopyright("www.raspberry-sharp.org, 2012-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
