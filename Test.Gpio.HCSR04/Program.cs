@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Raspberry.IO.Components.Sensors.HcSr04;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
@@ -16,41 +17,29 @@ namespace Test.Gpio.HCSR04
         {
             var interval = GetInterval(args);
 
-            var driver = new MemoryGpioConnectionDriver();
-
             var triggerPin = ConnectorPin.P1Pin03.ToProcessor();
             var echoPin = ConnectorPin.P1Pin07.ToProcessor();
 
-            driver.Allocate(triggerPin, PinDirection.Output);
-            driver.Allocate(echoPin, PinDirection.Input);
-
-            while (!Console.KeyAvailable)
+            using (var connection = new HcSr04Connection(triggerPin, echoPin))
             {
-                var distance = GetDistance(driver, triggerPin, echoPin);
-                if (distance != decimal.MinValue)
-                    Console.WriteLine("{0:0.0}cm", distance*100);
-                else
-                    Console.WriteLine("(Timeout)");
+                while (!Console.KeyAvailable)
+                {
+                    try
+                    {
+                        var distance = connection.GetDistance();
+                        Console.WriteLine("{0:0.0}cm", distance * 100);
+                    }
+                    catch (TimeoutException)
+                    {
+                        Console.WriteLine("(Timeout)");
+                    }
 
-                Timer.Sleep(interval);
+                    Timer.Sleep(interval);
+                }
             }
-
-            driver.Release(triggerPin);
-            driver.Release(echoPin);
         }
 
         #region Private Helpers
-
-        private static decimal GetDistance(MemoryGpioConnectionDriver driver, ProcessorPin triggerPin, ProcessorPin echoPin)
-        {
-            driver.Write(triggerPin, true);
-            Timer.Sleep(0.01m);
-            driver.Write(triggerPin, false);
-
-            return driver.Wait(echoPin)
-                       ? Units.Velocity.Sound.ToDistance(driver.Time(echoPin))
-                       : decimal.MinValue;
-        }
 
         private static int GetInterval(IEnumerable<string> args)
         {

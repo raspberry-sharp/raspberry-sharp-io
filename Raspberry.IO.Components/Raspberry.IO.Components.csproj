@@ -60,6 +60,8 @@
     <Compile Include="Expanders\Mcp23017\Mcp23017PinPolarity.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinResistor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sensors\HcSr04\HcSr04Connection.cs" />
+    <Compile Include="Sensors\HcSr04\Units.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">

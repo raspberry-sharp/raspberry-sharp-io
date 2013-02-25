@@ -1,10 +1,18 @@
-using System;
-using Raspberry.IO.GeneralPurpose;
+#region References
 
-namespace Test.Gpio.HCSR04
+using System;
+
+#endregion
+
+namespace Raspberry.IO.GeneralPurpose
 {
-    internal static class GpioConnectionDriverExtensionMethods
+    /// <summary>
+    /// Provides extension methods for <see cref="IGpioConnectionDriver"/>.
+    /// </summary>
+    public static class GpioConnectionDriverExtensionMethods
     {
+        #region Methods
+
         /// <summary>
         /// Waits for the specified pin to reach a given state.
         /// </summary>
@@ -12,10 +20,7 @@ namespace Test.Gpio.HCSR04
         /// <param name="pin">The pin.</param>
         /// <param name="waitForUp">if set to <c>true</c>, waits for the pin to become up; otherwise, waits for the pin to become down.</param>
         /// <param name="timeout">The timeout.</param>
-        /// <returns>
-        ///   <c>true</c> is the pin has reached the expected status, <c>false</c> if a timeout occurred.
-        /// </returns>
-        public static bool Wait(this IGpioConnectionDriver driver, ProcessorPin pin, bool waitForUp = true, int timeout = 0)
+        public static void Wait(this IGpioConnectionDriver driver, ProcessorPin pin, bool waitForUp = true, int timeout = 0)
         {
             if (timeout == 0)
                 timeout = 5000;
@@ -23,11 +28,9 @@ namespace Test.Gpio.HCSR04
             var startWait = DateTime.Now;
             while (driver.Read(pin) != waitForUp)
             {
-                if (DateTime.Now.Ticks - startWait.Ticks >= 10000 * timeout)
-                    return false;
+                if (DateTime.Now.Ticks - startWait.Ticks >= 10000*timeout)
+                    throw new TimeoutException();
             }
-
-            return true;
         }
 
         /// <summary>
@@ -48,11 +51,13 @@ namespace Test.Gpio.HCSR04
             var waitDown = DateTime.Now;
             while (driver.Read(pin) == waitForDown)
             {
-                if (DateTime.Now.Ticks - waitDown.Ticks >= 10000 * timeout)
-                    return decimal.MinValue;
+                if (DateTime.Now.Ticks - waitDown.Ticks >= 10000*timeout)
+                    throw new TimeoutException();
             }
 
-            return (DateTime.Now.Ticks - waitDown.Ticks) / 10000m;
+            return (DateTime.Now.Ticks - waitDown.Ticks)/10000m;
         }
+
+        #endregion
     }
 }

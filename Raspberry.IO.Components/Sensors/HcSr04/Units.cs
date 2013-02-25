@@ -1,4 +1,4 @@
-namespace Test.Gpio.HCSR04
+namespace Raspberry.IO.Components.Sensors.HcSr04
 {
     internal static class Units
     {

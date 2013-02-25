@@ -45,12 +45,14 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="GpioConnectionDriverExtensionMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Units.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
+      <Project>{8388CFCA-E3DB-43F7-B049-2CB195211CE8}</Project>
+      <Name>Raspberry.IO.Components</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
