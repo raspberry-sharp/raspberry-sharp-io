@@ -22,6 +22,8 @@ namespace Test.Gpio.HCSR04
 
             using (var connection = new HcSr04Connection(triggerPin, echoPin))
             {
+                connection.Timeout = 2000;
+
                 while (!Console.KeyAvailable)
                 {
                     try
