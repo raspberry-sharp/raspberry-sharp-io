@@ -22,14 +22,14 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="timeout">The timeout.</param>
         public static void Wait(this IGpioConnectionDriver driver, ProcessorPin pin, bool waitForUp = true, int timeout = 0)
         {
+            var startWait = DateTime.Now;
             if (timeout == 0)
                 timeout = 5000;
 
-            var startWait = DateTime.Now;
             while (driver.Read(pin) != waitForUp)
             {
                 if (DateTime.Now.Ticks - startWait.Ticks >= 10000*timeout)
-                    throw new TimeoutException();
+                    throw new TimeoutException("A timeout occurred while waiting");
             }
         }
 
@@ -45,14 +45,14 @@ namespace Raspberry.IO.GeneralPurpose
         /// </returns>
         public static decimal Time(this IGpioConnectionDriver driver, ProcessorPin pin, bool waitForDown = true, int timeout = 0)
         {
+            var waitDown = DateTime.Now;
             if (timeout == 0)
                 timeout = 5000;
 
-            var waitDown = DateTime.Now;
             while (driver.Read(pin) == waitForDown)
             {
                 if (DateTime.Now.Ticks - waitDown.Ticks >= 10000*timeout)
-                    throw new TimeoutException();
+                    throw new TimeoutException("A timeout occurred while measuring time");
             }
 
             return (DateTime.Now.Ticks - waitDown.Ticks)/10000m;

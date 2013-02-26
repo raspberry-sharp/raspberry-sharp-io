@@ -35,6 +35,45 @@ namespace Raspberry.IO.GeneralPurpose
         #region Methods
 
         /// <summary>
+        /// Allocates the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="direction">The direction.</param>
+        public void Allocate(ProcessorPin pin, PinDirection direction)
+        {
+            var gpioId = string.Format("gpio{0}", (int)pin);
+            if (Directory.Exists(Path.Combine(gpioPath, gpioId)))
+                Release(pin);
+
+            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "export"), false))
+                streamWriter.Write((int)pin);
+
+            var filePath = Path.Combine(gpioId, "direction");
+            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
+                streamWriter.Write(direction == PinDirection.Input ? "in" : "out");
+        }
+
+        /// <summary>
+        /// Sets the pin resistor.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="resistor">The resistor.</param>
+        public void SetPinResistor(ProcessorPin pin, PinResistor resistor)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Releases the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        public void Release(ProcessorPin pin)
+        {
+            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))
+                streamWriter.Write((int)pin);
+        }
+
+        /// <summary>
         /// Modified the status of a pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
@@ -80,31 +119,6 @@ namespace Raspberry.IO.GeneralPurpose
                 .Aggregate(
                     ProcessorPins.None, 
                     (a, p) => a | p);
-        }
-
-        /// <summary>
-        /// Allocates the specified pin.
-        /// </summary>
-        /// <param name="pin">The pin.</param>
-        /// <param name="direction">The direction.</param>
-        public void Allocate(ProcessorPin pin, PinDirection direction)
-        {
-            var gpioId = string.Format("gpio{0}", (int) pin);
-            if (Directory.Exists(Path.Combine(gpioPath, gpioId)))
-                Release(pin);
-
-            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "export"), false))
-                streamWriter.Write((int) pin);
-
-            var filePath = Path.Combine(gpioId, "direction");
-            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
-                streamWriter.Write(direction == PinDirection.Input ? "in" : "out");
-        }
-        
-        public void Release(ProcessorPin pin)
-        {
-            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))
-                streamWriter.Write((int) pin);
         }
 
         #endregion

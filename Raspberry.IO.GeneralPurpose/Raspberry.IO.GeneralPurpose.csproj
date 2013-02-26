@@ -56,6 +56,7 @@
     <Compile Include="GpioConnectionDriverExtensionMethods.cs" />
     <Compile Include="GpioConnectionSettings.cs" />
     <Compile Include="Interop.cs" />
+    <Compile Include="PinResistor.cs" />
     <Compile Include="ProcessorPinExtensionMethods.cs" />
     <Compile Include="ProcessorPins.cs" />
     <Compile Include="MemoryGpioConnectionDriver.cs" />
@@ -74,10 +75,6 @@
     <Compile Include="SwitchInputPinConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bcm2835-customizations.txt" />
-    <Content Include="libbcm2835.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -36,6 +36,8 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
             driver = new MemoryGpioConnectionDriver();
 
             driver.Allocate(triggerPin, PinDirection.Output);
+            driver.Write(triggerPin, false);
+
             driver.Allocate(echoPin, PinDirection.Input);
         }
 

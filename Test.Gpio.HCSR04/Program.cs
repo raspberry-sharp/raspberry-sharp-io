@@ -17,8 +17,8 @@ namespace Test.Gpio.HCSR04
         {
             var interval = GetInterval(args);
 
-            var triggerPin = ConnectorPin.P1Pin03.ToProcessor();
-            var echoPin = ConnectorPin.P1Pin07.ToProcessor();
+            var triggerPin = ConnectorPin.P1Pin21.ToProcessor();
+            var echoPin = ConnectorPin.P1Pin23.ToProcessor();
 
             using (var connection = new HcSr04Connection(triggerPin, echoPin))
             {
@@ -29,9 +29,9 @@ namespace Test.Gpio.HCSR04
                         var distance = connection.GetDistance();
                         Console.WriteLine("{0:0.0}cm", distance * 100);
                     }
-                    catch (TimeoutException)
+                    catch (TimeoutException e)
                     {
-                        Console.WriteLine("(Timeout)");
+                        Console.WriteLine("(Timeout): " + e.Message);
                     }
 
                     Timer.Sleep(interval);

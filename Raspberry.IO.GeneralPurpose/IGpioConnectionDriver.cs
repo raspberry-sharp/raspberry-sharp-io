@@ -8,6 +8,26 @@ namespace Raspberry.IO.GeneralPurpose
         #region Methods
 
         /// <summary>
+        /// Allocates the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="direction">The direction.</param>
+        void Allocate(ProcessorPin pin, PinDirection direction);
+        
+        /// <summary>
+        /// Sets the pin resistor.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="resistor">The resistor.</param>
+        void SetPinResistor(ProcessorPin pin, PinResistor resistor);
+
+        /// <summary>
+        /// Releases the specified pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        void Release(ProcessorPin pin);
+
+        /// <summary>
         /// Modified the status of a pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
@@ -27,20 +47,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="pins">The pins.</param>
         /// <returns>The pins status.</returns>
         ProcessorPins Read(ProcessorPins pins);
-
-        /// <summary>
-        /// Allocates the specified pin.
-        /// </summary>
-        /// <param name="pin">The pin.</param>
-        /// <param name="direction">The direction.</param>
-        void Allocate(ProcessorPin pin, PinDirection direction);
-
-        /// <summary>
-        /// Releases the specified pin.
-        /// </summary>
-        /// <param name="pin">The pin.</param>
-        void Release(ProcessorPin pin);
-
+        
         #endregion
     }
 }

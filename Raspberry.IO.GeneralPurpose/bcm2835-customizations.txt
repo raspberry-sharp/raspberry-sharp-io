@@ -1,8 +1,0 @@
-﻿// bcm2835.h
-extern uint32_t bcm2835_gpioperi_read(uint32_t group);
-
-// bcm2835.c
-uint32_t bcm2835_gpioperi_read(uint32_t group){
-    volatile uint32_t* paddr = gpio + BCM2835_GPLEV0/4 + group;
-    return bcm2835_peri_read(paddr);
-}
