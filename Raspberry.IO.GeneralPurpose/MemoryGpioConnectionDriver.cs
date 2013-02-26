@@ -61,7 +61,7 @@ namespace Raspberry.IO.GeneralPurpose
         public void Allocate(ProcessorPin pin, PinDirection direction)
         {
             // Set the direction on the pin and update the exported list
-            SetPinMode((uint)pin, direction == PinDirection.Input ? Interop.BCM2835_GPIO_FSEL_INPT : Interop.BCM2835_GPIO_FSEL_OUTP);
+            SetPinMode(pin, direction == PinDirection.Input ? Interop.BCM2835_GPIO_FSEL_INPT : Interop.BCM2835_GPIO_FSEL_OUTP);
 
             if (direction == PinDirection.Input)
                 SetPinResistor(pin, PinResistor.None);
@@ -111,10 +111,10 @@ namespace Raspberry.IO.GeneralPurpose
 
             WriteResistor(pud);
             Timers.Timer.Sleep(1);
-            SetPinResistorClock((uint)pin, true);
+            SetPinResistorClock(pin, true);
             Timers.Timer.Sleep(1);
             WriteResistor(Interop.BCM2835_GPIO_PUD_OFF);
-            SetPinResistorClock((uint)pin, false);
+            SetPinResistorClock(pin, false);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="pin">The pin.</param>
         public void Release(ProcessorPin pin)
         {
-            SetPinMode((uint)pin, Interop.BCM2835_GPIO_FSEL_INPT);
+            SetPinMode(pin, Interop.BCM2835_GPIO_FSEL_INPT);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Private Methods
 
-        private void SetPinResistorClock(uint pin, bool on)
+        private void SetPinResistorClock(ProcessorPin pin, bool on)
         {
             int shift;
             var offset = Math.DivRem((int)pin, 32, out shift);
@@ -192,14 +192,14 @@ namespace Raspberry.IO.GeneralPurpose
             SafeWriteUInt32(resistorPin, resistor);
         }
 
-        private void SetPinMode(uint pin, uint mode)
+        private void SetPinMode(ProcessorPin pin, uint mode)
         {
             // Function selects are 10 pins per 32 bit word, 3 bits per pin
-            var pinModeAddress = gpioAddress + (int) (Interop.BCM2835_GPFSEL0 + 4*(pin/10));
+            var pinModeAddress = gpioAddress + (int) (Interop.BCM2835_GPFSEL0 + 4*((int)pin/10));
 
-            var shift = (pin%10)*3;
-            var mask = Interop.BCM2835_GPIO_FSEL_MASK << (int) shift;
-            var value = mode << (int) shift;
+            var shift = 3*((int) pin%10);
+            var mask = Interop.BCM2835_GPIO_FSEL_MASK << shift;
+            var value = mode << shift;
 
             WriteUInt32Mask(pinModeAddress, value, mask);
         }
@@ -227,8 +227,6 @@ namespace Raspberry.IO.GeneralPurpose
             {
                 return (uint) Marshal.ReadInt32(address);
             }
-
-            //return (uint) Marshal.PtrToStructure(address, typeof (uint));
         }
 
         private static void SafeWriteUInt32(IntPtr address, uint value)
@@ -245,7 +243,6 @@ namespace Raspberry.IO.GeneralPurpose
             {
                 Marshal.WriteInt32(address, (int)value);
             }
-            //Marshal.Copy(BitConverter.GetBytes(value), 0, address, 4);
         }
 
         #endregion
