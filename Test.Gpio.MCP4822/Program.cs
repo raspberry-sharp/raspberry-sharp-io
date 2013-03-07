@@ -15,16 +15,21 @@ namespace Test.Gpio.MCP4822
     /// </summary>
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var dacClock = ConnectorPin.P1Pin11.ToProcessor();
-            var dacCs = ConnectorPin.P1Pin13.ToProcessor();
-            var dacMosi = ConnectorPin.P1Pin15.ToProcessor();
+            const ConnectorPin dacClock = ConnectorPin.P1Pin11;
+            const ConnectorPin dacCs = ConnectorPin.P1Pin13;
+            const ConnectorPin dacMosi = ConnectorPin.P1Pin15;
 
-            using (var dacConnection = new Mcp4822SpiConnection(dacClock, dacCs, dacMosi, 1))
+            Console.WriteLine("MCP-4822 Sample: Write a changing value on Channel A");
+            Console.WriteLine();
+            Console.WriteLine("\tClock: {0}", dacClock);
+            Console.WriteLine("\tCS: {0}", dacCs);
+            Console.WriteLine("\tMOSI: {0}", dacMosi);
+            Console.WriteLine();
+
+            using (var dacConnection = new Mcp4822SpiConnection(dacClock.ToProcessor(), dacCs.ToProcessor(), dacMosi.ToProcessor(), 1))
             {
-                Console.WriteLine("MC4822 Sample: Write a changing value on Channel A");
-
                 const decimal minimum = 0.0001m;
                 var ticks = minimum;
                 var up = true;

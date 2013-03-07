@@ -1,7 +1,6 @@
 ﻿#region References
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
@@ -14,29 +13,39 @@ namespace Test.Gpio.HD44780
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var settings = new Hd44780LcdConnectionSettings
+            const ConnectorPin registerSelectPin = ConnectorPin.P1Pin22;
+            const ConnectorPin clockPin = ConnectorPin.P1Pin18;
+            var dataPins = new[]
                                {
-                                   ScreenWidth = 20,
-                                   ScreenHeight = 2,
+                                   ConnectorPin.P1Pin16,
+                                   ConnectorPin.P1Pin15,
+                                   ConnectorPin.P1Pin13,
+                                   ConnectorPin.P1Pin11
                                };
 
-            var registerSelectPin = ConnectorPin.P1Pin22.ToProcessor();
-            var clockPin = ConnectorPin.P1Pin18.ToProcessor();
-            var dataPins = (IEnumerable<ProcessorPin>)new[]
-                               {
-                                   ConnectorPin.P1Pin16.ToProcessor(),
-                                   ConnectorPin.P1Pin15.ToProcessor(),
-                                   ConnectorPin.P1Pin13.ToProcessor(),
-                                   ConnectorPin.P1Pin11.ToProcessor()
-                               };
+            Console.WriteLine("HD-44780 Sample: Display IP configuration on LCD screen");
+            Console.WriteLine();
+            Console.WriteLine("\tRegister Select: {0}", registerSelectPin);
+            Console.WriteLine("\tClock: {0}", clockPin);
+            Console.WriteLine("\tData 1: {0}", dataPins[0]);
+            Console.WriteLine("\tData 2: {0}", dataPins[1]);
+            Console.WriteLine("\tData 3: {0}", dataPins[2]);
+            Console.WriteLine("\tData 4: {0}", dataPins[3]);
+            Console.WriteLine();
+
+            var settings = new Hd44780LcdConnectionSettings
+            {
+                ScreenWidth = 20,
+                ScreenHeight = 2,
+            };
 
             using (var connection = new Hd44780LcdConnection(
                 settings,
-                registerSelectPin,
-                clockPin,
-                dataPins))
+                registerSelectPin.ToProcessor(),
+                clockPin.ToProcessor(),
+                dataPins.Select(p => p.ToProcessor())))
             {
                 connection.SetCustomCharacter(1, new byte[] {0x0, 0x0, 0x04, 0xe, 0x1f, 0x0, 0x0});
                 connection.SetCustomCharacter(2, new byte[] {0x0, 0x0, 0x1f, 0xe, 0x04, 0x0, 0x0});

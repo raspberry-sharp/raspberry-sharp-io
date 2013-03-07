@@ -15,20 +15,26 @@ namespace Test.Gpio.MCP3008
     /// </summary>
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var adcClock = ConnectorPin.P1Pin12.ToProcessor();
-            var adcMiso = ConnectorPin.P1Pin16.ToProcessor();
-            var adcMosi = ConnectorPin.P1Pin18.ToProcessor();
-            var adcCs = ConnectorPin.P1Pin22.ToProcessor();
+            const ConnectorPin adcClock = ConnectorPin.P1Pin12;
+            const ConnectorPin adcMiso = ConnectorPin.P1Pin16;
+            const ConnectorPin adcMosi = ConnectorPin.P1Pin18;
+            const ConnectorPin adcCs = ConnectorPin.P1Pin22;
+
+            Console.WriteLine("MCP-3008 Sample: Reading temperature on Channel 0 and luminosity on Channel 1");
+            Console.WriteLine();
+            Console.WriteLine("\tClock: {0}", adcClock);
+            Console.WriteLine("\tCS: {0}", adcCs);
+            Console.WriteLine("\tMOSI: {0}", adcMosi);
+            Console.WriteLine("\tMISO: {0}", adcMiso);
+            Console.WriteLine();
 
             const decimal voltage = 3.3m;
 
-            using (var adcConnection = new Mcp3008SpiConnection(adcClock, adcCs, adcMiso, adcMosi, voltage))
+            using (var adcConnection = new Mcp3008SpiConnection(adcClock.ToProcessor(), adcCs.ToProcessor(), adcMiso.ToProcessor(), adcMosi.ToProcessor(), voltage))
             {
                 Console.CursorVisible = false;
-                Console.WriteLine("MCP3008 Sample: Reading temperature on Channel 0 and luminosity on Channel 1");
-                Console.WriteLine();
 
                 while (!Console.KeyAvailable)
                 {

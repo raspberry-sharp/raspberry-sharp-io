@@ -15,12 +15,18 @@ namespace Test.Gpio.HCSR04
     {
         private static void Main(string[] args)
         {
+            const ConnectorPin triggerPin = ConnectorPin.P1Pin21;
+            const ConnectorPin echoPin = ConnectorPin.P1Pin23;
+
+            Console.WriteLine("HC-SR04 Sample: measure distance");
+            Console.WriteLine();
+            Console.WriteLine("\tTrigger: {0}", triggerPin);
+            Console.WriteLine("\tEcho: {0}", echoPin);
+            Console.WriteLine();
+
             var interval = GetInterval(args);
 
-            var triggerPin = ConnectorPin.P1Pin21.ToProcessor();
-            var echoPin = ConnectorPin.P1Pin23.ToProcessor();
-
-            using (var connection = new HcSr04Connection(triggerPin, echoPin))
+            using (var connection = new HcSr04Connection(triggerPin.ToProcessor(), echoPin.ToProcessor()))
             {
                 connection.Timeout = 2000;
 
