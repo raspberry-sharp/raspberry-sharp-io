@@ -491,22 +491,26 @@ namespace Raspberry.IO.GeneralPurpose
                 this[configuration.Pin] = outputConfiguration.Enabled;
             else
             {
-                var pinValue = Driver.Read(configuration.Pin);
+                var inputConfiguration = (InputPinConfiguration) configuration;
+                var pinValue = Driver.Read(inputConfiguration.Pin);
 
-                var pin = (ProcessorPins)((uint)1 << (int)configuration.Pin);
+                var pin = (ProcessorPins)((uint)1 << (int)inputConfiguration.Pin);
                 inputPins = inputPins | pin;
                 pinRawValues = Driver.Read(inputPins);
 
-                var switchConfiguration = configuration as SwitchInputPinConfiguration;
+                if (inputConfiguration.Resistor != PinResistor.None)
+                    Driver.SetPinResistor(inputConfiguration.Pin, inputConfiguration.Resistor);
+
+                var switchConfiguration = inputConfiguration as SwitchInputPinConfiguration;
                 if (switchConfiguration != null)
                 {
-                    pinValues[configuration.Pin] = switchConfiguration.Enabled;
-                    OnPinStatusChanged(new PinStatusEventArgs {Configuration = configuration, Enabled = pinValues[configuration.Pin]});
+                    pinValues[inputConfiguration.Pin] = switchConfiguration.Enabled;
+                    OnPinStatusChanged(new PinStatusEventArgs { Configuration = inputConfiguration, Enabled = pinValues[inputConfiguration.Pin] });
                 }
                 else
                 {
-                    pinValues[configuration.Pin] = configuration.GetEffective(pinValue);
-                    OnPinStatusChanged(new PinStatusEventArgs { Configuration = configuration, Enabled = pinValues[configuration.Pin] });
+                    pinValues[inputConfiguration.Pin] = inputConfiguration.GetEffective(pinValue);
+                    OnPinStatusChanged(new PinStatusEventArgs { Configuration = inputConfiguration, Enabled = pinValues[inputConfiguration.Pin] });
                 }
             }
         }

@@ -98,6 +98,30 @@ namespace Raspberry.IO.GeneralPurpose
         }
 
         /// <summary>
+        /// Enables pull-up resistor.
+        /// </summary>
+        /// <typeparam name="T">The configuration type.</typeparam>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The pin configuration.</returns>
+        public static T PullUp<T>(this T configuration) where T : InputPinConfiguration
+        {
+            configuration.Resistor = PinResistor.PullUp;
+            return configuration;
+        }
+
+        /// <summary>
+        /// Enables pull-down resistor.
+        /// </summary>
+        /// <typeparam name="T">The configuration type.</typeparam>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The pin configuration.</returns>
+        public static T PullDown<T>(this T configuration) where T : InputPinConfiguration
+        {
+            configuration.Resistor = PinResistor.PullDown;
+            return configuration;
+        }
+
+        /// <summary>
         /// Indicates the specified pin is enabled on connection.
         /// </summary>
         /// <param name="configuration">The configuration.</param>

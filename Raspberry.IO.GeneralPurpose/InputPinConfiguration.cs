@@ -25,6 +25,14 @@ namespace Raspberry.IO.GeneralPurpose
             get { return PinDirection.Input; }
         }
 
+        /// <summary>
+        /// Gets or sets the resistor.
+        /// </summary>
+        /// <value>
+        /// The resistor.
+        /// </value>
+        public PinResistor Resistor { get; set; }
+
         #endregion
     }
 }

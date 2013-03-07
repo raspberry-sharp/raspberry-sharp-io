@@ -35,7 +35,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// Gets the direction.
         /// </summary>
         public abstract PinDirection Direction { get; }
-
+        
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
