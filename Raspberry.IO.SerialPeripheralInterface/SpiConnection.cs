@@ -12,7 +12,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
     {
         #region Fields
 
-        private readonly MemoryGpioConnectionDriver driver;
+        private readonly IGpioConnectionDriver driver;
         private readonly ProcessorPin clock;
         private readonly ProcessorPin ss;
         private readonly ProcessorPin? miso;
@@ -32,7 +32,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
             this.mosi = mosi;
             this.endianness = endianness;
 
-            driver = new MemoryGpioConnectionDriver();
+            driver = new GpioConnectionDriver();
 
             driver.Allocate(clock, PinDirection.Output);
             driver.Write(clock, false);

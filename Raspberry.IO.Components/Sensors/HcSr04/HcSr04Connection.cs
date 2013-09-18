@@ -37,7 +37,7 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
 
             Timeout = 5000;
 
-            driver = new MemoryGpioConnectionDriver();
+            driver = new GpioConnectionDriver();
 
             driver.Allocate(triggerPin, PinDirection.Output);
             driver.Write(triggerPin, false);

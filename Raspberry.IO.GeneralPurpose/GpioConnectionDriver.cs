@@ -1,20 +1,18 @@
-#region References
-
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
-
-#endregion
 
 namespace Raspberry.IO.GeneralPurpose
 {
     /// <summary>
-    /// Represents a connection driver that uses memory.
+    /// Represents the default connection driver that uses memory for accesses and files for edge detection.
     /// </summary>
-    public class MemoryGpioConnectionDriver : IGpioConnectionDriver
+    public class GpioConnectionDriver : IGpioConnectionDriver
     {
         #region Fields
 
         private readonly IntPtr gpioAddress;
+        private const string gpioPath = "/sys/class/gpio";
 
         #endregion
 
@@ -23,7 +21,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryGpioConnectionDriver"/> class.
         /// </summary>
-        public MemoryGpioConnectionDriver()
+        public GpioConnectionDriver()
         {
             var memoryFile = Interop.open("/dev/mem", Interop.O_RDWR + Interop.O_SYNC);
             try
@@ -43,11 +41,11 @@ namespace Raspberry.IO.GeneralPurpose
         /// Releases unmanaged resources and performs other cleanup operations before the
         /// <see cref="MemoryGpioConnectionDriver"/> is reclaimed by garbage collection.
         /// </summary>
-        ~MemoryGpioConnectionDriver()
+        ~GpioConnectionDriver()
         {
             Interop.munmap(gpioAddress, Interop.BCM2835_BLOCK_SIZE);
         }
-        
+
         #endregion
 
         #region Methods
@@ -59,8 +57,25 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="direction">The direction.</param>
         public void Allocate(ProcessorPin pin, PinDirection direction)
         {
+            var gpioId = string.Format("gpio{0}", (int)pin);
+            if (Directory.Exists(Path.Combine(gpioPath, gpioId)))
+            {
+                // Reinitialize pin virtual file
+                using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))
+                    streamWriter.Write((int) pin);
+            }
+
+            // Export pin for file mode
+            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "export"), false))
+                streamWriter.Write((int)pin);
+
             // Set the direction on the pin and update the exported list
             SetPinMode(pin, direction == PinDirection.Input ? Interop.BCM2835_GPIO_FSEL_INPT : Interop.BCM2835_GPIO_FSEL_OUTP);
+
+            // Set direction in pin virtual file
+            var filePath = Path.Combine(gpioId, "direction");
+            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
+                streamWriter.Write(direction == PinDirection.Input ? "in" : "out");
 
             if (direction == PinDirection.Input)
                 SetPinResistor(pin, PinResistor.None);
@@ -92,7 +107,7 @@ namespace Raspberry.IO.GeneralPurpose
             // RPi has P1-03 and P1-05 with 1k8 pullup resistor
 
             uint pud;
-            switch(resistor)
+            switch (resistor)
             {
                 case PinResistor.None:
                     pud = Interop.BCM2835_GPIO_PUD_OFF;
@@ -123,6 +138,9 @@ namespace Raspberry.IO.GeneralPurpose
         public void Release(ProcessorPin pin)
         {
             SetPinMode(pin, Interop.BCM2835_GPIO_FSEL_INPT);
+
+            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))
+                streamWriter.Write((int)pin);
         }
 
         /// <summary>
@@ -136,7 +154,7 @@ namespace Raspberry.IO.GeneralPurpose
             var offset = Math.DivRem((int)pin, 32, out shift);
 
             var pinGroupAddress = gpioAddress + (int)((value ? Interop.BCM2835_GPSET0 : Interop.BCM2835_GPCLR0) + offset);
-            SafeWriteUInt32(pinGroupAddress, (uint) 1 << shift);
+            SafeWriteUInt32(pinGroupAddress, (uint)1 << shift);
         }
 
         /// <summary>
@@ -149,9 +167,9 @@ namespace Raspberry.IO.GeneralPurpose
         public bool Read(ProcessorPin pin)
         {
             int shift;
-            var offset = Math.DivRem((int) pin, 32, out shift);
+            var offset = Math.DivRem((int)pin, 32, out shift);
 
-            var pinGroupAddress = gpioAddress + (int) (Interop.BCM2835_GPLEV0 + offset);
+            var pinGroupAddress = gpioAddress + (int)(Interop.BCM2835_GPLEV0 + offset);
             var value = SafeReadUInt32(pinGroupAddress);
 
             return (value & (1 << shift)) != 0;
@@ -166,7 +184,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </returns>
         public ProcessorPins Read(ProcessorPins pins)
         {
-            var pinGroupAddress = gpioAddress + (int) (Interop.BCM2835_GPLEV0 + (uint) 0 * 4);
+            var pinGroupAddress = gpioAddress + (int)(Interop.BCM2835_GPLEV0 + (uint)0 * 4);
             var value = SafeReadUInt32(pinGroupAddress);
 
             return (ProcessorPins)((uint)pins & value);
@@ -182,21 +200,21 @@ namespace Raspberry.IO.GeneralPurpose
             var offset = Math.DivRem((int)pin, 32, out shift);
 
             var clockAddress = gpioAddress + (int)(Interop.BCM2835_GPPUDCLK0 + offset);
-            SafeWriteUInt32(clockAddress, (uint) (on ? 1 : 0) << shift);
+            SafeWriteUInt32(clockAddress, (uint)(on ? 1 : 0) << shift);
         }
 
         private void WriteResistor(uint resistor)
         {
-            var resistorPin = gpioAddress + (int) Interop.BCM2835_GPPUD;
+            var resistorPin = gpioAddress + (int)Interop.BCM2835_GPPUD;
             SafeWriteUInt32(resistorPin, resistor);
         }
 
         private void SetPinMode(ProcessorPin pin, uint mode)
         {
             // Function selects are 10 pins per 32 bit word, 3 bits per pin
-            var pinModeAddress = gpioAddress + (int) (Interop.BCM2835_GPFSEL0 + 4*((int)pin/10));
+            var pinModeAddress = gpioAddress + (int)(Interop.BCM2835_GPFSEL0 + 4 * ((int)pin / 10));
 
-            var shift = 3*((int) pin%10);
+            var shift = 3 * ((int)pin % 10);
             var mask = Interop.BCM2835_GPIO_FSEL_MASK << shift;
             var value = mode << shift;
 
@@ -224,7 +242,7 @@ namespace Raspberry.IO.GeneralPurpose
         {
             unchecked
             {
-                return (uint) Marshal.ReadInt32(address);
+                return (uint)Marshal.ReadInt32(address);
             }
         }
 
