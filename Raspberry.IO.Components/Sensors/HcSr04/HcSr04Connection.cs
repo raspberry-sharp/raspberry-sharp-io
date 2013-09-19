@@ -35,9 +35,9 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
             this.triggerPin = triggerPin;
             this.echoPin = echoPin;
 
-            Timeout = 5000;
+            Timeout = 2000;
 
-            driver = new GpioConnectionDriver();
+            driver = GpioConnectionSettings.DefaultDriver;
 
             driver.Allocate(triggerPin, PinDirection.Output);
             driver.Write(triggerPin, false);
@@ -61,9 +61,9 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         /// Gets or sets the timeout for distance measure, in milliseconds.
         /// </summary>
         /// <value>
-        /// The timeout.
+        /// The timeout, in milliseconds.
         /// </value>
-        public int Timeout { get; set; }
+        public decimal Timeout { get; set; }
 
         #endregion
 
@@ -76,11 +76,11 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         public decimal GetDistance()
         {
             driver.Write(triggerPin, true);
-            Timer.Sleep(0.01m);
+            Timer.Sleep(0.02m);
             driver.Write(triggerPin, false);
 
-            driver.Wait(echoPin, timeout:waitTimeout);
-            return Units.Velocity.Sound.ToDistance(driver.Time(echoPin, timeout:Timeout));
+            driver.Wait(echoPin, true, waitTimeout);
+            return Units.Velocity.Sound.ToDistance(driver.Time(echoPin, false, Timeout));
         }
 
         /// <summary>

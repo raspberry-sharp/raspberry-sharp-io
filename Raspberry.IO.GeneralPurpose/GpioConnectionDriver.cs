@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -13,6 +14,8 @@ namespace Raspberry.IO.GeneralPurpose
 
         private readonly IntPtr gpioAddress;
         private const string gpioPath = "/sys/class/gpio";
+
+        private readonly Dictionary<ProcessorPin, PinPoll> polls = new Dictionary<ProcessorPin, PinPoll>();
 
         #endregion
 
@@ -78,7 +81,11 @@ namespace Raspberry.IO.GeneralPurpose
                 streamWriter.Write(direction == PinDirection.Input ? "in" : "out");
 
             if (direction == PinDirection.Input)
+            {
                 SetPinResistor(pin, PinResistor.None);
+                SetPinDetectedEdges(pin, PinDetectedEdges.Both);
+                InitializePoll(pin);
+            }
         }
 
         /// <summary>
@@ -132,15 +139,61 @@ namespace Raspberry.IO.GeneralPurpose
         }
 
         /// <summary>
+        /// Sets the detected edges on an input pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="edges">The edges.</param>
+        /// <remarks>By default, both edges may be detected on input pins.</remarks>
+        public void SetPinDetectedEdges(ProcessorPin pin, PinDetectedEdges edges)
+        {
+            var edgePath = Path.Combine(gpioPath, string.Format("gpio{0}/edge", (int)pin));
+            using (var streamWriter = new StreamWriter(edgePath, false))
+                streamWriter.Write(ToString(edges));
+        }
+
+        /// <summary>
+        /// Waits for the specified pin to be in the specified state.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up.</param>
+        /// <param name="timeout">The timeout, in milliseconds.</param>
+        /// <exception cref="System.TimeoutException"></exception>
+        /// <exception cref="System.IO.IOException">epoll_wait failed</exception>
+        public void Wait(ProcessorPin pin, bool waitForUp = true, decimal timeout = 0)
+        {
+            var pinPoll = polls[pin];
+            if (Read(pin) == waitForUp)
+                return;
+
+            var actualTimeout = GetActualTimeout(timeout);
+
+            while (true)
+            {
+                // TODO: timeout after the remaining amount of time.
+                var waitResult = Interop.epoll_wait(pinPoll.PollDescriptor, pinPoll.OutEventPtr, 1, actualTimeout);
+                if (waitResult > 0)
+                {
+                    if (Read(pin) == waitForUp)
+                        break;
+                }
+                else if (waitResult == 0)
+                    throw new TimeoutException(string.Format("Operation timed out after waiting {0}ms for the pin {1} to be {2}", actualTimeout, pin, (waitForUp ? "up" : "down")));
+                else
+                    throw new IOException("epoll_wait failed");
+            }
+        }
+
+        /// <summary>
         /// Releases the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
         public void Release(ProcessorPin pin)
         {
-            SetPinMode(pin, Interop.BCM2835_GPIO_FSEL_INPT);
-
+            UninitializePoll(pin);
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "unexport"), false))
                 streamWriter.Write((int)pin);
+
+            SetPinMode(pin, Interop.BCM2835_GPIO_FSEL_INPT);
         }
 
         /// <summary>
@@ -193,6 +246,89 @@ namespace Raspberry.IO.GeneralPurpose
         #endregion
 
         #region Private Methods
+
+        private static int GetActualTimeout(decimal timeout)
+        {
+            int actualTimeout;
+            if (timeout <= 0)
+                actualTimeout = 5000;
+            else if (timeout < 1)
+                actualTimeout = 1;
+            else actualTimeout = (int)timeout;
+            return actualTimeout;
+        }
+
+        private void InitializePoll(ProcessorPin pin)
+        {
+            lock (polls)
+            {
+                PinPoll poll;
+                if (polls.TryGetValue(pin, out poll))
+                    return;
+
+                var pinPoll = new PinPoll();
+
+                pinPoll.PollDescriptor = Interop.epoll_create(1);
+                if (pinPoll.PollDescriptor.ToInt64() < 0)
+                    throw new IOException("epoll_create failed with the following return value: " + pinPoll.PollDescriptor.ToInt64());
+
+                var valuePath = Path.Combine(gpioPath, string.Format("gpio{0}/value", (int)pin));
+                pinPoll.FileDescriptor = Interop.open(valuePath, Interop.O_RDONLY | Interop.O_NONBLOCK);
+
+                var ev = new Interop.epoll_event
+                {
+                    events = (Interop.EPOLLIN | Interop.EPOLLET | Interop.EPOLLPRI),
+                    data = new Interop.epoll_data { fd = pinPoll.FileDescriptor }
+                };
+
+                pinPoll.InEventPtr = Marshal.AllocHGlobal(64);
+                Marshal.StructureToPtr(ev, pinPoll.InEventPtr, false);
+
+                var controlResult = Interop.epoll_ctl(pinPoll.PollDescriptor, Interop.EPOLL_CTL_ADD, pinPoll.FileDescriptor, pinPoll.InEventPtr);
+                if (controlResult != 0)
+                    throw new IOException("epoll_ctl(EPOLL_CTL_ADD) failed with the following return value: " + controlResult);
+
+                pinPoll.OutEventPtr = Marshal.AllocHGlobal(64);
+                polls[pin] = pinPoll;
+            }
+        }
+
+        private void UninitializePoll(ProcessorPin pin)
+        {
+            PinPoll poll;
+            if (polls.TryGetValue(pin, out poll))
+            {
+                polls.Remove(pin);
+
+                var controlResult = poll.InEventPtr != IntPtr.Zero ? Interop.epoll_ctl(poll.PollDescriptor, Interop.EPOLL_CTL_DEL, poll.FileDescriptor, poll.InEventPtr) : 0;
+
+                Marshal.FreeHGlobal(poll.InEventPtr);
+                Marshal.FreeHGlobal(poll.OutEventPtr);
+
+                Interop.close(poll.PollDescriptor);
+                Interop.close(poll.FileDescriptor);
+
+                if (controlResult != 0)
+                    throw new IOException("epoll_ctl(EPOLL_CTL_DEL) failed with the following return value: " + controlResult);
+            }
+        }
+
+        private static string ToString(PinDetectedEdges edges)
+        {
+            switch (edges)
+            {
+                case PinDetectedEdges.Both:
+                    return "both";
+                case PinDetectedEdges.Rising:
+                    return "rising";
+                case PinDetectedEdges.Falling:
+                    return "falling";
+                case PinDetectedEdges.None:
+                    return "none";
+                default:
+                    throw new ArgumentOutOfRangeException("edges");
+            }
+        }
 
         private void SetPinResistorClock(ProcessorPin pin, bool on)
         {
@@ -260,6 +396,14 @@ namespace Raspberry.IO.GeneralPurpose
             {
                 Marshal.WriteInt32(address, (int)value);
             }
+        }
+
+        private struct PinPoll
+        {
+            public IntPtr FileDescriptor;
+            public IntPtr PollDescriptor;
+            public IntPtr InEventPtr;
+            public IntPtr OutEventPtr;
         }
 
         #endregion

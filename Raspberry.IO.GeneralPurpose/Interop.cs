@@ -60,10 +60,12 @@ namespace Raspberry.IO.GeneralPurpose
         #endregion
 
         #region Libc
-
+        
         #region Constants
 
+        public const int O_RDONLY = 1;
         public const int O_RDWR = 2;
+        public const int O_NONBLOCK = 4;
         public const int O_SYNC = 10000;
 
         public const int PROT_READ = 1;
@@ -71,6 +73,13 @@ namespace Raspberry.IO.GeneralPurpose
 
         public const int MAP_SHARED = 1;
         public const int MAP_FAILED = -1;
+
+        public const int EPOLLIN = 1;
+        public const int EPOLLPRI = 2;
+        public const int EPOLLET = (1 << 31);
+
+        public const int EPOLL_CTL_ADD = 0x1;
+        public const int EPOLL_CTL_DEL = 0x2;
 
         #endregion
 
@@ -88,7 +97,32 @@ namespace Raspberry.IO.GeneralPurpose
         [DllImport("libc.so.6", EntryPoint = "munmap")]
         public static extern IntPtr munmap(IntPtr address, uint size);
 
+        [DllImport("libc.so.6", EntryPoint = "epoll_create")]
+        public static extern IntPtr epoll_create(int size);
+
+        [DllImport("libc.so.6", EntryPoint = "epoll_ctl")]
+        public static extern int epoll_ctl(IntPtr epfd, int op, IntPtr fd, IntPtr epevent);
+
+        [DllImport("libc.so.6", EntryPoint = "epoll_wait")]
+        public static extern int epoll_wait(IntPtr epfd, IntPtr events, int maxevents, int timeout);
+
         #endregion
+
+        [StructLayout(LayoutKind.Explicit)]
+        public struct epoll_data
+        {
+            [FieldOffset(0)] public IntPtr ptr;
+            [FieldOffset(0)] public IntPtr fd;
+            [FieldOffset(0)] public UInt32 u32;
+            [FieldOffset(0)] public UInt64 u64;
+        };
+
+        [StructLayout(LayoutKind.Explicit)]
+        public struct epoll_event
+        {
+            [FieldOffset(0)] public int events;
+            [FieldOffset(4)] public epoll_data data;
+        };
 
         #endregion
     }

@@ -22,6 +22,22 @@ namespace Raspberry.IO.GeneralPurpose
         void SetPinResistor(ProcessorPin pin, PinResistor resistor);
 
         /// <summary>
+        /// Sets the detected edges on an input pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="edges">The edges.</param>
+        /// <remarks>By default, both edges may be detected on input pins.</remarks>
+        void SetPinDetectedEdges(ProcessorPin pin, PinDetectedEdges edges);
+
+        /// <summary>
+        /// Waits for the specified pin to be in the specified state.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up.</param>
+        /// <param name="timeout">The timeout, in milliseconds.</param>
+        void Wait(ProcessorPin pin, bool waitForUp = true, decimal timeout = 0);
+
+        /// <summary>
         /// Releases the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>

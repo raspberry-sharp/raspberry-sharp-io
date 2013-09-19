@@ -109,7 +109,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
             encoding = settings.Encoding;
 
-            connectionDriver = new GpioConnectionDriver();
+            connectionDriver = GpioConnectionSettings.DefaultDriver;
 
             connectionDriver.Allocate(registerSelectPin, PinDirection.Output);
             connectionDriver.Write(registerSelectPin, false);

@@ -32,7 +32,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
             this.mosi = mosi;
             this.endianness = endianness;
 
-            driver = new GpioConnectionDriver();
+            driver = GpioConnectionSettings.DefaultDriver;
 
             driver.Allocate(clock, PinDirection.Output);
             driver.Write(clock, false);

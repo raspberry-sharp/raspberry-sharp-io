@@ -64,6 +64,40 @@ namespace Raspberry.IO.GeneralPurpose
         }
 
         /// <summary>
+        /// Sets the detected edges on an input pin.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="edges">The edges.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        /// <remarks>
+        /// By default, both edges may be detected on input pins.
+        /// </remarks>
+        public void SetPinDetectedEdges(ProcessorPin pin, PinDetectedEdges edges)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Waits for the specified pin to be in the specified state.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up.</param>
+        /// <param name="timeout">The timeout, in milliseconds.</param>
+        /// <exception cref="System.TimeoutException">A timeout occurred while waiting</exception>
+        public void Wait(ProcessorPin pin, bool waitForUp = true, decimal timeout = 0)
+        {
+            var startWait = DateTime.Now;
+            if (timeout == 0)
+                timeout = 5000;
+
+            while (Read(pin) != waitForUp)
+            {
+                if (DateTime.Now.Ticks - startWait.Ticks >= 10000 * timeout)
+                    throw new TimeoutException("A timeout occurred while waiting");
+            }
+        }
+
+        /// <summary>
         /// Releases the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
