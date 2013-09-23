@@ -4,25 +4,51 @@
         <name>Raspberry.System</name>
     </assembly>
     <members>
-        <member name="T:Raspberry.Timers.Timer">
+        <member name="T:Raspberry.Board">
             <summary>
-            Provides access to timing features.
+            Represents the Raspberry Pi mainboard.
+            </summary>
+            <remarks>Version and revisions are based on <see cref="!:http://raspberryalphaomega.org.uk/2013/02/06/automatic-raspberry-pi-board-revision-detection-model-a-b1-and-b2/"/>.</remarks>
+        </member>
+        <member name="P:Raspberry.Board.Current">
+            <summary>
+            Gets the current mainboard configuration.
             </summary>
         </member>
-        <member name="M:Raspberry.Timers.Timer.Create">
+        <member name="P:Raspberry.Board.IsRaspberryPi">
             <summary>
-            Creates a timer.
+            Gets a value indicating whether this instance is a Raspberry Pi.
             </summary>
-            <returns>The timer.</returns>
-            <remarks>
-            The created timer is the most suitable for the current platform.
-            </remarks>
+            <value>
+            	<c>true</c> if this instance is a Raspberry Pi; otherwise, <c>false</c>.
+            </value>
         </member>
-        <member name="M:Raspberry.Timers.Timer.Sleep(System.Decimal)">
+        <member name="P:Raspberry.Board.Processor">
             <summary>
-            Sleeps during the specified time.
+            Gets the processor.
             </summary>
-            <param name="time">The time, in milliseconds.</param>
+        </member>
+        <member name="P:Raspberry.Board.Firmware">
+            <summary>
+            Gets the board firmware version.
+            </summary>
+        </member>
+        <member name="P:Raspberry.Board.SerialNumber">
+            <summary>
+            Gets the serial number.
+            </summary>
+        </member>
+        <member name="P:Raspberry.Board.Model">
+            <summary>
+            Gets the model.
+            </summary>
+            <returns>The model name (<c>A</c> or <c>B</c>) if known; otherwise, <c>(char)0</c>.</returns>
+        </member>
+        <member name="P:Raspberry.Board.Revision">
+            <summary>
+            Gets the board revision.
+            </summary>
+            <returns>The board revision for the given <see cref="P:Raspberry.Board.Model"/> if known; otherwise, <c>0</c>.</returns>
         </member>
         <member name="T:Raspberry.Timers.HighResolutionTimer">
             <summary>
@@ -121,43 +147,25 @@
             The action.
             </value>
         </member>
-        <member name="T:Raspberry.Board">
+        <member name="T:Raspberry.Timers.Timer">
             <summary>
-            Represents the Raspberry Pi mainboard.
+            Provides access to timing features.
             </summary>
         </member>
-        <member name="P:Raspberry.Board.Current">
+        <member name="M:Raspberry.Timers.Timer.Create">
             <summary>
-            Gets the current mainboard configuration.
+            Creates a timer.
             </summary>
+            <returns>The timer.</returns>
+            <remarks>
+            The created timer is the most suitable for the current platform.
+            </remarks>
         </member>
-        <member name="P:Raspberry.Board.IsRaspberryPi">
+        <member name="M:Raspberry.Timers.Timer.Sleep(System.Decimal)">
             <summary>
-            Gets a value indicating whether this instance is a Raspberry Pi.
+            Sleeps during the specified time.
             </summary>
-            <value>
-            	<c>true</c> if this instance is a Raspberry Pi; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:Raspberry.Board.Processor">
-            <summary>
-            Gets the processor.
-            </summary>
-        </member>
-        <member name="P:Raspberry.Board.Firmware">
-            <summary>
-            Gets the board firmware version.
-            </summary>
-        </member>
-        <member name="P:Raspberry.Board.SerialNumber">
-            <summary>
-            Gets the serial number.
-            </summary>
-        </member>
-        <member name="P:Raspberry.Board.Revision">
-            <summary>
-            Gets the board revision.
-            </summary>
+            <param name="time">The time, in milliseconds.</param>
         </member>
     </members>
 </doc>

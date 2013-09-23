@@ -14,8 +14,8 @@
       Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.
 
       It is an initiative of the Raspberry# Community, aimed at providing tools and information concerning use of Raspberry Pi boards with Mono/.NET framework.
-      Parts of this work are based on [BCM2835 C library](http://www.open.com.au/mikem/bcm2835/).
-
+      Parts of Raspberry# IO are inspired by [BCM2835 C Library](http://www.airspayce.com/mikem/bcm2835/) and Gordon Henderson's [WiringPi](http://wiringpi.com/).
+      
       Visit project [Github site](https://github.com/raspberry-sharp/raspberry-sharp-io/) for documentation and samples.
     </description>
     <summary>Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.</summary>
@@ -26,14 +26,13 @@
       <frameworkAssembly assemblyName="System.Core" targetFramework="net40" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="Raspberry.System" version="1.0.4" />
+      <dependency id="Raspberry.System" version="1.2.0" />
     </dependencies>
   </metadata>
   <files>
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.pdb" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.xml" target="lib\net40" />
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\libbcm2835.so" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\**\*.cs" target="src" />
   </files>
 </package>

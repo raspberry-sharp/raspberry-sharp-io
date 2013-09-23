@@ -36,16 +36,16 @@ namespace Raspberry.IO.GeneralPurpose.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the board revision.
+        /// Gets or sets the board connector revision.
         /// </summary>
         /// <value>
-        /// The board revision.
+        /// The board revision, <c>0</c> for automatic detection, <c>1</c> for model B rev1; <c>2</c> for model B rev2 and model A.
         /// </value>
-        [ConfigurationProperty("boardRevision")]
-        public string BoardRevision
+        [ConfigurationProperty("boardConnectorRevision", DefaultValue = 0)]
+        public int BoardConnectorRevision
         {
-            get { return (string) this["boardRevision"]; }
-            set { this["boardRevision"] = value; }
+            get { return (int)this["boardConnectorRevision"]; }
+            set { this["boardConnectorRevision"] = value; }
         }
 
         /// <summary>

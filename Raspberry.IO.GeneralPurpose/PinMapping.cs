@@ -29,13 +29,13 @@ namespace Raspberry.IO.GeneralPurpose
         {
             var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
 
-            int boardRevision;
-            if (configurationSection == null || string.Equals(configurationSection.BoardRevision ?? "auto", "auto", StringComparison.InvariantCultureIgnoreCase))
-                boardRevision = Board.Current.Revision;
+            int connectorRevision;
+            if (configurationSection == null || configurationSection.BoardConnectorRevision == 0)
+                connectorRevision = Board.Current.Model == 'A' ? 2 : Board.Current.Revision;
             else
-                boardRevision = int.Parse(configurationSection.BoardRevision);
+                connectorRevision = configurationSection.BoardConnectorRevision;
 
-            var mapping = boardRevision == 1
+            var mapping = connectorRevision == 1
                               ? new[]
                                     {
                                         new {Processor = ProcessorPin.Pin0, Connector = ConnectorPin.P1Pin3},
