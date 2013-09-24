@@ -8,3 +8,13 @@ TestResults
 # user files
 **.user
 **.suo
+**.sdf  
+
+# resharper  
+/_[Rr]e[Ss]harper.*  
+*.[Rr]e[Ss]harper.*  
+*.[Rr]e[Ss]harper  
+  
+# OS generated files  
+[Tt]humbs.db   
+[Dd]esktop.ini
