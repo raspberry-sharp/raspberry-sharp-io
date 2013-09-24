@@ -27,15 +27,7 @@ namespace Raspberry.IO.GeneralPurpose
 
         static PinMapping()
         {
-            var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
-
-            int connectorRevision;
-            if (configurationSection == null || configurationSection.BoardConnectorRevision == 0)
-                connectorRevision = Board.Current.Model == 'A' ? 2 : Board.Current.Revision;
-            else
-                connectorRevision = configurationSection.BoardConnectorRevision;
-
-            var mapping = connectorRevision == 1
+            var mapping = GpioConnectionSettings.BoardConnectorRevision == 1
                               ? new[]
                                     {
                                         new {Processor = ProcessorPin.Pin0, Connector = ConnectorPin.P1Pin3},
@@ -101,7 +93,7 @@ namespace Raspberry.IO.GeneralPurpose
             if (processorMappings.TryGetValue(pin, out processorPin))
                 return processorPin;
             else
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Connector pin {0} is not mapped to processor on board revision {1}", pin.ToString().Replace("Pin", "-"), Board.Current.Revision));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Connector pin {0} is not mapped to processor with pin layout revision {1}", pin.ToString().Replace("Pin", "-"), GpioConnectionSettings.BoardConnectorRevision));
         }
 
         /// <summary>
@@ -115,7 +107,7 @@ namespace Raspberry.IO.GeneralPurpose
             if (connectorMappings.TryGetValue(pin, out connectorPin))
                 return connectorPin;
             else
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to connector on board revision {1}", (int)pin, Board.Current.Revision));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Processor pin {0} is not mapped to processor with pin layout revision {1}", (int) pin, GpioConnectionSettings.BoardConnectorRevision));
         }
 
         #endregion

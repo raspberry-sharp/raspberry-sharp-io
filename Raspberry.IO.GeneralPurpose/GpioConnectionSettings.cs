@@ -2,6 +2,7 @@
 
 using System;
 using System.Configuration;
+using System.IO;
 using Raspberry.IO.GeneralPurpose.Configuration;
 
 #endregion
@@ -103,6 +104,28 @@ namespace Raspberry.IO.GeneralPurpose
                            ? configurationSection.PollInterval
                            : GpioConnectionConfigurationSection.DefaultPollInterval;
 
+            }
+        }
+
+        /// <summary>
+        /// Gets the board connector revision.
+        /// </summary>
+        /// <value>
+        /// The board connector revision.
+        /// </value>
+        public static int BoardConnectorRevision
+        {
+            get
+            {
+                var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
+                if (configurationSection != null)
+                    return configurationSection.BoardConnectorRevision;
+
+                var board = Board.Current;
+                if (board.Model == 'B' && board.Revision == 1)
+                    return 1;
+
+                return 2;
             }
         }
 
