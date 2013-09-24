@@ -26,9 +26,9 @@ namespace Raspberry.IO.InterIntegratedCircuit
             Write(value);
         }
 
-        public byte[] Read(int length)
+        public byte[] Read(int byteCount)
         {
-            return driver.Read(deviceAddress, length);
+            return driver.Read(deviceAddress, byteCount);
         }
 
         public byte ReadByte()

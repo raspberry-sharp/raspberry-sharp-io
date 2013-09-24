@@ -58,8 +58,8 @@ namespace Raspberry.IO.InterIntegratedCircuit
             var divider = (ushort) SafeReadUInt32(dividerAddress);
             waitInterval = GetWaitInterval(divider);
 
-            var addressAddress = bscAddress + (int)Interop.BCM2835_BSC_A;
-            SafeWriteUInt32(addressAddress, (uint)currentDeviceAddress);
+            var addressAddress = bscAddress + (int) Interop.BCM2835_BSC_A;
+            SafeWriteUInt32(addressAddress, (uint) currentDeviceAddress);
         }
 
         public void Dispose()
@@ -174,7 +174,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
             }
         }
 
-        internal byte[] Read(int deviceAddress, int len)
+        internal byte[] Read(int deviceAddress, int byteCount)
         {
             lock (driverLock)
             {
@@ -185,7 +185,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 var status = bscAddress + (int) Interop.BCM2835_BSC_S;
                 var control = bscAddress + (int) Interop.BCM2835_BSC_C;
 
-                var remaining = (uint) len;
+                var remaining = (uint) byteCount;
                 uint i = 0;
 
                 // Clear FIFO
@@ -195,12 +195,12 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 WriteUInt32(status, Interop.BCM2835_BSC_S_CLKT | Interop.BCM2835_BSC_S_ERR | Interop.BCM2835_BSC_S_DONE);
 
                 // Set Data Length
-                WriteUInt32(dlen, (uint) len);
+                WriteUInt32(dlen, (uint) byteCount);
 
                 // Start read
                 WriteUInt32(control, Interop.BCM2835_BSC_C_I2CEN | Interop.BCM2835_BSC_C_ST | Interop.BCM2835_BSC_C_READ);
 
-                var buffer = new byte[len];
+                var buffer = new byte[byteCount];
                 while ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_DONE) == 0)
                 {
                     Wait(remaining);
@@ -260,7 +260,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
 
         private static uint GetBscBase(ProcessorPin sdaPin, ProcessorPin sclPin)
         {
-            switch (Board.Current.Revision)
+            switch (GpioConnectionSettings.BoardConnectorRevision)
             {
                 case 1:
                     if (sdaPin == ProcessorPin.Pin0 && sclPin == ProcessorPin.Pin1)
@@ -268,10 +268,10 @@ namespace Raspberry.IO.InterIntegratedCircuit
                     throw new InvalidOperationException("I2C cannot be initialized for specified pins");
 
                 case 2:
-                    if (sdaPin == ProcessorPin.Pin2 && sclPin == ProcessorPin.Pin3)
-                        return Interop.BCM2835_BSC1_BASE;
                     if (sdaPin == ProcessorPin.Pin28 && sclPin == ProcessorPin.Pin29)
                         return Interop.BCM2835_BSC0_BASE;
+                    if (sdaPin == ProcessorPin.Pin2 && sclPin == ProcessorPin.Pin3)
+                        return Interop.BCM2835_BSC1_BASE;
                     throw new InvalidOperationException("I2C cannot be initialized for specified pins");
 
                 default:
