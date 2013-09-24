@@ -1,7 +1,7 @@
 Raspberry# IO
 =============
 
-See the **[Raspberry\# IO Wiki](raspberry-sharp-io/wiki)** for full documentation and samples.
+See the **[Raspberry\# IO Wiki](https://github.com/raspberry-sharp/raspberry-sharp-io/wiki)** for full documentation and samples.
 
 Introduction
 ------------
