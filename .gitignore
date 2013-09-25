@@ -16,5 +16,6 @@ TestResults
 *.[Rr]e[Ss]harper  
   
 # OS generated files  
-[Tt]humbs.db   
-[Dd]esktop.ini
+**/[Tt]humbs.db
+**/[Dd]esktop.ini
+
