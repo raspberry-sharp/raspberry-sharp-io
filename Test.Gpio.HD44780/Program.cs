@@ -4,8 +4,11 @@ using System;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
+using Raspberry.IO.Components;
 using Raspberry.IO.Components.Displays.Hd44780;
+using Raspberry.IO.Components.Expanders.Mcp23017;
 using Raspberry.IO.GeneralPurpose;
+using Raspberry.IO.InterIntegratedCircuit;
 
 #endregion
 
@@ -13,27 +16,9 @@ namespace Test.Gpio.HD44780
 {
     class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
-            const ConnectorPin registerSelectPin = ConnectorPin.P1Pin22;
-            const ConnectorPin clockPin = ConnectorPin.P1Pin18;
-            var dataPins = new[]
-                               {
-                                   ConnectorPin.P1Pin16,
-                                   ConnectorPin.P1Pin15,
-                                   ConnectorPin.P1Pin13,
-                                   ConnectorPin.P1Pin11
-                               };
-
             Console.WriteLine("HD-44780 Sample: Display IP configuration on LCD screen");
-            Console.WriteLine();
-            Console.WriteLine("\tRegister Select: {0}", registerSelectPin);
-            Console.WriteLine("\tClock: {0}", clockPin);
-            Console.WriteLine("\tData 1: {0}", dataPins[0]);
-            Console.WriteLine("\tData 2: {0}", dataPins[1]);
-            Console.WriteLine("\tData 3: {0}", dataPins[2]);
-            Console.WriteLine("\tData 4: {0}", dataPins[3]);
-            Console.WriteLine();
 
             var settings = new Hd44780LcdConnectionSettings
             {
@@ -41,11 +26,14 @@ namespace Test.Gpio.HD44780
                 ScreenHeight = 2,
             };
 
+            var useI2c = args.Contains("i2c");
+
+            using (var configuration = useI2c ? LoadI2cConfiguration() : LoadGpioConfiguration())
             using (var connection = new Hd44780LcdConnection(
                 settings,
-                registerSelectPin.ToProcessor(),
-                clockPin.ToProcessor(),
-                dataPins.Select(p => p.ToProcessor())))
+                configuration.RegisterSelect,
+                configuration.Clock,
+                configuration.Data))
             {
                 connection.SetCustomCharacter(1, new byte[] {0x0, 0x0, 0x04, 0xe, 0x1f, 0x0, 0x0});
                 connection.SetCustomCharacter(2, new byte[] {0x0, 0x0, 0x1f, 0xe, 0x04, 0x0, 0x0});
@@ -125,6 +113,75 @@ namespace Test.Gpio.HD44780
             }
         }
 
+        #region Private Helpers
+
+        private static Hd44780Configuration LoadI2cConfiguration()
+        {
+            const Mcp23017Pin registerSelectPin = Mcp23017Pin.B0;
+            const Mcp23017Pin clockPin = Mcp23017Pin.B1;
+            var dataPins = new[]
+                {
+                    Mcp23017Pin.B2,
+                    Mcp23017Pin.B3,
+                    Mcp23017Pin.B4,
+                    Mcp23017Pin.B5
+                };
+
+            Console.WriteLine();
+            Console.WriteLine("Using I2C connection");
+            Console.WriteLine("\tRegister Select: {0}", registerSelectPin);
+            Console.WriteLine("\tClock: {0}", clockPin);
+            Console.WriteLine("\tData 1: {0}", dataPins[0]);
+            Console.WriteLine("\tData 2: {0}", dataPins[1]);
+            Console.WriteLine("\tData 3: {0}", dataPins[2]);
+            Console.WriteLine("\tData 4: {0}", dataPins[3]);
+            Console.WriteLine();
+
+            const ConnectorPin sdaPin = ConnectorPin.P1Pin03;
+            const ConnectorPin sclPin = ConnectorPin.P1Pin05;
+
+            var driver = new I2cDriver(sdaPin.ToProcessor(), sclPin.ToProcessor());
+            var connection = new Mcp23017I2cConnection(driver.Connect(0x20));
+
+            return new Hd44780Configuration(driver)
+                {
+                    RegisterSelect = connection.Out(registerSelectPin),
+                    Clock = connection.Out(clockPin),
+                    Data = dataPins.Select(connection.Out)
+                };
+        }
+
+        private static Hd44780Configuration LoadGpioConfiguration()
+        {
+            const ConnectorPin registerSelectPin = ConnectorPin.P1Pin22;
+            const ConnectorPin clockPin = ConnectorPin.P1Pin18;
+            var dataPins = new[]
+                {
+                    ConnectorPin.P1Pin16,
+                    ConnectorPin.P1Pin15,
+                    ConnectorPin.P1Pin13,
+                    ConnectorPin.P1Pin11
+                };
+
+            Console.WriteLine();
+            Console.WriteLine("Using GPIO connection");
+            Console.WriteLine("\tRegister Select: {0}", registerSelectPin);
+            Console.WriteLine("\tClock: {0}", clockPin);
+            Console.WriteLine("\tData 1: {0}", dataPins[0]);
+            Console.WriteLine("\tData 2: {0}", dataPins[1]);
+            Console.WriteLine("\tData 3: {0}", dataPins[2]);
+            Console.WriteLine("\tData 4: {0}", dataPins[3]);
+            Console.WriteLine();
+
+            var driver = GpioConnectionSettings.DefaultDriver;
+            return new Hd44780Configuration
+                {
+                    RegisterSelect = driver.Out(registerSelectPin),
+                    Clock = driver.Out(clockPin),
+                    Data = dataPins.Select(driver.Out)
+                };
+        }
+
         private static void DisplayCharMap(Hd44780LcdConnection connection)
         {
             var idx = 0;
@@ -134,7 +191,7 @@ namespace Test.Gpio.HD44780
                 var s2 = new string(@group.Skip(20).Take(20).ToArray());
 
                 connection.Clear();
-                
+
                 connection.WriteLine(s1);
                 connection.WriteLine(s2);
 
@@ -153,5 +210,7 @@ namespace Test.Gpio.HD44780
 
             return string.Format("{0:0.0}GB", byteCount/(1024*1024*1024.0m));
         }
+
+        #endregion
     }
 }

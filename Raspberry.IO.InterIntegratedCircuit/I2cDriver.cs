@@ -9,6 +9,9 @@ using Raspberry.Timers;
 
 namespace Raspberry.IO.InterIntegratedCircuit
 {
+    /// <summary>
+    /// Represents a driver for I2C devices.
+    /// </summary>
     public class I2cDriver : IDisposable
     {
         #region Fields
@@ -147,20 +150,25 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 // Set Data Length
                 WriteUInt32(dlen, len);
 
+                while (remaining != 0 && i < Interop.BCM2835_BSC_FIFO_SIZE)
+                {
+                    WriteUInt32(fifo, buffer[i]);
+                    i++;
+                    remaining--;
+                }
+
                 // Enable device and start transfer
                 WriteUInt32(control, Interop.BCM2835_BSC_C_I2CEN | Interop.BCM2835_BSC_C_ST);
 
-                while ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_DONE) == 0)
+                while ((ReadUInt32(status) & Interop.BCM2835_BSC_S_DONE) == 0)
                 {
-                    while ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_TXD) != 0 && remaining != 0)
+                    while (remaining != 0 && (ReadUInt32(status) & Interop.BCM2835_BSC_S_TXD) != 0)
                     {
                         // Write to FIFO, no barrier
                         WriteUInt32(fifo, buffer[i]);
                         i++;
                         remaining--;
                     }
-
-                    Wait(remaining);
                 }
 
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_ERR) != 0) // Received a NACK
@@ -168,8 +176,8 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_CLKT) != 0) // Received Clock Stretch Timeout
                     throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_CLKT");
                 if (remaining != 0) // Not all data is sent
-                    throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_DATA");
-
+                    throw new InvalidOperationException(string.Format("BCM2835_I2C_REASON_ERROR_DATA. Missing {0} bytes", remaining));
+                
                 WriteUInt32Mask(control, Interop.BCM2835_BSC_S_DONE, Interop.BCM2835_BSC_S_DONE);
             }
         }
@@ -201,11 +209,9 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 WriteUInt32(control, Interop.BCM2835_BSC_C_I2CEN | Interop.BCM2835_BSC_C_ST | Interop.BCM2835_BSC_C_READ);
 
                 var buffer = new byte[byteCount];
-                while ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_DONE) == 0)
+                while ((ReadUInt32(status) & Interop.BCM2835_BSC_S_DONE) == 0)
                 {
-                    Wait(remaining);
-
-                    while ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_RXD) != 0)
+                    while ((ReadUInt32(status) & Interop.BCM2835_BSC_S_RXD) != 0)
                     {
                         // Read from FIFO, no barrier
                         buffer[i] = (byte) ReadUInt32(fifo);
@@ -215,12 +221,19 @@ namespace Raspberry.IO.InterIntegratedCircuit
                     }
                 }
 
+                while (remaining != 0 && (ReadUInt32(status) & Interop.BCM2835_BSC_S_RXD) != 0)
+                {
+                    buffer[i] = (byte) ReadUInt32(fifo);
+                    i++;
+                    remaining--;
+                }
+
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_ERR) != 0) // Received a NACK
                     throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_NACK");
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_CLKT) != 0) // Received Clock Stretch Timeout
                     throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_CLKT");
                 if (remaining != 0) // Not all data is received
-                    throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_DATA");
+                    throw new InvalidOperationException(string.Format("BCM2835_I2C_REASON_ERROR_DATA. Missing {0} bytes", remaining));
 
                 WriteUInt32Mask(control, Interop.BCM2835_BSC_S_DONE, Interop.BCM2835_BSC_S_DONE);
 

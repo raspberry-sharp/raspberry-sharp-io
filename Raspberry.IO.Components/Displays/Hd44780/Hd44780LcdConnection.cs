@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
 #endregion
@@ -21,11 +20,9 @@ namespace Raspberry.IO.Components.Displays.Hd44780
     {
         #region Fields
 
-        private readonly IGpioConnectionDriver connectionDriver;
-
-        private readonly ProcessorPin registerSelectPin;
-        private readonly ProcessorPin clockPin;
-        private readonly ProcessorPin[] dataPins;
+        private readonly IOutputPin registerSelectPin;
+        private readonly IOutputPin clockPin;
+        private readonly IOutputPin[] dataPins;
 
         private readonly int width;
         private readonly int height;
@@ -48,7 +45,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(ProcessorPin registerSelectPin, ProcessorPin clockPin, params ProcessorPin[] dataPins) : this(null, registerSelectPin, clockPin, (IEnumerable<ProcessorPin>)dataPins) { }
+        public Hd44780LcdConnection(IOutputPin registerSelectPin, IOutputPin clockPin, params IOutputPin[] dataPins) : this(null, registerSelectPin, clockPin, (IEnumerable<IOutputPin>)dataPins) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
@@ -56,16 +53,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(ProcessorPin registerSelectPin, ProcessorPin clockPin, IEnumerable<ProcessorPin> dataPins) : this(null, registerSelectPin, clockPin, dataPins) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="registerSelectPin">The register select pin.</param>
-        /// <param name="clockPin">The clock pin.</param>
-        /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, ProcessorPin registerSelectPin, ProcessorPin clockPin, params ProcessorPin[] dataPins) : this (settings, registerSelectPin, clockPin, (IEnumerable<ProcessorPin>)dataPins) {}
+        public Hd44780LcdConnection(IOutputPin registerSelectPin, IOutputPin clockPin, IEnumerable<IOutputPin> dataPins) : this(null, registerSelectPin, clockPin, dataPins) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
@@ -74,7 +62,16 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, ProcessorPin registerSelectPin, ProcessorPin clockPin, IEnumerable<ProcessorPin> dataPins)
+        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputPin registerSelectPin, IOutputPin clockPin, params IOutputPin[] dataPins) : this(settings, registerSelectPin, clockPin, (IEnumerable<IOutputPin>)dataPins) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="registerSelectPin">The register select pin.</param>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="dataPins">The data pins.</param>
+        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputPin registerSelectPin, IOutputPin clockPin, IEnumerable<IOutputPin> dataPins)
         {
             settings = settings ?? new Hd44780LcdConnectionSettings();
 
@@ -109,19 +106,10 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
             encoding = settings.Encoding;
 
-            connectionDriver = GpioConnectionSettings.DefaultDriver;
-
-            connectionDriver.Allocate(registerSelectPin, PinDirection.Output);
-            connectionDriver.Write(registerSelectPin, false);
-
-            connectionDriver.Allocate(clockPin, PinDirection.Output);
-            connectionDriver.Write(clockPin, false);
-            
+            registerSelectPin.Write(false);
+            clockPin.Write(false);
             foreach (var dataPin in this.dataPins)
-            {
-                connectionDriver.Allocate(dataPin, PinDirection.Output);
-                connectionDriver.Write(dataPin, false);
-            }
+                dataPin.Write(false);
 
             WriteByte(0x33, false); // Initialize
             WriteByte(0x32, false);
@@ -192,10 +180,10 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         {
             Clear();
 
-            connectionDriver.Release(registerSelectPin);
-            connectionDriver.Release(clockPin);
+            registerSelectPin.Dispose();
+            clockPin.Dispose();
             foreach (var dataPin in dataPins)
-                connectionDriver.Release(dataPin);
+                dataPin.Dispose();
         }
 
         public void Home()
@@ -350,19 +338,19 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
         private void WriteByte4Pins(int bits, bool charMode)
         {
-            connectionDriver.Write(registerSelectPin, charMode);
+            registerSelectPin.Write(charMode);
 
-            connectionDriver.Write(dataPins[0], (bits & 0x10) != 0);
-            connectionDriver.Write(dataPins[1], (bits & 0x20) != 0);
-            connectionDriver.Write(dataPins[2], (bits & 0x40) != 0);
-            connectionDriver.Write(dataPins[3], (bits & 0x80) != 0);
+            dataPins[0].Write((bits & 0x10) != 0);
+            dataPins[1].Write((bits & 0x20) != 0);
+            dataPins[2].Write((bits & 0x40) != 0);
+            dataPins[3].Write((bits & 0x80) != 0);
 
             Synchronize();
 
-            connectionDriver.Write(dataPins[0], (bits & 0x01) != 0);
-            connectionDriver.Write(dataPins[1], (bits & 0x02) != 0);
-            connectionDriver.Write(dataPins[2], (bits & 0x04) != 0);
-            connectionDriver.Write(dataPins[3], (bits & 0x08) != 0);
+            dataPins[0].Write((bits & 0x01) != 0);
+            dataPins[1].Write((bits & 0x02) != 0);
+            dataPins[2].Write((bits & 0x04) != 0);
+            dataPins[3].Write((bits & 0x08) != 0);
 
             Synchronize();
         }
@@ -371,10 +359,10 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         {
             Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
 
-            connectionDriver.Write(clockPin, true);
+            clockPin.Write(true);
             Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
 
-            connectionDriver.Write(clockPin, false);
+            clockPin.Write(false);
             Sleep(0.001m); // commands need > 37us to settle
         }
 

@@ -1,9 +1,18 @@
 namespace Raspberry.IO.InterIntegratedCircuit
 {
+    /// <summary>
+    /// Represents a connection to the I2C device.
+    /// </summary>
     public class I2cDeviceConnection
     {
+        #region Fields
+
         private readonly I2cDriver driver;
         private readonly int deviceAddress;
+
+        #endregion
+
+        #region Instance Management
 
         internal I2cDeviceConnection(I2cDriver driver, int deviceAddress)
         {
@@ -11,10 +20,19 @@ namespace Raspberry.IO.InterIntegratedCircuit
             this.deviceAddress = deviceAddress;
         }
 
+        #endregion
+
+        #region Properties
+
         public int DeviceAddress
         {
             get { return deviceAddress; }
         }
+
+
+        #endregion
+
+        #region Methods
 
         public void Write(params byte[] buffer)
         {
@@ -35,5 +53,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
         {
             return Read(1)[0];
         }
+
+        #endregion
     }
 }
