@@ -147,7 +147,7 @@ namespace Test.Gpio.HD44780
                 {
                     RegisterSelect = connection.Out(registerSelectPin),
                     Clock = connection.Out(clockPin),
-                    Data = dataPins.Select(connection.Out)
+                    Data = dataPins.Select(pin=>connection.Out(pin))
                 };
         }
 
@@ -178,7 +178,7 @@ namespace Test.Gpio.HD44780
                 {
                     RegisterSelect = driver.Out(registerSelectPin),
                     Clock = driver.Out(clockPin),
-                    Data = dataPins.Select(driver.Out)
+                    Data = dataPins.Select(pin=>driver.Out(pin))
                 };
         }
 
