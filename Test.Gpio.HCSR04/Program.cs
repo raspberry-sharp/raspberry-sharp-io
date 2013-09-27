@@ -28,7 +28,7 @@ namespace Test.Gpio.HCSR04
 
             using (var connection = new HcSr04Connection(triggerPin.ToProcessor(), echoPin.ToProcessor()))
             {
-                connection.Timeout = 2000;
+                connection.Timeout = 50;
 
                 while (!Console.KeyAvailable)
                 {
@@ -55,7 +55,7 @@ namespace Test.Gpio.HCSR04
                 .SkipWhile(a => a != "-interval")
                 .Skip(1)
                 .Select(int.Parse)
-                .DefaultIfEmpty(1000)
+                .DefaultIfEmpty(10)
                 .First();
         }
 

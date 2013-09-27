@@ -15,7 +15,7 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
     {
         #region Fields
 
-        private const int waitTimeout = 1000;
+        private const int waitToStartMeasureTimeout = 5;
 
         private readonly IGpioConnectionDriver driver;
         private readonly ProcessorPin triggerPin;
@@ -35,11 +35,12 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
             this.triggerPin = triggerPin;
             this.echoPin = echoPin;
 
-            Timeout = 2000;
+            Timeout = 50;
 
             driver = GpioConnectionSettings.DefaultDriver;
 
             driver.Allocate(triggerPin, PinDirection.Output);
+
             driver.Write(triggerPin, false);
 
             driver.Allocate(echoPin, PinDirection.Input);
@@ -79,8 +80,13 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
             Timer.Sleep(0.02m);
             driver.Write(triggerPin, false);
 
-            driver.Wait(echoPin, true, waitTimeout);
-            return Units.Velocity.Sound.ToDistance(driver.Time(echoPin, true, Timeout));
+            var waitToStartMeasureActual = driver.Time(echoPin, false, waitToStartMeasureTimeout);
+            //Console.Write("ttu"+(int)(waitToStartMeasureActual*1000)+" us\t");
+
+            var time = driver.Time(echoPin, true, Timeout);
+            //Console.Write(((int)time) +" ms\t" );
+
+            return Units.Velocity.Sound.ToDistance(time);
         }
 
         /// <summary>
