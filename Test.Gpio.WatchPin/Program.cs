@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Raspberry.IO.GeneralPurpose;
 
 namespace Test.Gpio.WatchPin
 {
@@ -19,18 +20,56 @@ namespace Test.Gpio.WatchPin
                 return;
             }
 
-            var pin = args[0];
+            var pinname = args[0];
 
-            Console.WriteLine("\tPin: {0}", pin);
+            ConnectorPin userPin;
+            if (!Enum.TryParse(pinname, true, out userPin))
+            {
+                Console.WriteLine("Could not find pin: "+pinname);
+                PrintUsage();
+                return;
+            }
+
+            Console.WriteLine("\tWatching Pin: {0}", userPin);
             Console.WriteLine();
 
-            Console.WriteLine("//todo actually watch the pin"); //todo
+            var procPin = userPin.ToProcessor();
+
+            IGpioConnectionDriver driver = GpioConnectionSettings.DefaultDriver;
+
+            try
+            {
+                driver.Allocate(procPin, PinDirection.Input);
+
+                bool val;
+
+                while (true)
+                {
+                    val = driver.Read(procPin);
+
+                    Console.WriteLine(DateTime.Now + ": " + val);
+
+                    driver.Wait(procPin, waitForUp: !val, timeout: 60000);
+                }
+
+                //driver.Allocate(procPin, PinDirection.Output);
+                //driver.Write(procPin, false);
+
+                //driver.Allocate(procPin, PinDirection.Input);
+            } finally
+            {
+                //driver.Release(procPin); //not sure if its a good idea
+            }
         }
 
         private static void PrintUsage()
         {
-            Console.WriteLine("Usage: Test.Gpio.WatchPin [pin]"); //todo watch multiple pins
-            Console.WriteLine("//todo watch multiple pins"); 
+            Console.WriteLine("Usage: Test.Gpio.WatchPin [pin]"); //todo allow watch multiple pins
+            Console.WriteLine("//todo allow watch multiple pins");
+            Console.WriteLine("Available pins:");
+            Enum.GetNames(typeof(ConnectorPin)).ToList().ForEach(Console.WriteLine);
+            Console.WriteLine("//todo allow to specify pin in diffrent ways, ie, by name, by wiringPi, etc"); //todo allow to specify pin in diffrent ways, ie, by name, by wiringPi, etc
+            Console.WriteLine("I.e.: sudo mono Test.Gpio.WatchPin.exe P1Pin23");
             Console.WriteLine();
         }
     }
