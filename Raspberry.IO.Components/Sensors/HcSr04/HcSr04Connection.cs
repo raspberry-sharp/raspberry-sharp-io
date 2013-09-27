@@ -80,7 +80,7 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
             driver.Write(triggerPin, false);
 
             driver.Wait(echoPin, true, waitTimeout);
-            return Units.Velocity.Sound.ToDistance(driver.Time(echoPin, false, Timeout));
+            return Units.Velocity.Sound.ToDistance(driver.Time(echoPin, true, Timeout));
         }
 
         /// <summary>
