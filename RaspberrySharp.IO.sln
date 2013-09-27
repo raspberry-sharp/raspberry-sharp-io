@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{33C6FE
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.WatchPin", "Test.Gpio.WatchPin\Test.Gpio.WatchPin.csproj", "{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +152,16 @@ Global
 		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8388CFCA-E3DB-43F7-B049-2CB195211CE8}.Release|x86.ActiveCfg = Release|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,5 +173,6 @@ Global
 		{0A18AC47-CA6D-442C-A31C-6864F7DDD97D} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 		{5D9D1834-4C4B-4E03-B635-5F205205B6F8} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 		{266EDDBC-F741-48F8-83B7-2CD37BACE62B} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
+		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 	EndGlobalSection
 EndGlobal
