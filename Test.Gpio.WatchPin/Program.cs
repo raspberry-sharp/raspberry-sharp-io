@@ -11,7 +11,7 @@ namespace Test.Gpio.WatchPin
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("WatchPin Sample: Try to run it in parallel with i.e. Test.Gpio.HCSR501 or Test.Gpio.HCSR04");
+            Console.WriteLine("WatchPin Sample: log the state changes on input pin. \nTry to run it in parallel with i.e. Test.Gpio.HCSR501 or to test HCSR04 (IR motion detector) or SW-18020P (shake detector)");
             Console.WriteLine();
 
             if (args.Length!=1)
