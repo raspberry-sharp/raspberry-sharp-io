@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Raspberry.IO.Components.Sensors.HcSr04;
 using Raspberry.IO.GeneralPurpose;
@@ -15,6 +16,8 @@ namespace Test.Gpio.HCSR04
     {
         private static void Main(string[] args)
         {
+            Console.CursorVisible = false;
+
             const ConnectorPin triggerPin = ConnectorPin.P1Pin21;
             const ConnectorPin echoPin = ConnectorPin.P1Pin23;
 
@@ -33,7 +36,8 @@ namespace Test.Gpio.HCSR04
                     try
                     {
                         var distance = connection.GetDistance();
-                        Console.WriteLine("{0:0.0}cm", distance * 100);
+                        Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0:0.0}cm", distance * 100).PadRight(16));
+                        Console.CursorTop--;
                     }
                     catch (TimeoutException e)
                     {
@@ -43,6 +47,8 @@ namespace Test.Gpio.HCSR04
                     Timer.Sleep(interval);
                 }
             }
+
+            Console.CursorVisible = true;
         }
 
         #region Private Helpers
@@ -53,7 +59,7 @@ namespace Test.Gpio.HCSR04
                 .SkipWhile(a => a != "-interval")
                 .Skip(1)
                 .Select(int.Parse)
-                .DefaultIfEmpty(1000)
+                .DefaultIfEmpty(100)
                 .First();
         }
 
