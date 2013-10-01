@@ -253,13 +253,12 @@ namespace Raspberry.IO.GeneralPurpose
 
         private static int GetActualTimeout(decimal timeout)
         {
-            int actualTimeout;
-            if (timeout <= 0)
-                actualTimeout = 5000;
-            else if (timeout < 1)
-                actualTimeout = 1;
-            else actualTimeout = (int)timeout;
-            return actualTimeout;
+            if (timeout > 1)
+                return (int)timeout;
+            else if (timeout > 0)
+                return 1;
+            else 
+                return 5000;
         }
 
         private void InitializePoll(ProcessorPin pin)

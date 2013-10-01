@@ -11,11 +11,16 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
     /// <summary>
     /// Represents a connection to HC-SR04 distance sensor.
     /// </summary>
+    /// <remarks>
+    ///     <see cref="https://docs.google.com/document/d/1Y-yZnNhMYy7rwhAgyL_pfa39RsB-x2qR4vP8saG73rE/edit"/> for hardware specification and 
+    ///     <see cref="http://www.raspberrypi-spy.co.uk/2012/12/ultrasonic-distance-measurement-using-python-part-1/"/> for implementation details.
+    /// </remarks>
     public class HcSr04Connection : IDisposable
     {
         #region Fields
 
-        private const int waitTimeout = 1000;
+        private const decimal triggerTime = 0.01m;  // Waits at least 10µs = 0.01ms
+        private const decimal echoUpTimeout = 500m;
 
         private readonly IGpioConnectionDriver driver;
         private readonly ProcessorPin triggerPin;
@@ -35,14 +40,17 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
             this.triggerPin = triggerPin;
             this.echoPin = echoPin;
 
-            Timeout = 2000;
+            Timeout = DefaultTimeout;
 
             driver = GpioConnectionSettings.DefaultDriver;
 
-            driver.Allocate(triggerPin, PinDirection.Output);
-            driver.Write(triggerPin, false);
-
             driver.Allocate(echoPin, PinDirection.Input);
+            driver.Allocate(triggerPin, PinDirection.Output);
+
+            try
+            {
+                GetDistance();
+            } catch {}
         }
 
         /// <summary>
@@ -56,6 +64,12 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The default timeout (50ms).
+        /// </summary>
+        /// <remarks>Maximum time (if no obstacle) is 38ms.</remarks>
+        public const decimal DefaultTimeout = 50m;
 
         /// <summary>
         /// Gets or sets the timeout for distance measure, in milliseconds.
@@ -76,11 +90,11 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         public decimal GetDistance()
         {
             driver.Write(triggerPin, true);
-            Timer.Sleep(0.02m);
+            Timer.Sleep(triggerTime);
             driver.Write(triggerPin, false);
 
-            driver.Wait(echoPin, true, waitTimeout);
-            return Units.Velocity.Sound.ToDistance(driver.Time(echoPin, false, Timeout));
+            var upTime = driver.Time(echoPin, true, echoUpTimeout, Timeout);
+            return Units.Velocity.Sound.ToDistance(upTime);
         }
 
         /// <summary>

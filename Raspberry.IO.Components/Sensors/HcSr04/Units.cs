@@ -11,7 +11,7 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
                     if (time == decimal.MinValue)
                         return decimal.MinValue;
 
-                    return (time/1000m)*340/2;
+                    return (time * 340) / (2 * 1000m);
                 }
             }
         }
