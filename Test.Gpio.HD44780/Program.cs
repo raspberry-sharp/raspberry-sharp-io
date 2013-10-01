@@ -42,7 +42,7 @@ namespace Test.Gpio.HD44780
 
                 connection.WriteLine("R# IP Config");
                 connection.WriteLine(Environment.OSVersion);
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
 
                 // DisplayCharMap(connection);
                 var delay = 0m;
@@ -141,6 +141,8 @@ namespace Test.Gpio.HD44780
             const ConnectorPin sclPin = ConnectorPin.P1Pin05;
 
             var driver = new I2cDriver(sdaPin.ToProcessor(), sclPin.ToProcessor());
+            driver.ClockDivider = 2048;
+
             var connection = new Mcp23017I2cConnection(driver.Connect(0x20));
 
             return new Hd44780Configuration(driver)

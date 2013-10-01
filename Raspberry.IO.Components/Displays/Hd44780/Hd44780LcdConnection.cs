@@ -357,8 +357,6 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
         private void Synchronize()
         {
-            Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
-
             clockPin.Write(true);
             Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
 
