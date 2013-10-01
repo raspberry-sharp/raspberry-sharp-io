@@ -169,6 +169,8 @@ namespace Raspberry.IO.InterIntegratedCircuit
                         i++;
                         remaining--;
                     }
+
+                    Wait(remaining);
                 }
 
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_ERR) != 0) // Received a NACK
@@ -219,6 +221,8 @@ namespace Raspberry.IO.InterIntegratedCircuit
                         i++;
                         remaining--;
                     }
+
+                    Wait(remaining);
                 }
 
                 while (remaining != 0 && (ReadUInt32(status) & Interop.BCM2835_BSC_S_RXD) != 0)
@@ -259,7 +263,8 @@ namespace Raspberry.IO.InterIntegratedCircuit
         private void Wait(uint remaining)
         {
             // When remaining data is to be received, then wait for a fully FIFO
-            Timer.Sleep(waitInterval * (remaining >= Interop.BCM2835_BSC_FIFO_SIZE ? Interop.BCM2835_BSC_FIFO_SIZE : remaining) / 1000m);
+            if (remaining != 0)
+                Timer.Sleep(waitInterval * (remaining >= Interop.BCM2835_BSC_FIFO_SIZE ? Interop.BCM2835_BSC_FIFO_SIZE : remaining) / 1000m);
         }
 
         private static int GetWaitInterval(ushort actualDivider)
@@ -314,28 +319,40 @@ namespace Raspberry.IO.InterIntegratedCircuit
         {
             // Make sure we dont return the _last_ read which might get lost
             // if subsequent code changes to a different peripheral
-            var ret = ReadUInt32(address);
-            ReadUInt32(address);
+            unchecked
+            {
+                var returnValue = (uint) Marshal.ReadInt32(address);
+                Marshal.ReadInt32(address);
 
-            return ret;
+                return returnValue;
+            }
         }
         
         private static uint ReadUInt32(IntPtr address)
         {
-            return (uint) Marshal.PtrToStructure(address, typeof (uint));
+            unchecked
+            {
+                return (uint) Marshal.ReadInt32(address);
+            }
         }
 
         private static void SafeWriteUInt32(IntPtr address, uint value)
         {
             // Make sure we don't rely on the first write, which may get
             // lost if the previous access was to a different peripheral.
-            WriteUInt32(address, value);
-            WriteUInt32(address, value);
+            unchecked
+            {
+                Marshal.WriteInt32(address, (int)value);
+                Marshal.WriteInt32(address, (int)value);
+            }
         }
 
         private static void WriteUInt32(IntPtr address, uint value)
         {
-            Marshal.Copy(BitConverter.GetBytes(value), 0, address, 4);
+            unchecked
+            {
+                Marshal.WriteInt32(address, (int)value);
+            }
         }
 
         #endregion
