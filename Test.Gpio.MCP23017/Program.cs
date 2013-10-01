@@ -25,8 +25,6 @@ namespace Test.Gpio.MCP23017
 
             using (var driver = new I2cDriver(sdaPin.ToProcessor(), sclPin.ToProcessor()))
             {
-                driver.ClockDivider *= 10;
-
                 var deviceConnection =  new Mcp23017I2cConnection(driver.Connect(0x20));
                 deviceConnection.SetDirection(Mcp23017Pin.B0, Mcp23017PinDirection.Output);
 
