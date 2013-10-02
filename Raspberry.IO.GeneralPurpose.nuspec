@@ -14,9 +14,9 @@
       Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.
 
       It is an initiative of the Raspberry# Community, aimed at providing tools and information concerning use of Raspberry Pi boards with Mono/.NET framework.
-      Parts of Raspberry# IO are inspired by [BCM2835 C Library](http://www.airspayce.com/mikem/bcm2835/) and Gordon Henderson's [WiringPi](http://wiringpi.com/).
+      Parts of Raspberry# IO are inspired by BCM2835 C Library (http://www.airspayce.com/mikem/bcm2835/) and Gordon Henderson's WiringPi (http://wiringpi.com/).
       
-      Visit project [Github site](https://github.com/raspberry-sharp/raspberry-sharp-io/) for documentation and samples.
+      Visit the project Github site (https://github.com/raspberry-sharp/raspberry-sharp-io/) for documentation and samples.
     </description>
     <summary>Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.</summary>
     <language>en-US</language>
