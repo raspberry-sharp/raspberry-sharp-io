@@ -20,9 +20,9 @@ namespace Raspberry.IO.Components.Displays.Hd44780
     {
         #region Fields
 
-        private readonly IOutputPin registerSelectPin;
-        private readonly IOutputPin clockPin;
-        private readonly IOutputPin[] dataPins;
+        private readonly IOutputBinaryPin registerSelectPin;
+        private readonly IOutputBinaryPin clockPin;
+        private readonly IOutputBinaryPin[] dataPins;
 
         private readonly int width;
         private readonly int height;
@@ -45,7 +45,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(IOutputPin registerSelectPin, IOutputPin clockPin, params IOutputPin[] dataPins) : this(null, registerSelectPin, clockPin, (IEnumerable<IOutputPin>)dataPins) { }
+        public Hd44780LcdConnection(IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, params IOutputBinaryPin[] dataPins) : this(null, registerSelectPin, clockPin, (IEnumerable<IOutputBinaryPin>)dataPins) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
@@ -53,16 +53,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(IOutputPin registerSelectPin, IOutputPin clockPin, IEnumerable<IOutputPin> dataPins) : this(null, registerSelectPin, clockPin, dataPins) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="registerSelectPin">The register select pin.</param>
-        /// <param name="clockPin">The clock pin.</param>
-        /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputPin registerSelectPin, IOutputPin clockPin, params IOutputPin[] dataPins) : this(settings, registerSelectPin, clockPin, (IEnumerable<IOutputPin>)dataPins) { }
+        public Hd44780LcdConnection(IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, IEnumerable<IOutputBinaryPin> dataPins) : this(null, registerSelectPin, clockPin, dataPins) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
@@ -71,7 +62,16 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputPin registerSelectPin, IOutputPin clockPin, IEnumerable<IOutputPin> dataPins)
+        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, params IOutputBinaryPin[] dataPins) : this(settings, registerSelectPin, clockPin, (IEnumerable<IOutputBinaryPin>)dataPins) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="registerSelectPin">The register select pin.</param>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="dataPins">The data pins.</param>
+        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, IEnumerable<IOutputBinaryPin> dataPins)
         {
             settings = settings ?? new Hd44780LcdConnectionSettings();
 

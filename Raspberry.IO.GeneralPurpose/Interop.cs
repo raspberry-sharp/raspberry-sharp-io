@@ -1,5 +1,9 @@
+#region References
+
 using System;
 using System.Runtime.InteropServices;
+
+#endregion
 
 namespace Raspberry.IO.GeneralPurpose
 {

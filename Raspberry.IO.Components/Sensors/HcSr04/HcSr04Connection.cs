@@ -1,7 +1,6 @@
 #region References
 
 using System;
-using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
 #endregion
@@ -22,9 +21,8 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         private const decimal triggerTime = 0.01m;  // Waits at least 10µs = 0.01ms
         private const decimal echoUpTimeout = 500m;
 
-        private readonly IGpioConnectionDriver driver;
-        private readonly ProcessorPin triggerPin;
-        private readonly ProcessorPin echoPin;
+        private readonly IOutputBinaryPin triggerPin;
+        private readonly IInputBinaryPin echoPin;
 
         #endregion
 
@@ -35,17 +33,12 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         /// </summary>
         /// <param name="triggerPin">The trigger pin.</param>
         /// <param name="echoPin">The echo pin.</param>
-        public HcSr04Connection(ProcessorPin triggerPin, ProcessorPin echoPin)
+        public HcSr04Connection(IOutputBinaryPin triggerPin, IInputBinaryPin echoPin)
         {
             this.triggerPin = triggerPin;
             this.echoPin = echoPin;
 
             Timeout = DefaultTimeout;
-
-            driver = GpioConnectionSettings.DefaultDriver;
-
-            driver.Allocate(echoPin, PinDirection.Input);
-            driver.Allocate(triggerPin, PinDirection.Output);
 
             try
             {
@@ -89,11 +82,11 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         /// <returns>The distance, in meters.</returns>
         public decimal GetDistance()
         {
-            driver.Write(triggerPin, true);
+            triggerPin.Write(true);
             Timer.Sleep(triggerTime);
-            driver.Write(triggerPin, false);
+            triggerPin.Write(false);
 
-            var upTime = driver.Time(echoPin, true, echoUpTimeout, Timeout);
+            var upTime = echoPin.Time(true, echoUpTimeout, Timeout);
             return Units.Velocity.Sound.ToDistance(upTime);
         }
 
@@ -102,8 +95,8 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         /// </summary>
         public void Close()
         {
-            driver.Release(triggerPin);
-            driver.Release(echoPin);
+            triggerPin.Dispose();
+            echoPin.Dispose();
         }
 
         #endregion

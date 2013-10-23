@@ -45,9 +45,13 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Converters\Mcp3008\Mcp3008AnalogPinExtensionMethods.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008Channel.cs" />
+    <Compile Include="Converters\Mcp3008\Mcp3008InputAnalogPin.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008SpiConnection.cs" />
+    <Compile Include="Converters\Mcp4822\Mcp4822AnalogPinExtensionMethods.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822Channel.cs" />
+    <Compile Include="Converters\Mcp4822\Mcp4822OutputAnalogPin.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822SpiConnection.cs" />
     <Compile Include="Displays\Hd44780\Command.cs" />
     <Compile Include="Displays\Hd44780\CursorShiftFlags.cs" />
@@ -57,11 +61,9 @@
     <Compile Include="Displays\Hd44780\Hd44780A00Encoding.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnection.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
-    <Compile Include="Expanders\Mcp23017\Mcp23017OutputPin.cs" />
+    <Compile Include="Expanders\Mcp23017\Mcp23017InputBinaryPin.cs" />
+    <Compile Include="Expanders\Mcp23017\Mcp23017OutputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
-    <Compile Include="GpioOutputPin.cs" />
-    <Compile Include="GpioPinExtensionMethods.cs" />
-    <Compile Include="IOutputPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017I2cConnection.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017Pin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinDirection.cs" />
@@ -83,6 +85,10 @@
     <ProjectReference Include="..\Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj">
       <Project>{326342E5-0411-40E8-9F2D-563D6B192568}</Project>
       <Name>Raspberry.IO.SerialPeripheralInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
+      <Project>{ace64f17-87e5-43e7-97a0-bdde19059c61}</Project>
+      <Name>Raspberry.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

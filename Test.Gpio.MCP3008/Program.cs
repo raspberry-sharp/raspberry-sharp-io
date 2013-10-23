@@ -32,14 +32,22 @@ namespace Test.Gpio.MCP3008
 
             const decimal voltage = 3.3m;
 
-            using (var adcConnection = new Mcp3008SpiConnection(adcClock.ToProcessor(), adcCs.ToProcessor(), adcMiso.ToProcessor(), adcMosi.ToProcessor(), voltage))
+            var driver = GpioConnectionSettings.DefaultDriver;
+
+            using (var clockPin = driver.Out(adcClock))
+            using (var csPin = driver.Out(adcCs))
+            using (var misoPin = driver.In(adcMiso))
+            using (var mosiPin = driver.Out(adcMosi))
+            using (var adcConnection = new Mcp3008SpiConnection(clockPin, csPin, misoPin, mosiPin))
+            using (var temperaturePin = adcConnection.In(Mcp3008Channel.Channel0, voltage.ToCelsius()))
+            using (var luxPin = adcConnection.In(Mcp3008Channel.Channel1, voltage))
             {
                 Console.CursorVisible = false;
 
                 while (!Console.KeyAvailable)
                 {
-                    var temperature = adcConnection.Read(Mcp3008Channel.Channel0).ToCelsius();
-                    var lux = adcConnection.Read(Mcp3008Channel.Channel1).ToLux(voltage);
+                    var temperature = temperaturePin.Read();
+                    var lux = luxPin.Read().ToLux(voltage);
 
                     Console.WriteLine("Temperature = {0,5:0.0} Celsius\t\tLuminosity = {1,5:0.0} Lux", temperature, lux);
                     Console.CursorTop--;

@@ -7,32 +7,21 @@
     <authors>Eric Bézine</authors>
     <owners>Raspberry-Sharp</owners>
     <licenseUrl>http://opensource.org/licenses/GPL-2.0</licenseUrl>
-    <projectUrl>https://github.com/raspberry-sharp/raspberry-sharp-io/wiki/Raspberry.IO.GeneralPurpose</projectUrl>
+    <projectUrl>https://github.com/raspberry-sharp/raspberry-sharp-io/wiki/Raspberry.IO</projectUrl>
     <iconUrl>https://raw.github.com/raspberry-sharp/raspberry-sharp-io/master/Icon.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>
       Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.
 
-      It is an initiative of the Raspberry# Community, aimed at providing tools and information concerning use of Raspberry Pi boards with Mono/.NET framework.
-      Parts of Raspberry# IO are inspired by BCM2835 C Library (http://www.airspayce.com/mikem/bcm2835/) and Gordon Henderson's WiringPi (http://wiringpi.com/).
-      
-      Visit the project Github site (https://github.com/raspberry-sharp/raspberry-sharp-io/) for documentation and samples.
+      Raspberry.IO.GeneralPurpose is no longer maintained and superseded by Raspberry.IO.
     </description>
     <summary>Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.</summary>
     <language>en-US</language>
     <tags>Raspberry Pi Mono GPIO</tags>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.Configuration" targetFramework="net40" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="net40" />
-    </frameworkAssemblies>
     <dependencies>
-      <dependency id="Raspberry.System" version="1.2.0" />
+      <dependency id="Raspberry.IO" version="2.0.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib\net40" />
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.pdb" target="lib\net40" />
-    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.xml" target="lib\net40" />
-    <file src="Raspberry.IO.GeneralPurpose\**\*.cs" target="src" />
   </files>
 </package>

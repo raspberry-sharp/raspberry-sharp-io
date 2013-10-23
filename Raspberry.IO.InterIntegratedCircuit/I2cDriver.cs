@@ -31,6 +31,11 @@ namespace Raspberry.IO.InterIntegratedCircuit
 
         #region Instance Management
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="I2cDriver"/> class.
+        /// </summary>
+        /// <param name="sdaPin">The SDA pin.</param>
+        /// <param name="sclPin">The SCL pin.</param>
         public I2cDriver(ProcessorPin sdaPin, ProcessorPin sclPin)
         {
             this.sdaPin = sdaPin;
@@ -65,6 +70,9 @@ namespace Raspberry.IO.InterIntegratedCircuit
             SafeWriteUInt32(addressAddress, (uint) currentDeviceAddress);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             // Set all the I2C/BSC1 pins back to input
@@ -120,11 +128,6 @@ namespace Raspberry.IO.InterIntegratedCircuit
 
         #region Internal Methods
 
-        /// <summary>
-        /// Writes the specified buffer.
-        /// </summary>
-        /// <param name="deviceAddress">The device address.</param>
-        /// <param name="buffer">The buffer.</param>
         internal void Write(int deviceAddress, byte[] buffer)
         {
             lock (driverLock)

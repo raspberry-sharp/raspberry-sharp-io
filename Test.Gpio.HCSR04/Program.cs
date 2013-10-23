@@ -29,7 +29,8 @@ namespace Test.Gpio.HCSR04
 
             var interval = GetInterval(args);
 
-            using (var connection = new HcSr04Connection(triggerPin.ToProcessor(), echoPin.ToProcessor()))
+            var driver = GpioConnectionSettings.DefaultDriver;
+            using (var connection = new HcSr04Connection(driver.Out(triggerPin), driver.In(echoPin)))
             {
                 while (!Console.KeyAvailable)
                 {

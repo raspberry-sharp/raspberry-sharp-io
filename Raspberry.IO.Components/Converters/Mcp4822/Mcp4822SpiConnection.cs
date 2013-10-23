@@ -1,7 +1,6 @@
 #region References
 
 using System;
-using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.SerialPeripheralInterface;
 
 #endregion
@@ -17,18 +16,25 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
         #region Fields
 
         private readonly SpiConnection spiConnection;
-        private readonly decimal scale;
 
         #endregion
 
         #region Instance Management
 
-        public Mcp4822SpiConnection(ProcessorPin clock, ProcessorPin ss, ProcessorPin mosi, decimal scale)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mcp4822SpiConnection"/> class.
+        /// </summary>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="slaveSelectPin">The slave select pin.</param>
+        /// <param name="mosiPin">The mosi pin.</param>
+        public Mcp4822SpiConnection(IOutputBinaryPin clockPin, IOutputBinaryPin slaveSelectPin, IOutputBinaryPin mosiPin)
         {
-            spiConnection = new SpiConnection(clock, ss, null, mosi, Endianness.LittleEndian);
-            this.scale = scale;
+            spiConnection = new SpiConnection(clockPin, slaveSelectPin, null, mosiPin, Endianness.LittleEndian);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         void IDisposable.Dispose()
         {
             Close();
@@ -47,7 +53,7 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
         {
             using (spiConnection.SelectSlave())
             {
-                var value = (uint) (data*4096m/scale);
+                var value = (uint) (data*4096m);
                 if (value > 0xFFF)
                     value = 0xFFF;
 

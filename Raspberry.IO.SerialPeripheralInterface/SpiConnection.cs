@@ -1,22 +1,23 @@
 #region References
 
 using System;
-using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
 #endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
+    /// <summary>
+    /// Represents a connection to a SPI device.
+    /// </summary>
     public class SpiConnection : IDisposable
     {
         #region Fields
 
-        private readonly IGpioConnectionDriver driver;
-        private readonly ProcessorPin clock;
-        private readonly ProcessorPin ss;
-        private readonly ProcessorPin? miso;
-        private readonly ProcessorPin? mosi;
+        private readonly IOutputBinaryPin clockPin;
+        private readonly IOutputBinaryPin selectSlavePin;
+        private readonly IInputBinaryPin misoPin;
+        private readonly IOutputBinaryPin mosiPin;
 
         private readonly Endianness endianness = Endianness.LittleEndian;
 
@@ -24,32 +25,32 @@ namespace Raspberry.IO.SerialPeripheralInterface
 
         #region Instance Management
 
-        public SpiConnection(ProcessorPin clock, ProcessorPin ss, ProcessorPin? miso, ProcessorPin? mosi, Endianness endianness)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpiConnection"/> class.
+        /// </summary>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="selectSlavePin">The select slave pin.</param>
+        /// <param name="misoPin">The miso pin.</param>
+        /// <param name="mosiPin">The mosi pin.</param>
+        /// <param name="endianness">The endianness.</param>
+        public SpiConnection(IOutputBinaryPin clockPin, IOutputBinaryPin selectSlavePin, IInputBinaryPin misoPin, IOutputBinaryPin mosiPin, Endianness endianness)
         {
-            this.clock = clock;
-            this.ss = ss;
-            this.miso = miso;
-            this.mosi = mosi;
+            this.clockPin = clockPin;
+            this.selectSlavePin = selectSlavePin;
+            this.misoPin = misoPin;
+            this.mosiPin = mosiPin;
             this.endianness = endianness;
 
-            driver = GpioConnectionSettings.DefaultDriver;
+            clockPin.Write(false);
+            selectSlavePin.Write(true);
 
-            driver.Allocate(clock, PinDirection.Output);
-            driver.Write(clock, false);
-
-            driver.Allocate(ss, PinDirection.Output);
-            driver.Write(ss, true);
-
-            if (mosi.HasValue)
-            {
-                driver.Allocate(mosi.Value, PinDirection.Output);
-                driver.Write(mosi.Value, false);
-            }
-
-            if (miso.HasValue)
-                driver.Allocate(miso.Value, PinDirection.Input);
+            if (mosiPin != null)
+                mosiPin.Write(false);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         void IDisposable.Dispose()
         {
             Close();
@@ -59,43 +60,57 @@ namespace Raspberry.IO.SerialPeripheralInterface
 
         #region Methods
 
+        /// <summary>
+        /// Closes this instance.
+        /// </summary>
         public void Close()
         {
-            driver.Release(clock);
-            driver.Release(ss);
-            if (mosi.HasValue)
-                driver.Release(mosi.Value);
-            if (miso.HasValue)
-                driver.Release(miso.Value);
+            clockPin.Dispose();
+            selectSlavePin.Dispose();
+            if (mosiPin != null)
+                mosiPin.Dispose();
+            if (misoPin != null)
+                misoPin.Dispose();
         }
 
-        public SpiSlaveSelection SelectSlave()
+        /// <summary>
+        /// Selects the slave device.
+        /// </summary>
+        /// <returns>The slave selection context.</returns>
+        public SpiSlaveSelectionContext SelectSlave()
         {
-            driver.Write(ss, false);
-            return new SpiSlaveSelection(this);
-        }
-        
-        internal void DeselectSlave()
-        {
-            driver.Write(ss, true);
+            selectSlavePin.Write(false);
+            return new SpiSlaveSelectionContext(this);
         }
 
+        /// <summary>
+        /// Synchronizes the devices.
+        /// </summary>
         public void Synchronize()
         {
-            driver.Write(clock, true);
+            clockPin.Write(true);
             Timer.Sleep(1);
-            driver.Write(clock, false);
+            clockPin.Write(false);
         }
 
+        /// <summary>
+        /// Writes the specified bit to the device.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public void Write(bool data)
         {
-            if (!mosi.HasValue)
+            if (mosiPin == null)
                 throw new NotSupportedException("No MOSI pin has been provided");
 
-            driver.Write(mosi.Value, data);
+            mosiPin.Write(data);
             Synchronize();
         }
 
+        /// <summary>
+        /// Writes the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="bitCount">The bit count.</param>
         public void Write(byte data, int bitCount)
         {
             if (bitCount > 8)
@@ -104,6 +119,11 @@ namespace Raspberry.IO.SerialPeripheralInterface
             SafeWrite(data, bitCount);
         }
 
+        /// <summary>
+        /// Writes the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="bitCount">The bit count.</param>
         public void Write(ushort data, int bitCount)
         {
             if (bitCount > 16)
@@ -112,6 +132,11 @@ namespace Raspberry.IO.SerialPeripheralInterface
             SafeWrite(data, bitCount);
         }
 
+        /// <summary>
+        /// Writes the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="bitCount">The bit count.</param>
         public void Write(uint data, int bitCount)
         {
             if (bitCount > 32)
@@ -120,6 +145,11 @@ namespace Raspberry.IO.SerialPeripheralInterface
             SafeWrite(data, bitCount);
         }
 
+        /// <summary>
+        /// Writes the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="bitCount">The bit count.</param>
         public void Write(ulong data, int bitCount)
         {
             if (bitCount > 64)
@@ -128,15 +158,24 @@ namespace Raspberry.IO.SerialPeripheralInterface
             SafeWrite(data, bitCount);
         }
 
+        /// <summary>
+        /// Reads a bit from the device.
+        /// </summary>
+        /// <returns>The bit status.</returns>
         public bool Read()
         {
-            if (!miso.HasValue)
+            if (misoPin == null)
                 throw new NotSupportedException("No MISO pin has been provided");
 
             Synchronize();
-            return driver.Read(miso.Value);
+            return misoPin.Read();
         }
 
+        /// <summary>
+        /// Reads the specified number of bits from the device.
+        /// </summary>
+        /// <param name="bitCount">The bit count.</param>
+        /// <returns>The read value.</returns>
         public ulong Read(int bitCount)
         {
             if (bitCount > 64)
@@ -155,6 +194,15 @@ namespace Raspberry.IO.SerialPeripheralInterface
             }
 
             return data;
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal void DeselectSlave()
+        {
+            selectSlavePin.Write(true);
         }
 
         #endregion

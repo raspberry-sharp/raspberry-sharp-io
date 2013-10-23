@@ -1,7 +1,6 @@
 #region References
 
 using System;
-using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.SerialPeripheralInterface;
 
 #endregion
@@ -19,18 +18,26 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
         #region Fields
 
         private readonly SpiConnection spiConnection;
-        private readonly decimal scale;
 
         #endregion
 
         #region Instance Management
 
-        public Mcp3008SpiConnection(ProcessorPin clock, ProcessorPin cs, ProcessorPin miso, ProcessorPin mosi, decimal scale)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mcp3008SpiConnection"/> class.
+        /// </summary>
+        /// <param name="clockPin">The clock pin.</param>
+        /// <param name="slaveSelectPin">The slave select pin.</param>
+        /// <param name="misoPin">The miso pin.</param>
+        /// <param name="mosiPin">The mosi pin.</param>
+        public Mcp3008SpiConnection(IOutputBinaryPin clockPin, IOutputBinaryPin slaveSelectPin, IInputBinaryPin misoPin, IOutputBinaryPin mosiPin)
         {
-            this.scale = scale;
-            spiConnection = new SpiConnection(clock, cs, miso, mosi, Endianness.LittleEndian);
+            spiConnection = new SpiConnection(clockPin, slaveSelectPin, misoPin, mosiPin, Endianness.LittleEndian);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         void IDisposable.Dispose()
         {
             Close();
@@ -59,7 +66,7 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
                 // Read 10 bits
                 var data = spiConnection.Read(10);
                 
-                return data*scale/1024m;
+                return data/1024m;
             }
         }
 

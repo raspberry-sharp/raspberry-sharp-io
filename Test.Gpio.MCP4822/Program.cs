@@ -28,7 +28,13 @@ namespace Test.Gpio.MCP4822
             Console.WriteLine("\tMOSI: {0}", dacMosi);
             Console.WriteLine();
 
-            using (var dacConnection = new Mcp4822SpiConnection(dacClock.ToProcessor(), dacCs.ToProcessor(), dacMosi.ToProcessor(), 1))
+            var driver = GpioConnectionSettings.DefaultDriver;
+
+            using(var clockPin = driver.Out(dacClock))
+            using(var csPin = driver.Out(dacCs))
+            using(var mosiPin = driver.Out(dacMosi))
+            using (var dacConnection = new Mcp4822SpiConnection(clockPin, csPin, mosiPin))
+            using (var channel = new Mcp4822OutputAnalogPin(dacConnection, Mcp4822Channel.ChannelA))
             {
                 const decimal minimum = 0.0001m;
                 var ticks = minimum;
@@ -36,7 +42,7 @@ namespace Test.Gpio.MCP4822
 
                 while (!Console.KeyAvailable)
                 {
-                    dacConnection.Write(Mcp4822Channel.ChannelA, ticks);
+                    channel.Write(ticks);
 
                     if (up)
                     {

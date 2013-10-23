@@ -6,7 +6,10 @@ using System;
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
-    public class SpiSlaveSelection : IDisposable
+    /// <summary>
+    /// Represents a SPI slave selection context.
+    /// </summary>
+    public class SpiSlaveSelectionContext : IDisposable
     {
         #region Fields
 
@@ -16,11 +19,14 @@ namespace Raspberry.IO.SerialPeripheralInterface
 
         #region Instance Management
 
-        internal SpiSlaveSelection(SpiConnection connection)
+        internal SpiSlaveSelectionContext(SpiConnection connection)
         {
             this.connection = connection;
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         void IDisposable.Dispose()
         {
             connection.DeselectSlave();

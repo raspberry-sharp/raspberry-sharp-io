@@ -56,9 +56,12 @@
     <Compile Include="ConnectedPin.cs" />
     <Compile Include="ConnectedPins.cs" />
     <Compile Include="FileGpioConnectionDriver.cs" />
+    <Compile Include="GpioBinaryPinExtensionMethods.cs" />
     <Compile Include="GpioConnectionDriver.cs" />
     <Compile Include="GpioConnectionDriverExtensionMethods.cs" />
     <Compile Include="GpioConnectionSettings.cs" />
+    <Compile Include="GpioInputBinaryPin.cs" />
+    <Compile Include="GpioOutputBinaryPin.cs" />
     <Compile Include="Interop.cs" />
     <Compile Include="PinDetectedEdges.cs" />
     <Compile Include="PinResistor.cs" />
@@ -81,6 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
+      <Project>{ACE64F17-87E5-43E7-97A0-BDDE19059C61}</Project>
+      <Name>Raspberry.IO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
