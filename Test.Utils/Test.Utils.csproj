@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{57A001A7-FCF7-45EC-8E25-A390EF044E94}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{B665A155-B08A-40EE-9970-50BCC3777CA0}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test.Gpio.PCA9685</RootNamespace>
-    <AssemblyName>Test.Gpio.PCA9685</AssemblyName>
+    <RootNamespace>Test.Utils</RootNamespace>
+    <AssemblyName>Test.Utils</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,35 +31,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="PCA9685Options.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
-      <Project>{8388cfca-e3db-43f7-b049-2cb195211ce8}</Project>
-      <Name>Raspberry.IO.Components</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
-      <Project>{281c71ed-c36d-408e-8baa-75c381dc17e7}</Project>
-      <Name>Raspberry.IO.GeneralPurpose</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
-      <Project>{63b8403e-bc56-43f9-a045-f61ecc3871f3}</Project>
-      <Name>Raspberry.IO.InterIntegratedCircuit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Test.Utils\Test.Utils.csproj">
-      <Project>{b665a155-b08a-40ee-9970-50bcc3777ca0}</Project>
-      <Name>Test.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -59,7 +59,7 @@
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017OutputPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
-    <Compile Include="Expanders\Pca9685\Pca9685I2cConnection.cs" />
+    <Compile Include="Expanders\PCA9685\PCA9685I2cConnection.cs" />
     <Compile Include="GpioOutputPin.cs" />
     <Compile Include="GpioPinExtensionMethods.cs" />
     <Compile Include="IOutputPin.cs" />
