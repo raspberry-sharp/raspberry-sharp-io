@@ -31,6 +31,10 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
         /// Sets a single PWM channel
         /// </summary>
         void SetPwm(PwmChannel channel, int on, int off);
+
+        void SetFullOn(PwmChannel channel);
+
+        void SetFullOff(PwmChannel channel);
     }
 
     /// <summary>
@@ -47,19 +51,19 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
 
         private enum Register
         {
-           SUBADR1 = 0x02,
-           SUBADR2            = 0x03,
-           SUBADR3            = 0x04,
-           MODE1              = 0x00,
-           PRESCALE           = 0xFE,
-           LED0_ON_L          = 0x06,
-           LED0_ON_H          = 0x07,
-           LED0_OFF_L         = 0x08,
-           LED0_OFF_H         = 0x09,
-           ALLLED_ON_L        = 0xFA,
-           ALLLED_ON_H        = 0xFB,
-           ALLLED_OFF_L       = 0xFC,
-           ALLLED_OFF_H       = 0xFD,
+           SUBADR1      = 0x02,
+           SUBADR2      = 0x03,
+           SUBADR3      = 0x04,
+           MODE1        = 0x00,
+           PRESCALE     = 0xFE,
+           LED0_ON_L    = 0x06,
+           LED0_ON_H    = 0x07,
+           LED0_OFF_L   = 0x08,
+           LED0_OFF_H   = 0x09,
+           ALLLED_ON_L  = 0xFA,
+           ALLLED_ON_H  = 0xFB,
+           ALLLED_OFF_L = 0xFC,
+           ALLLED_OFF_H = 0xFD,
 
         }
 
@@ -117,6 +121,16 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
             WriteRegister(Register.LED0_ON_H + 4 * (int)channel, on >> 8);
             WriteRegister(Register.LED0_OFF_L + 4 * (int)channel, off & 0xFF);
             WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, off >> 8);
+        }
+
+        public void SetFullOn(PwmChannel channel)
+        {
+            WriteRegister(Register.LED0_ON_H + 4 * (int)channel, 0x10);
+        }
+
+        public void SetFullOff(PwmChannel channel)
+        {
+            WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, 0x00);
         }
 
         private void WriteRegister(Register register, byte data)
