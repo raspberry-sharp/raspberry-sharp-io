@@ -32,9 +32,7 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
         /// </summary>
         void SetPwm(PwmChannel channel, int on, int off);
 
-        void SetFullOn(PwmChannel channel);
-
-        void SetFullOff(PwmChannel channel);
+        void SetFull(PwmChannel channel, bool fullOn);
     }
 
     /// <summary>
@@ -123,12 +121,24 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
             WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, off >> 8);
         }
 
-        public void SetFullOn(PwmChannel channel)
+        public void SetFull(PwmChannel channel, bool fullOn)
+        {
+            if (fullOn)
+            {
+                SetFullOn(channel);
+            }
+            else
+            {
+                SetFullOff(channel);
+            }
+        }
+
+        private void SetFullOn(PwmChannel channel)
         {
             WriteRegister(Register.LED0_ON_H + 4 * (int)channel, 0x10);
         }
 
-        public void SetFullOff(PwmChannel channel)
+        private void SetFullOff(PwmChannel channel)
         {
             WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, 0x00);
         }
