@@ -145,7 +145,7 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
 
         private void WriteRegister(Register register, byte data)
         {
-            Log("{0}=>{1}", register, data);
+           // Log("{0}=>{1}", register, data);
             connection.Write(new[] { (byte)register , data });
         }
 
