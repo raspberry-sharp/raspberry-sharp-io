@@ -1,12 +1,13 @@
 ﻿using System;
 using NDesk.Options;
+using Raspberry.IO.Components.Expanders.Pca9685;
 using Raspberry.IO.GeneralPurpose;
 
 namespace Test.Gpio.PCA9685
 {
     public class PCA9685Options
     {
-        public int Channel { get; set; }
+        public PwmChannel Channel { get; set; }
 
         public int PwmFrequency { get; set; }
 
@@ -32,7 +33,7 @@ namespace Test.Gpio.PCA9685
             PwmOff = 600;
 
             var p = new OptionSet {
-                { "c|Channel=",  v => Channel = int.Parse(v) },
+                { "c|Channel=",  v => Channel =(PwmChannel) Enum.Parse(typeof(PwmChannel), v)},
                 { "f|PwmFrequency=",  v => PwmFrequency = int.Parse(v) },
                 { "b|PwmOn=",  v => PwmOn = int.Parse(v) },
                 { "e|PwmOff=",  v => PwmOff = int.Parse(v) },

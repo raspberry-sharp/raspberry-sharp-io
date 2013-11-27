@@ -44,14 +44,14 @@ namespace Test.Gpio.PCA9685
                 var device = new PCA9685I2cConnection(driver.Connect(options.DeviceAddress));
 
                 Log.Info("Setting frequency...");
-                device.SetPWMUpdateRate(options.PwmFrequency);  //                        # Set frequency to 60 Hz
+                device.SetPwmUpdateRate(options.PwmFrequency);  //                        # Set frequency to 60 Hz
                 while (!Console.KeyAvailable)
                 {
                     Log.Info("Set channel={0} to {1}", options.Channel, options.PwmOn);
-                    device.SetPWM(options.Channel, 0, options.PwmOn);
+                    device.SetPwm(options.Channel, 0, options.PwmOn);
                     Thread.Sleep(1000);
                     Log.Info("Set channel={0} to {1}", options.Channel, options.PwmOff);
-                    device.SetPWM(options.Channel, 0, options.PwmOff);
+                    device.SetPwm(options.Channel, 0, options.PwmOff);
                     Thread.Sleep(1000);
                 }
 

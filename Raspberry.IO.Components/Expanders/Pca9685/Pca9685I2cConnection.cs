@@ -8,6 +8,31 @@ using Raspberry.IO.InterIntegratedCircuit;
 
 namespace Raspberry.IO.Components.Expanders.Pca9685
 {
+
+    public enum PwmChannel
+    {
+        C0 = 0,
+        C1 = 1,
+        C2 = 2,
+        C3 = 3,
+        C4 = 4,
+        C5 = 5,
+        C6 = 6,
+        C7 = 7,
+        C8 = 8,
+        C9 = 9,
+        C10 = 10,
+        C11 = 11,
+    }
+
+    public interface IPwmDevice
+    {
+        /// <summary>
+        /// Sets a single PWM channel
+        /// </summary>
+        void SetPwm(PwmChannel channel, int on, int off);
+    }
+
     /// <summary>
     /// Driver for PCA9685
     /// 16-channel, 12-bit PWM Fm+ I2C-bus LED controller
@@ -15,9 +40,10 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
     /// Ported from
     /// https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_PWM_Servo_Driver/Adafruit_PWM_Servo_Driver.py
     /// </summary>
-    public class PCA9685I2cConnection
+    public class PCA9685I2cConnection : IPwmDevice
     {
         private readonly I2cDeviceConnection connection;
+
 
         private enum Register
         {
@@ -53,7 +79,7 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
         /// <summary>
         /// Datasheet: 7.3.5 PWM frequency PRE_SCALE
         /// </summary>
-        public void SetPWMUpdateRate(int frequencyHz)
+        public void SetPwmUpdateRate(int frequencyHz)
         {
             var preScale = 25000000.0m; // 25MHz
             preScale /= 4096m;// 12-bit
@@ -85,12 +111,12 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
         /// <summary>
         /// Sets a single PWM channel
         /// </summary>
-        public void SetPWM(int channel, int on, int off)
+        public void SetPwm(PwmChannel channel, int on, int off)
         {
-            WriteRegister(Register.LED0_ON_L + 4*channel, on & 0xFF);
-            WriteRegister(Register.LED0_ON_H + 4*channel, on >> 8);
-            WriteRegister(Register.LED0_OFF_L + 4*channel, off & 0xFF);
-            WriteRegister(Register.LED0_OFF_H + 4*channel, off >> 8);
+            WriteRegister(Register.LED0_ON_L + 4*(int)channel, on & 0xFF);
+            WriteRegister(Register.LED0_ON_H + 4 * (int)channel, on >> 8);
+            WriteRegister(Register.LED0_OFF_L + 4 * (int)channel, off & 0xFF);
+            WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, off >> 8);
         }
 
         private void WriteRegister(Register register, byte data)
