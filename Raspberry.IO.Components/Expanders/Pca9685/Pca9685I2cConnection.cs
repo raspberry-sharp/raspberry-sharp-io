@@ -136,11 +136,13 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
         private void SetFullOn(PwmChannel channel)
         {
             WriteRegister(Register.LED0_ON_H + 4 * (int)channel, 0x10);
+            WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, 0x00);
         }
 
         private void SetFullOff(PwmChannel channel)
         {
-            WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, 0x00);
+            WriteRegister(Register.LED0_ON_H + 4 * (int)channel, 0x00);
+            WriteRegister(Register.LED0_OFF_H + 4 * (int)channel, 0x10);
         }
 
         private void WriteRegister(Register register, byte data)
