@@ -27,6 +27,8 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
 
     public interface IPwmDevice
     {
+        void SetPwmUpdateRate(int frequencyHz);
+
         /// <summary>
         /// Sets a single PWM channel
         /// </summary>
@@ -70,13 +72,24 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
             Console.WriteLine(format, args);
         }
 
-        public PCA9685I2cConnection(I2cDeviceConnection connection)
+        #region Ctor
+
+        public static IPwmDevice Create(I2cDeviceConnection connection)
+        {
+            var pwmDevice = new PCA9685I2cConnection(connection);
+            return pwmDevice;
+        }
+
+        private PCA9685I2cConnection(I2cDeviceConnection connection)
         {
             this.connection = connection;
 
             Log("Reseting PCA9685");
             WriteRegister(Register.MODE1, 0x00);
         }
+
+        #endregion
+
 
         /// <summary>
         /// Datasheet: 7.3.5 PWM frequency PRE_SCALE
