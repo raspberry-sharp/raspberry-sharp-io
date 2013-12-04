@@ -41,7 +41,7 @@ namespace Test.Gpio.PCA9685
             using (var driver = new I2cDriver(options.SdaPin.ToProcessor(), options.SclPin.ToProcessor()))
             {
                 Log.Info("Creating device...");
-                var device = new PCA9685I2cConnection(driver.Connect(options.DeviceAddress));
+                var device = PCA9685I2cConnection.Create(driver.Connect(options.DeviceAddress));
 
                 Log.Info("Setting frequency...");
                 device.SetPwmUpdateRate(options.PwmFrequency);  //                        # Set frequency to 60 Hz
