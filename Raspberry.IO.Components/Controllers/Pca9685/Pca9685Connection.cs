@@ -1,53 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Raspberry.IO.InterIntegratedCircuit;
 
-
-namespace Raspberry.IO.Components.Expanders.Pca9685
+namespace Raspberry.IO.Components.Controllers.Pca9685
 {
-
-    public enum PwmChannel
-    {
-        C0 = 0,
-        C1 = 1,
-        C2 = 2,
-        C3 = 3,
-        C4 = 4,
-        C5 = 5,
-        C6 = 6,
-        C7 = 7,
-        C8 = 8,
-        C9 = 9,
-        C10 = 10,
-        C11 = 11,
-    }
-
-    public interface IPwmDevice
-    {
-        void SetPwmUpdateRate(int frequencyHz);
-
-        /// <summary>
-        /// Sets a single PWM channel
-        /// </summary>
-        void SetPwm(PwmChannel channel, int on, int off);
-
-        void SetFull(PwmChannel channel, bool fullOn);
-    }
-
     /// <summary>
-    /// Driver for PCA9685
-    /// 16-channel, 12-bit PWM Fm+ I2C-bus LED controller
-
+    /// Driver for Adafruit 16-channel PWM/Servo Shield which uses the
+    /// NXP PCA9685 16-channel, 12-bit PWM Fm+ I2C-bus LED controller
     /// Ported from
     /// https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_PWM_Servo_Driver/Adafruit_PWM_Servo_Driver.py
     /// </summary>
-    public class PCA9685I2cConnection : IPwmDevice
+    public class Pca9685Connection : IPwmDevice
     {
-        private readonly I2cDeviceConnection connection;
-
+        private readonly I2cDeviceConnection _connection;
 
         private enum Register
         {
@@ -64,7 +28,6 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
            ALLLED_ON_H  = 0xFB,
            ALLLED_OFF_L = 0xFC,
            ALLLED_OFF_H = 0xFD,
-
         }
 
         private void Log(string format, params object[] args)
@@ -76,14 +39,13 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
 
         public static IPwmDevice Create(I2cDeviceConnection connection)
         {
-            var pwmDevice = new PCA9685I2cConnection(connection);
+            var pwmDevice = new Pca9685Connection(connection);
             return pwmDevice;
         }
 
-        private PCA9685I2cConnection(I2cDeviceConnection connection)
+        private Pca9685Connection(I2cDeviceConnection connection)
         {
-            this.connection = connection;
-
+            _connection = connection;
             Log("Reseting PCA9685");
             WriteRegister(Register.MODE1, 0x00);
         }
@@ -161,7 +123,7 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
         private void WriteRegister(Register register, byte data)
         {
            // Log("{0}=>{1}", register, data);
-            connection.Write(new[] { (byte)register , data });
+            _connection.Write(new[] { (byte)register , data });
         }
 
         private void WriteRegister(Register register, int data)
@@ -171,8 +133,8 @@ namespace Raspberry.IO.Components.Expanders.Pca9685
 
         private byte ReadRegister(Register register)
         {
-            connection.Write((byte)register);
-            var value = connection.ReadByte();
+            _connection.Write((byte)register);
+            var value = _connection.ReadByte();
             return value;
         }
     }

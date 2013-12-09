@@ -45,6 +45,8 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controllers\Pca9685\IPwmDevice.cs" />
+    <Compile Include="Controllers\Pca9685\PwmChannel.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008Channel.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008SpiConnection.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822Channel.cs" />
@@ -59,7 +61,7 @@
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017OutputPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
-    <Compile Include="Expanders\PCA9685\PCA9685I2cConnection.cs" />
+    <Compile Include="Controllers\Pca9685\Pca9685Connection.cs" />
     <Compile Include="GpioOutputPin.cs" />
     <Compile Include="GpioPinExtensionMethods.cs" />
     <Compile Include="IOutputPin.cs" />
@@ -88,6 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Expanders\PCA9685\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

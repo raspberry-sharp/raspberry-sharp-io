@@ -1,6 +1,6 @@
 ﻿using System;
 using NDesk.Options;
-using Raspberry.IO.Components.Expanders.Pca9685;
+using Raspberry.IO.Components.Controllers.Pca9685;
 using Raspberry.IO.GeneralPurpose;
 
 namespace Test.Gpio.PCA9685
