@@ -50,11 +50,14 @@ High-level:
 ### Raspberry.IO.InterIntegratedCircuit
 
 + Preliminary support for I2C through Raspberry.IO.InterIntegratedCircuit assembly
-+ Includes I2C sample for MCP23017 I/O expander
-
++ Includes I2C sample for MCP23017 I/O expander 
+	
 ### Raspberry.IO.Components
 
 + Preliminary support for various components through Raspberry.IO.Components assembly
-+ Includes samples for HD44780 LCD display and HC-SR04 distance detector
++ Includes samples for
+	- HD44780 LCD display 
+    - HC-SR04 distance detector
+    - Pca9685 PWM LED Controller (as used in the [Adafruit 16-Channel 12-bit PWM/Servo Driver](http://www.adafruit.com/products/815))
 
 Parts of Raspberry# IO are inspired by [BCM2835 C Library](http://www.airspayce.com/mikem/bcm2835/) and Gordon Henderson's [WiringPi](http://wiringpi.com/).

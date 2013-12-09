@@ -6,8 +6,14 @@ using Raspberry.IO.InterIntegratedCircuit;
 using Test.Utils;
 
 
-namespace Test.Gpio.PCA9685
+namespace Test.Gpio.Pca9685
 {
+    /// <summary>
+    /// Demonstrates a connection to the Pca9685 LED controller - used by the Adafruit 16-channel PWM/Servo Shield
+    /// </summary>
+    /// <remarks>
+    /// Ported from https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_PWM_Servo_Driver/Servo_Example.py
+    /// </remarks>
     class Program
     {
 
@@ -15,7 +21,7 @@ namespace Test.Gpio.PCA9685
 
         static void Main(string[] args)
         {
-            var options = new PCA9685Options(args);
+            var options = new Pca9685Options(args);
 
             if (options.ShowHelp)
             {
@@ -30,9 +36,9 @@ namespace Test.Gpio.PCA9685
             int pulse = CalculatePulse(options.PwmFrequency, 1000);
             Log.Info("Pulse={0}", pulse);
 
-            if (Environment.OSVersion.ToString().Contains("Windows"))
+            if (Environment.OSVersion.Platform != PlatformID.Unix)
             {
-                Log.Info("Windows. Exiting");
+                Log.Info("Windows?! Exiting");
                 return;
             }
             
@@ -44,7 +50,7 @@ namespace Test.Gpio.PCA9685
                 var device = Pca9685Connection.Create(driver.Connect(options.DeviceAddress));
 
                 Log.Info("Setting frequency...");
-                device.SetPwmUpdateRate(options.PwmFrequency);  //                        # Set frequency to 60 Hz
+                device.SetPwmUpdateRate(options.PwmFrequency);
                 while (!Console.KeyAvailable)
                 {
                     Log.Info("Set channel={0} to {1}", options.Channel, options.PwmOn);
@@ -58,6 +64,9 @@ namespace Test.Gpio.PCA9685
             }
         }
 
+        /// <summary>
+        /// Ported but wasn't used in original? Ported from https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_PWM_Servo_Driver/Servo_Example.py
+        /// </summary>
         private static int CalculatePulse(int frequency, int pulse)
         {
             int pulseLengthMicroSeconds = 1000000;                   //# 1,000,000 us per second

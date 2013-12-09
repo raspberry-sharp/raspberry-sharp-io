@@ -3,9 +3,9 @@ using NDesk.Options;
 using Raspberry.IO.Components.Controllers.Pca9685;
 using Raspberry.IO.GeneralPurpose;
 
-namespace Test.Gpio.PCA9685
+namespace Test.Gpio.Pca9685
 {
-    public class PCA9685Options
+    public class Pca9685Options
     {
         public PwmChannel Channel { get; set; }
 
@@ -23,7 +23,7 @@ namespace Test.Gpio.PCA9685
 
         public bool ShowHelp { get; set; }
 
-        public PCA9685Options(string[] args)
+        public Pca9685Options(string[] args)
         {
             PwmFrequency = 60;
             SdaPin = ConnectorPin.P1Pin03;
