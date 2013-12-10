@@ -30,7 +30,7 @@ namespace Test.Gpio.Pca9685
             Log.Info(m => m("Running {0}", Environment.OSVersion));
             Log.Info("Options:" + Environment.NewLine + options);
 
-            int pulse = CalculatePulse(options.PwmFrequency, 1000);
+            int pulse = CalculatePulse(options.PwmFrequency, 50);
             Log.Info(m => m("Pulse={0}", pulse));
 
             if (Environment.OSVersion.Platform != PlatformID.Unix)
@@ -63,14 +63,15 @@ namespace Test.Gpio.Pca9685
 
         /// <summary>
         /// Ported but wasn't used in original? Ported from https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_PWM_Servo_Driver/Servo_Example.py
+        /// Not entirely sure what the result is meant to mean.
         /// </summary>
         private static int CalculatePulse(int frequency, int pulse)
         {
-            int pulseLengthMicroSeconds = 1000000;                   //# 1,000,000 us per second
-            pulseLengthMicroSeconds /= frequency;                   //    # 60 Hz
+            int microSeconds = 1000000;                   //# 1,000,000 us per second
+            int pulseLengthMicroSeconds = microSeconds / frequency;                   //    # 60 Hz
             Log.Info(m => m("{0} uSecs per period", pulseLengthMicroSeconds));
-            pulseLengthMicroSeconds /= 4096; //                     # 12 bits of resolution
-            Log.Info(m => m("{0} uSecs per bit", pulseLengthMicroSeconds));
+            int microSecondsPerBit = pulseLengthMicroSeconds / 4096; //                     # 12 bits of resolution
+            Log.Info(m => m("{0} uSecs per bit", microSecondsPerBit));
             pulse *= 1000;
             pulse /= pulseLengthMicroSeconds;
             return pulse;
