@@ -7,8 +7,8 @@
     <ProjectGuid>{57A001A7-FCF7-45EC-8E25-A390EF044E94}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test.Gpio.PCA9685</RootNamespace>
-    <AssemblyName>Test.Gpio.PCA9685</AssemblyName>
+    <RootNamespace>Test.Gpio.Pca9685</RootNamespace>
+    <AssemblyName>Test.Gpio.Pca9685</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
