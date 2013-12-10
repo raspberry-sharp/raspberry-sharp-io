@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
+using Common.Logging;
 using Raspberry.IO.Components.Controllers.Pca9685;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.InterIntegratedCircuit;
-using Test.Utils;
-
 
 namespace Test.Gpio.Pca9685
 {
@@ -16,8 +15,7 @@ namespace Test.Gpio.Pca9685
     /// </remarks>
     class Program
     {
-
-        private static readonly Logger Log = new Logger();
+        private readonly static ILog Log = LogManager.GetCurrentClassLogger();
 
         static void Main(string[] args)
         {
@@ -29,16 +27,15 @@ namespace Test.Gpio.Pca9685
             }
 
             Log.Info("-=Pca9685 Sample=-");
-            Log.Info("Running {0}", Environment.OSVersion);
-            Log.Info("Options:");
-            Log.Info(options.ToString());
+            Log.Info(m => m("Running {0}", Environment.OSVersion));
+            Log.Info("Options:" + Environment.NewLine + options);
 
             int pulse = CalculatePulse(options.PwmFrequency, 1000);
-            Log.Info("Pulse={0}", pulse);
+            Log.Info(m => m("Pulse={0}", pulse));
 
             if (Environment.OSVersion.Platform != PlatformID.Unix)
             {
-                Log.Info("Windows?! Exiting");
+                Log.Info("Windows detected. Exiting");
                 return;
             }
             
@@ -53,10 +50,10 @@ namespace Test.Gpio.Pca9685
                 device.SetPwmUpdateRate(options.PwmFrequency);
                 while (!Console.KeyAvailable)
                 {
-                    Log.Info("Set channel={0} to {1}", options.Channel, options.PwmOn);
+                    Log.Info(m => m("Set channel={0} to {1}", options.Channel, options.PwmOn));
                     device.SetPwm(options.Channel, 0, options.PwmOn);
                     Thread.Sleep(1000);
-                    Log.Info("Set channel={0} to {1}", options.Channel, options.PwmOff);
+                    Log.Info(m => m("Set channel={0} to {1}", options.Channel, options.PwmOff));
                     device.SetPwm(options.Channel, 0, options.PwmOff);
                     Thread.Sleep(1000);
                 }
@@ -71,9 +68,9 @@ namespace Test.Gpio.Pca9685
         {
             int pulseLengthMicroSeconds = 1000000;                   //# 1,000,000 us per second
             pulseLengthMicroSeconds /= frequency;                   //    # 60 Hz
-            Log.Info("{0} uSecs per period", pulseLengthMicroSeconds);
+            Log.Info(m => m("{0} uSecs per period", pulseLengthMicroSeconds));
             pulseLengthMicroSeconds /= 4096; //                     # 12 bits of resolution
-            Log.Info("{0} uSecs per bit", pulseLengthMicroSeconds);
+            Log.Info(m => m("{0} uSecs per bit", pulseLengthMicroSeconds));
             pulse *= 1000;
             pulse /= pulseLengthMicroSeconds;
             return pulse;

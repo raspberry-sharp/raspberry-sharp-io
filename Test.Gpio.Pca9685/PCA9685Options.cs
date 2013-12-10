@@ -41,7 +41,6 @@ namespace Test.Gpio.Pca9685
             };
             p.Parse(args);
 
-
             if (ShowHelp)
             {
                 Console.WriteLine("Options:");
