@@ -85,6 +85,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
       <Project>{ACE64F17-87E5-43E7-97A0-BDDE19059C61}</Project>
+      <Project>{D2E41147-5BF6-4109-A497-C76284F3C020}</Project>
       <Name>Raspberry.IO</Name>
     </ProjectReference>
   </ItemGroup>

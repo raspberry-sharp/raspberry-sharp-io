@@ -1,13 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.GeneralPurpose", "Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj", "{281C71ED-C36D-408E-8BAA-75C381DC17E7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93E87796-2109-444A-8852-7174C93E6F45}"
 	ProjectSection(SolutionItems) = preProject
 		Icon.png = Icon.png
 		Raspberry.IO.GeneralPurpose.nuspec = Raspberry.IO.GeneralPurpose.nuspec
-		Raspberry.IO.nuspec = Raspberry.IO.nuspec
 		README.md = README.md
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
@@ -42,6 +43,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.WatchPin", "Test.Gpio.WatchPin\Test.Gpio.WatchPin.csproj", "{60B59A9C-69F6-4CEA-8385-C8542AE2BB98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO", "Raspberry.IO\Raspberry.IO.csproj", "{ACE64F17-87E5-43E7-97A0-BDDE19059C61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.PCA9685", "Test.Gpio.Pca9685\Test.Gpio.PCA9685.csproj", "{57A001A7-FCF7-45EC-8E25-A390EF044E94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,11 +100,16 @@ Global
 		{ACE64F17-87E5-43E7-97A0-BDDE19059C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACE64F17-87E5-43E7-97A0-BDDE19059C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACE64F17-87E5-43E7-97A0-BDDE19059C61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57A001A7-FCF7-45EC-8E25-A390EF044E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57A001A7-FCF7-45EC-8E25-A390EF044E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57A001A7-FCF7-45EC-8E25-A390EF044E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57A001A7-FCF7-45EC-8E25-A390EF044E94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{15ECD485-B3FD-4B6F-8491-7489DFFC89BC} = {93E87796-2109-444A-8852-7174C93E6F45}
 		{B28253A7-BB93-40F7-B41C-B4AE369174ED} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 		{54075457-7C1D-4C8F-BE7D-CFCA34F11228} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 		{6B5D38D3-7642-4DF9-A9AA-3AF7D00890BC} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
@@ -109,5 +117,6 @@ Global
 		{5D9D1834-4C4B-4E03-B635-5F205205B6F8} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 		{266EDDBC-F741-48F8-83B7-2CD37BACE62B} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 		{60B59A9C-69F6-4CEA-8385-C8542AE2BB98} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
+		{57A001A7-FCF7-45EC-8E25-A390EF044E94} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 	EndGlobalSection
 EndGlobal

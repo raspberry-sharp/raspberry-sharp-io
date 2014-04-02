@@ -46,7 +46,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
 
             if (mosiPin != null)
                 mosiPin.Write(false);
-        }
+            }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

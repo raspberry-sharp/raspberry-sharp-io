@@ -21,4 +21,6 @@ _[Rr]e[Ss]harper.*
 **/[Tt]humbs.db
 **/[Dd]esktop.ini
 
+#Nuget packages
+packages/*
 

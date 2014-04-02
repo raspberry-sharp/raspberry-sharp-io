@@ -13,6 +13,7 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
     /// <remarks>See http://ww1.microchip.com/downloads/en/DeviceDoc/22249A.pdf for specifications.</remarks>
     public class Mcp4822SpiConnection : IDisposable
     {
+
         #region Fields
 
         private readonly SpiConnection spiConnection;
@@ -22,7 +23,7 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
         #region Instance Management
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Mcp4822SpiConnection"/> class.
+        /// Initializes a new instance of the <see cref="Mcp4822SpiConnection" /> class.
         /// </summary>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="slaveSelectPin">The slave select pin.</param>

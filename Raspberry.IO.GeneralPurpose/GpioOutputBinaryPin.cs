@@ -1,7 +1,7 @@
 namespace Raspberry.IO.GeneralPurpose
 {
     /// <summary>
-    /// Represents a GPIO output binary pin.
+    /// Represents an output pin on GPIO interface
     /// </summary>
     public class GpioOutputBinaryPin : IOutputBinaryPin
     {
@@ -19,13 +19,19 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pin">The pin.</param>
-        public GpioOutputBinaryPin(IGpioConnectionDriver driver, ProcessorPin pin)
+        /// <param name="resistor">The resistor.</param>
+        public GpioOutputBinaryPin(IGpioConnectionDriver driver, ProcessorPin pin, PinResistor resistor = PinResistor.None)
         {
             this.driver = driver;
             this.pin = pin;
 
             driver.Allocate(pin, PinDirection.Output);
+            driver.SetPinResistor(pin, resistor);
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -35,14 +41,10 @@ namespace Raspberry.IO.GeneralPurpose
             driver.Release(pin);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
-        /// Writes the value of the pin.
+        /// Writes the specified state.
         /// </summary>
-        /// <param name="state">if set to <c>true</c>, pin is set to high state.</param>
+        /// <param name="state">The pin state.</param>
         public void Write(bool state)
         {
             driver.Write(pin, state);
