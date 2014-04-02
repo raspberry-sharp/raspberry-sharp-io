@@ -24,7 +24,7 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
 
         #region Instance Management
 
-        public Mcp3008SpiConnection(IOutputPin clock, IOutputPin cs, IInputPin miso, IOutputPin mosi, decimal scale)
+        public Mcp3008SpiConnection(IOutputBinaryPin clock, IOutputBinaryPin cs, IInputBinaryPin miso, IOutputBinaryPin mosi, decimal scale)
         {
             this.scale = scale;
             spiConnection = new SpiConnection(clock, cs, miso, mosi, Endianness.LittleEndian);

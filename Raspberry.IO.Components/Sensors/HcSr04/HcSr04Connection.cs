@@ -21,8 +21,8 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         private const decimal triggerTime = 0.01m;  // Waits at least 10µs = 0.01ms
         private const decimal echoUpTimeout = 500m;
 
-        private readonly IOutputPin triggerPin;
-        private readonly IInputPin echoPin;
+        private readonly IOutputBinaryPin triggerPin;
+        private readonly IInputBinaryPin echoPin;
 
         #endregion
 
@@ -33,7 +33,7 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
         /// </summary>
         /// <param name="triggerPin">The trigger pin.</param>
         /// <param name="echoPin">The echo pin.</param>
-        public HcSr04Connection(IOutputPin triggerPin, IInputPin echoPin)
+        public HcSr04Connection(IOutputBinaryPin triggerPin, IInputBinaryPin echoPin)
         {
             this.triggerPin = triggerPin;
             this.echoPin = echoPin;

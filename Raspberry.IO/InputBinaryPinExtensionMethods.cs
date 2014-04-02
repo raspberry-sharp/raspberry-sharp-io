@@ -7,9 +7,9 @@ using System;
 namespace Raspberry.IO
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IInputPin"/>.
+    /// Provides extension methods for <see cref="IInputBinaryPin"/>.
     /// </summary>
-    public static class InputPinExtensionMethods
+    public static class InputBinaryPinExtensionMethods
     {
         #region Methods
 
@@ -23,7 +23,7 @@ namespace Raspberry.IO
         /// <returns>
         /// The time the pin remains up, in milliseconds.
         /// </returns>
-        public static decimal Time(this IInputPin pin, bool waitForUp = true, decimal phase1Timeout = 0, decimal phase2Timeout = 0)
+        public static decimal Time(this IInputBinaryPin pin, bool waitForUp = true, decimal phase1Timeout = 0, decimal phase2Timeout = 0)
         {
             pin.Wait(waitForUp, phase1Timeout);
 

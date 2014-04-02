@@ -65,8 +65,8 @@
     <Compile Include="Displays\Hd44780\Hd44780A00Encoding.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnection.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
-    <Compile Include="Expanders\Mcp23017\Mcp23017InputPin.cs" />
-    <Compile Include="Expanders\Mcp23017\Mcp23017OutputPin.cs" />
+    <Compile Include="Expanders\Mcp23017\Mcp23017InputBinaryPin.cs" />
+    <Compile Include="Expanders\Mcp23017\Mcp23017OutputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
     <Compile Include="Controllers\Pca9685\Pca9685Connection.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017I2cConnection.cs" />

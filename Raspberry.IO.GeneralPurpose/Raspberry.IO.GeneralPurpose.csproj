@@ -59,8 +59,8 @@
     <Compile Include="GpioConnectionDriver.cs" />
     <Compile Include="GpioConnectionDriverExtensionMethods.cs" />
     <Compile Include="GpioConnectionSettings.cs" />
-    <Compile Include="GpioInputPin.cs" />
-    <Compile Include="GpioOutputPin.cs" />
+    <Compile Include="GpioInputBinaryPin.cs" />
+    <Compile Include="GpioOutputBinaryPin.cs" />
     <Compile Include="GpioPinExtensionMethods.cs" />
     <Compile Include="Interop.cs" />
     <Compile Include="PinDetectedEdges.cs" />

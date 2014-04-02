@@ -9,7 +9,7 @@ namespace Raspberry.IO
     /// <summary>
     /// Provides a generic interface for binary input pins.
     /// </summary>
-    public interface IInputPin : IDisposable
+    public interface IInputBinaryPin : IDisposable
     {
         #region Methods
 

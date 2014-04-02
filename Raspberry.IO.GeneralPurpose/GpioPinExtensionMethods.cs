@@ -8,55 +8,55 @@ namespace Raspberry.IO.GeneralPurpose
         #region Methods
 
         /// <summary>
-        /// Created an <see cref="IOutputPin"/> output pin on the specified driver.
+        /// Created an <see cref="IOutputBinaryPin"/> output pin on the specified driver.
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pin">The pin.</param>
         /// <param name="resistor">The resistor.</param>
         /// <returns></returns>
-        public static GpioOutputPin Out(this IGpioConnectionDriver driver, ConnectorPin pin,
+        public static GpioOutputBinaryPin Out(this IGpioConnectionDriver driver, ConnectorPin pin,
             PinResistor resistor = PinResistor.None)
         {
             return driver.Out(pin.ToProcessor(), resistor);
         }
 
         /// <summary>
-        /// Created an <see cref="IOutputPin"/> output pin on the specified driver.
+        /// Created an <see cref="IOutputBinaryPin"/> output pin on the specified driver.
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pin">The pin.</param>
         /// <param name="resistor">The resistor.</param>
         /// <returns></returns>
-        public static GpioOutputPin Out(this IGpioConnectionDriver driver, ProcessorPin pin,
+        public static GpioOutputBinaryPin Out(this IGpioConnectionDriver driver, ProcessorPin pin,
             PinResistor resistor = PinResistor.None)
         {
-            return new GpioOutputPin(driver, pin, resistor);
+            return new GpioOutputBinaryPin(driver, pin, resistor);
         }
 
         /// <summary>
-        /// Created an <see cref="IInputPin"/> input pin on the specified driver.
+        /// Created an <see cref="IInputBinaryPin"/> input pin on the specified driver.
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pin">The pin.</param>
         /// <param name="resistor">The resistor.</param>
         /// <returns></returns>
-        public static GpioInputPin In(this IGpioConnectionDriver driver, ConnectorPin pin,
+        public static GpioInputBinaryPin In(this IGpioConnectionDriver driver, ConnectorPin pin,
             PinResistor resistor = PinResistor.None)
         {
             return driver.In(pin.ToProcessor(), resistor);
         }
 
         /// <summary>
-        /// Created an <see cref="IInputPin"/> input pin on the specified driver.
+        /// Created an <see cref="IInputBinaryPin"/> input pin on the specified driver.
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pin">The pin.</param>
         /// <param name="resistor">The resistor.</param>
         /// <returns></returns>
-        public static GpioInputPin In(this IGpioConnectionDriver driver, ProcessorPin pin,
+        public static GpioInputBinaryPin In(this IGpioConnectionDriver driver, ProcessorPin pin,
             PinResistor resistor = PinResistor.None)
         {
-            return new GpioInputPin(driver, pin, resistor);
+            return new GpioInputBinaryPin(driver, pin, resistor);
         }
 
         #endregion

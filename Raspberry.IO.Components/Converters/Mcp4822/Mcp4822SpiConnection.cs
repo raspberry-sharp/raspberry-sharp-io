@@ -22,7 +22,7 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
 
         #region Instance Management
 
-        public Mcp4822SpiConnection(IOutputPin clock, IOutputPin ss, IOutputPin mosi, decimal scale)
+        public Mcp4822SpiConnection(IOutputBinaryPin clock, IOutputBinaryPin ss, IOutputBinaryPin mosi, decimal scale)
         {
             spiConnection = new SpiConnection(clock, ss, null, mosi, Endianness.LittleEndian);
             this.scale = scale;

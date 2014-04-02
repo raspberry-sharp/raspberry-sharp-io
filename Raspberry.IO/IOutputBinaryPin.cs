@@ -9,7 +9,7 @@ namespace Raspberry.IO
     /// <summary>
     /// Provides an interface for output pins.
     /// </summary>
-    public interface IOutputPin : IDisposable
+    public interface IOutputBinaryPin : IDisposable
     {
         #region Methods
 

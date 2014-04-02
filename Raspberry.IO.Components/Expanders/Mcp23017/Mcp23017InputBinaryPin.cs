@@ -2,12 +2,12 @@ using System;
 
 namespace Raspberry.IO.Components.Expanders.Mcp23017
 {
-    public class Mcp23017InputPin : IInputPin
+    public class Mcp23017InputBinaryPin : IInputBinaryPin
     {
         private readonly Mcp23017I2cConnection connection;
         private readonly Mcp23017Pin pin;
 
-        public Mcp23017InputPin(Mcp23017I2cConnection connection, Mcp23017Pin pin, Mcp23017PinResistor resistor = Mcp23017PinResistor.None, Mcp23017PinPolarity polarity = Mcp23017PinPolarity.Normal)
+        public Mcp23017InputBinaryPin(Mcp23017I2cConnection connection, Mcp23017Pin pin, Mcp23017PinResistor resistor = Mcp23017PinResistor.None, Mcp23017PinPolarity polarity = Mcp23017PinPolarity.Normal)
         {
             this.connection = connection;
             this.pin = pin;

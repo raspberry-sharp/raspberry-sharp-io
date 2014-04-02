@@ -3,7 +3,7 @@ namespace Raspberry.IO.GeneralPurpose
     /// <summary>
     /// Represents an output pin on GPIO interface
     /// </summary>
-    public class GpioOutputPin : IOutputPin
+    public class GpioOutputBinaryPin : IOutputBinaryPin
     {
         #region Fields
 
@@ -15,12 +15,12 @@ namespace Raspberry.IO.GeneralPurpose
         #region Instance Management
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GpioOutputPin"/> class.
+        /// Initializes a new instance of the <see cref="GpioOutputBinaryPin"/> class.
         /// </summary>
         /// <param name="driver">The driver.</param>
         /// <param name="pin">The pin.</param>
         /// <param name="resistor">The resistor.</param>
-        public GpioOutputPin(IGpioConnectionDriver driver, ProcessorPin pin, PinResistor resistor = PinResistor.None)
+        public GpioOutputBinaryPin(IGpioConnectionDriver driver, ProcessorPin pin, PinResistor resistor = PinResistor.None)
         {
             this.driver = driver;
             this.pin = pin;
