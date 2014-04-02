@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Raspberry.IO;
+using Raspberry.IO.Components;
 using Raspberry.IO.Components.Sensors.HcSr04;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
@@ -28,8 +30,11 @@ namespace Test.Gpio.HCSR04
             Console.WriteLine();
 
             var interval = GetInterval(args);
+            var driver = GpioConnectionSettings.DefaultDriver;
 
-            using (var connection = new HcSr04Connection(triggerPin.ToProcessor(), echoPin.ToProcessor()))
+            using (var connection = new HcSr04Connection(
+                driver.Out(triggerPin.ToProcessor()), 
+                driver.In(echoPin.ToProcessor())))
             {
                 while (!Console.KeyAvailable)
                 {

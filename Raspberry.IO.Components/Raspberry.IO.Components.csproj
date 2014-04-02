@@ -36,6 +36,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Raspberry.System, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Raspberry.System.1.2.0\lib\net40\Raspberry.System.dll</HintPath>
@@ -62,12 +65,10 @@
     <Compile Include="Displays\Hd44780\Hd44780A00Encoding.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnection.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
+    <Compile Include="Expanders\Mcp23017\Mcp23017InputPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017OutputPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
     <Compile Include="Controllers\Pca9685\Pca9685Connection.cs" />
-    <Compile Include="GpioOutputPin.cs" />
-    <Compile Include="GpioPinExtensionMethods.cs" />
-    <Compile Include="IOutputPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017I2cConnection.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017Pin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinDirection.cs" />
@@ -78,10 +79,6 @@
     <Compile Include="Sensors\HcSr04\Units.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
-      <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
-      <Name>Raspberry.IO.GeneralPurpose</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
       <Project>{63B8403E-BC56-43F9-A045-F61ECC3871F3}</Project>
       <Name>Raspberry.IO.InterIntegratedCircuit</Name>
@@ -89,6 +86,10 @@
     <ProjectReference Include="..\Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj">
       <Project>{326342E5-0411-40E8-9F2D-563D6B192568}</Project>
       <Name>Raspberry.IO.SerialPeripheralInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
+      <Project>{D2E41147-5BF6-4109-A497-C76284F3C020}</Project>
+      <Name>Raspberry.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

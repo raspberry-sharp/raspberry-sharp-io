@@ -73,6 +73,10 @@
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
+      <Project>{D2E41147-5BF6-4109-A497-C76284F3C020}</Project>
+      <Name>Raspberry.IO</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Test.Gpio.MCP3008.fzz" />

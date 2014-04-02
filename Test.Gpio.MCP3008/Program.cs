@@ -32,7 +32,13 @@ namespace Test.Gpio.MCP3008
 
             const decimal voltage = 3.3m;
 
-            using (var adcConnection = new Mcp3008SpiConnection(adcClock.ToProcessor(), adcCs.ToProcessor(), adcMiso.ToProcessor(), adcMosi.ToProcessor(), voltage))
+            var driver = GpioConnectionSettings.DefaultDriver;
+            using (var adcConnection = new Mcp3008SpiConnection(
+                driver.Out(adcClock.ToProcessor()), 
+                driver.Out(adcCs.ToProcessor()),
+                driver.In(adcMiso.ToProcessor()),
+                driver.Out(adcMosi.ToProcessor()), 
+                voltage))
             {
                 Console.CursorVisible = false;
 

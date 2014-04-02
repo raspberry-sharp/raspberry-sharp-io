@@ -26,10 +26,12 @@
       <frameworkAssembly assemblyName="System.Core" targetFramework="net40" />
     </frameworkAssemblies>
     <dependencies>
+      <dependency id="Common.Logging" version="2.1.2" />
       <dependency id="Raspberry.System" version="1.2.0" />
     </dependencies>
   </metadata>
   <files>
+    <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.dll" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.pdb" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.xml" target="lib\net40" />

@@ -1,7 +1,6 @@
 #region References
 
 using System;
-using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
 #endregion
@@ -12,11 +11,10 @@ namespace Raspberry.IO.SerialPeripheralInterface
     {
         #region Fields
 
-        private readonly IGpioConnectionDriver driver;
-        private readonly ProcessorPin clock;
-        private readonly ProcessorPin ss;
-        private readonly ProcessorPin? miso;
-        private readonly ProcessorPin? mosi;
+        private readonly IOutputPin clock;
+        private readonly IOutputPin ss;
+        private readonly IInputPin miso;
+        private readonly IOutputPin mosi;
 
         private readonly Endianness endianness = Endianness.LittleEndian;
 
@@ -24,7 +22,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
 
         #region Instance Management
 
-        public SpiConnection(ProcessorPin clock, ProcessorPin ss, ProcessorPin? miso, ProcessorPin? mosi, Endianness endianness)
+        public SpiConnection(IOutputPin clock, IOutputPin ss, IInputPin miso, IOutputPin mosi, Endianness endianness)
         {
             this.clock = clock;
             this.ss = ss;
@@ -32,22 +30,11 @@ namespace Raspberry.IO.SerialPeripheralInterface
             this.mosi = mosi;
             this.endianness = endianness;
 
-            driver = GpioConnectionSettings.DefaultDriver;
+            clock.Write(false);
+            ss.Write(true);
 
-            driver.Allocate(clock, PinDirection.Output);
-            driver.Write(clock, false);
-
-            driver.Allocate(ss, PinDirection.Output);
-            driver.Write(ss, true);
-
-            if (mosi.HasValue)
-            {
-                driver.Allocate(mosi.Value, PinDirection.Output);
-                driver.Write(mosi.Value, false);
-            }
-
-            if (miso.HasValue)
-                driver.Allocate(miso.Value, PinDirection.Input);
+            if (mosi != null)
+                mosi.Write(false);
         }
 
         void IDisposable.Dispose()
@@ -61,38 +48,38 @@ namespace Raspberry.IO.SerialPeripheralInterface
 
         public void Close()
         {
-            driver.Release(clock);
-            driver.Release(ss);
-            if (mosi.HasValue)
-                driver.Release(mosi.Value);
-            if (miso.HasValue)
-                driver.Release(miso.Value);
+            clock.Dispose();
+            ss.Dispose();
+            if (mosi != null)
+                mosi.Dispose();
+            if (miso != null)
+                miso.Dispose();
         }
 
         public SpiSlaveSelection SelectSlave()
         {
-            driver.Write(ss, false);
+            ss.Write(false);
             return new SpiSlaveSelection(this);
         }
         
         internal void DeselectSlave()
         {
-            driver.Write(ss, true);
+            ss.Write(true);
         }
 
         public void Synchronize()
         {
-            driver.Write(clock, true);
+            clock.Write(true);
             Timer.Sleep(1);
-            driver.Write(clock, false);
+            clock.Write(false);
         }
 
         public void Write(bool data)
         {
-            if (!mosi.HasValue)
+            if (mosi == null)
                 throw new NotSupportedException("No MOSI pin has been provided");
 
-            driver.Write(mosi.Value, data);
+            mosi.Write(data);
             Synchronize();
         }
 
@@ -130,11 +117,11 @@ namespace Raspberry.IO.SerialPeripheralInterface
 
         public bool Read()
         {
-            if (!miso.HasValue)
+            if (miso == null)
                 throw new NotSupportedException("No MISO pin has been provided");
 
             Synchronize();
-            return driver.Read(miso.Value);
+            return miso.Read();
         }
 
         public ulong Read(int bitCount)

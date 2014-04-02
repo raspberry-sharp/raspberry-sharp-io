@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Raspberry.IO.Components;
+using Raspberry.IO;
 
 namespace Test.Gpio.HD44780
 {

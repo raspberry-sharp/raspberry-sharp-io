@@ -83,6 +83,10 @@
       <Project>{63B8403E-BC56-43F9-A045-F61ECC3871F3}</Project>
       <Name>Raspberry.IO.InterIntegratedCircuit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
+      <Project>{D2E41147-5BF6-4109-A497-C76284F3C020}</Project>
+      <Name>Raspberry.IO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
