@@ -34,29 +34,36 @@ namespace Test.Gpio.PCA9685
 
             if (Environment.OSVersion.Platform != PlatformID.Unix)
             {
-                log.Info("Windows detected. Exiting");
+                log.Warn("Windows detected. Exiting");
                 return;
             }
             
             log.Info("Connecting...");
-            
-            using (var driver = new I2cDriver(options.SdaPin.ToProcessor(), options.SclPin.ToProcessor()))
+
+            try
             {
-                log.Info("Creating device...");
-                var device = Pca9685Connection.Create(driver.Connect(options.DeviceAddress));
-
-                log.Info("Setting frequency...");
-                device.SetPwmUpdateRate(options.PwmFrequency);
-                while (!Console.KeyAvailable)
+                using (var driver = new I2cDriver(options.SdaPin.ToProcessor(), options.SclPin.ToProcessor()))
                 {
-                    log.Info(m => m("Set channel={0} to {1}", options.Channel, options.PwmOn));
-                    device.SetPwm(options.Channel, 0, options.PwmOn);
-                    Thread.Sleep(1000);
-                    log.Info(m => m("Set channel={0} to {1}", options.Channel, options.PwmOff));
-                    device.SetPwm(options.Channel, 0, options.PwmOff);
-                    Thread.Sleep(1000);
-                }
+                    log.Info("Creating device...");
+                    var device = Pca9685Connection.Create(driver.Connect(options.DeviceAddress));
 
+                    log.Info("Setting frequency...");
+                    device.SetPwmUpdateRate(options.PwmFrequency);
+                    while (!Console.KeyAvailable)
+                    {
+                        log.Info(m => m("Set channel={0} to {1}", options.Channel, options.PwmOn));
+                        device.SetPwm(options.Channel, 0, options.PwmOn);
+                        Thread.Sleep(1000);
+                        log.Info(m => m("Set channel={0} to {1}", options.Channel, options.PwmOff));
+                        device.SetPwm(options.Channel, 0, options.PwmOff);
+                        Thread.Sleep(1000);
+                    }
+                    log.Info("Key pressed. Exiting.");
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                log.Error("Failed to connect? Do you have a Pca9685 IC attached to the i2c line and powered on?", e);
             }
         }
 
