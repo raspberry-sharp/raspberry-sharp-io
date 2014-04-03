@@ -56,22 +56,22 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
+    <ProjectReference Include="..\..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
       <Project>{8388CFCA-E3DB-43F7-B049-2CB195211CE8}</Project>
       <Name>Raspberry.IO.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
+    <ProjectReference Include="..\..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
       <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
+    <ProjectReference Include="..\..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
       <Project>{63B8403E-BC56-43F9-A045-F61ECC3871F3}</Project>
       <Name>Raspberry.IO.InterIntegratedCircuit</Name>
     </ProjectReference>

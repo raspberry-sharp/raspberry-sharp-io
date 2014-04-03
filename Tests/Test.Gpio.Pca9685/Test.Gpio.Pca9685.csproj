@@ -48,7 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Pca9685Options.cs" />
@@ -56,15 +56,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
+    <ProjectReference Include="..\..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
       <Project>{8388cfca-e3db-43f7-b049-2cb195211ce8}</Project>
       <Name>Raspberry.IO.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
+    <ProjectReference Include="..\..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
       <Project>{281c71ed-c36d-408e-8baa-75c381dc17e7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
+    <ProjectReference Include="..\..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
       <Project>{63b8403e-bc56-43f9-a045-f61ecc3871f3}</Project>
       <Name>Raspberry.IO.InterIntegratedCircuit</Name>
     </ProjectReference>
