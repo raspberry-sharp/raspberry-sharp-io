@@ -1,6 +1,10 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-bin
-obj
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
 
 # mstest test results
 TestResults
@@ -9,6 +13,7 @@ TestResults
 **.user
 **.suo
 **.sdf  
+*.sln.docstates
 
 # resharper  
 /_[Rr]e[Ss]harper.*  
@@ -21,6 +26,12 @@ _[Rr]e[Ss]harper.*
 **/[Tt]humbs.db
 **/[Dd]esktop.ini
 
-#Nuget packages
+# Nuget packages
 packages/*
+!packages/repositories.config
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
 
