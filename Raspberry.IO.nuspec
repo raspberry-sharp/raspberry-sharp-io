@@ -35,6 +35,10 @@
     <file src="Raspberry.IO\bin\release\Raspberry.IO.pdb" target="lib\net40" />
     <file src="Raspberry.IO\bin\release\Raspberry.IO.xml" target="lib\net40" />
 
+    <file src="Raspberry.IO.Interop\bin\release\Raspberry.IO.Interop.dll" target="lib\net40" />
+    <file src="Raspberry.IO.Interop\bin\release\Raspberry.IO.Interop.pdb" target="lib\net40" />
+    <file src="Raspberry.IO.Interop\bin\release\Raspberry.IO.Interop.xml" target="lib\net40" />
+
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.dll" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.pdb" target="lib\net40" />
     <file src="Raspberry.IO.GeneralPurpose\bin\release\Raspberry.IO.GeneralPurpose.xml" target="lib\net40" />

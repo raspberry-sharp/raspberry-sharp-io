@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using Raspberry.IO.Interop;
 
 #endregion
 
@@ -28,20 +29,18 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryGpioConnectionDriver"/> class.
         /// </summary>
-        public GpioConnectionDriver()
-        {
-            var memoryFile = Interop.open("/dev/mem", Interop.O_RDWR + Interop.O_SYNC);
-            try
-            {
-                gpioAddress = Interop.mmap(IntPtr.Zero, Interop.BCM2835_BLOCK_SIZE, Interop.PROT_READ | Interop.PROT_WRITE, Interop.MAP_SHARED, memoryFile, Interop.BCM2835_GPIO_BASE);
+        public GpioConnectionDriver() {
+            
+            using (var memoryFile = UnixFile.Open("/dev/mem", UnixFileMode.ReadWrite | UnixFileMode.Synchronized)) {
+                gpioAddress = MemoryMap.Create(
+                    IntPtr.Zero, 
+                    Interop.BCM2835_BLOCK_SIZE,
+                    MemoryProtection.ReadWrite,
+                    MemoryFlags.Shared, 
+                    memoryFile.Descriptor,
+                    Interop.BCM2835_GPIO_BASE
+                );
             }
-            finally
-            {
-                Interop.close(memoryFile);
-            }
-
-            if (gpioAddress == (IntPtr)Interop.MAP_FAILED)
-                throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         ~GpioConnectionDriver()
         {
-            Interop.munmap(gpioAddress, Interop.BCM2835_BLOCK_SIZE);
+            MemoryMap.Close(gpioAddress, Interop.BCM2835_BLOCK_SIZE);
         }
 
         #endregion
@@ -272,11 +271,12 @@ namespace Raspberry.IO.GeneralPurpose
                 var pinPoll = new PinPoll();
 
                 pinPoll.PollDescriptor = Interop.epoll_create(1);
-                if (pinPoll.PollDescriptor.ToInt64() < 0)
-                    throw new IOException("epoll_create failed with the following return value: " + pinPoll.PollDescriptor.ToInt64());
+                if (pinPoll.PollDescriptor < 0)
+                    throw new IOException("epoll_create failed with the following return value: " + pinPoll.PollDescriptor);
 
                 var valuePath = Path.Combine(gpioPath, string.Format("gpio{0}/value", (int)pin));
-                pinPoll.FileDescriptor = Interop.open(valuePath, Interop.O_RDONLY | Interop.O_NONBLOCK);
+                
+                pinPoll.FileDescriptor = UnixFile.OpenFileDescriptor(valuePath, UnixFileMode.ReadOnly | UnixFileMode.NonBlocking);
 
                 var ev = new Interop.epoll_event
                 {
@@ -308,8 +308,8 @@ namespace Raspberry.IO.GeneralPurpose
                 Marshal.FreeHGlobal(poll.InEventPtr);
                 Marshal.FreeHGlobal(poll.OutEventPtr);
 
-                Interop.close(poll.PollDescriptor);
-                Interop.close(poll.FileDescriptor);
+                UnixFile.CloseFileDescriptor(poll.PollDescriptor);
+                UnixFile.CloseFileDescriptor(poll.FileDescriptor);
 
                 if (controlResult != 0)
                     throw new IOException("epoll_ctl(EPOLL_CTL_DEL) failed with the following return value: " + controlResult);
@@ -403,8 +403,8 @@ namespace Raspberry.IO.GeneralPurpose
 
         private struct PinPoll
         {
-            public IntPtr FileDescriptor;
-            public IntPtr PollDescriptor;
+            public int FileDescriptor;
+            public int PollDescriptor;
             public IntPtr InEventPtr;
             public IntPtr OutEventPtr;
         }

@@ -53,6 +53,19 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controllers\Tlc59711\ExtensionMethods\ByteExtensionMethods.cs" />
+    <Compile Include="Controllers\Tlc59711\IPwmChannels.cs" />
+    <Compile Include="Controllers\Tlc59711\IPwmDevice.cs" />
+    <Compile Include="Controllers\Tlc59711\ITlc59711Cluster.cs" />
+    <Compile Include="Controllers\Tlc59711\ITlc59711Connection.cs" />
+    <Compile Include="Controllers\Tlc59711\ITlc59711Device.cs" />
+    <Compile Include="Controllers\Tlc59711\ITlc59711Settings.cs" />
+    <Compile Include="Controllers\Tlc59711\Tlc59711Channels.cs" />
+    <Compile Include="Controllers\Tlc59711\Tlc59711Cluster.cs" />
+    <Compile Include="Controllers\Tlc59711\Tlc59711ClusterChannels.cs" />
+    <Compile Include="Controllers\Tlc59711\Tlc59711Settings.cs" />
+    <Compile Include="Controllers\Tlc59711\Tlc59711Connection.cs" />
+    <Compile Include="Controllers\Tlc59711\Tlc59711Device.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008AnalogPinExtensionMethods.cs" />
     <Compile Include="Controllers\Pca9685\IPwmDevice.cs" />
     <Compile Include="Controllers\Pca9685\PwmChannel.cs" />
@@ -88,6 +101,10 @@
     <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
       <Project>{63B8403E-BC56-43F9-A045-F61ECC3871F3}</Project>
       <Name>Raspberry.IO.InterIntegratedCircuit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Raspberry.IO.Interop\Raspberry.IO.Interop.csproj">
+      <Project>{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}</Project>
+      <Name>Raspberry.IO.Interop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj">
       <Project>{326342E5-0411-40E8-9F2D-563D6B192568}</Project>
