@@ -86,6 +86,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Raspberry.IO.Interop\Raspberry.IO.Interop.csproj">
+      <Project>{689cb6c4-3d23-45da-8e00-87c28aea32d0}</Project>
+      <Name>Raspberry.IO.Interop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
       <Project>{ACE64F17-87E5-43E7-97A0-BDDE19059C61}</Project>
       <Project>{D2E41147-5BF6-4109-A497-C76284F3C020}</Project>

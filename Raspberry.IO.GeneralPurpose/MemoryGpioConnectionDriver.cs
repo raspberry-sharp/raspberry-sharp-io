@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Raspberry.IO.Interop;
 
 #endregion
 
@@ -23,20 +24,17 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryGpioConnectionDriver"/> class.
         /// </summary>
-        public MemoryGpioConnectionDriver()
-        {
-            var memoryFile = Interop.open("/dev/mem", Interop.O_RDWR + Interop.O_SYNC);
-            try
-            {
-                gpioAddress = Interop.mmap(IntPtr.Zero, Interop.BCM2835_BLOCK_SIZE, Interop.PROT_READ | Interop.PROT_WRITE, Interop.MAP_SHARED, memoryFile, Interop.BCM2835_GPIO_BASE);
-            }
-            finally
-            {
-                Interop.close(memoryFile);
-            }
+        public MemoryGpioConnectionDriver() {
 
-            if (gpioAddress == (IntPtr)Interop.MAP_FAILED)
-                throw new InvalidOperationException();
+            using (var memoryFile = UnixFile.Open("/dev/mem", UnixFileMode.ReadWrite | UnixFileMode.Synchronized)) {
+                gpioAddress = MemoryMap.Create(
+                    IntPtr.Zero, 
+                    Interop.BCM2835_BLOCK_SIZE,
+                    MemoryProtection.ReadWrite, 
+                    MemoryFlags.Shared, 
+                    memoryFile.Descriptor,
+                    Interop.BCM2835_GPIO_BASE);
+            }
         }
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         ~MemoryGpioConnectionDriver()
         {
-            Interop.munmap(gpioAddress, Interop.BCM2835_BLOCK_SIZE);
+            MemoryMap.Close(gpioAddress, Interop.BCM2835_BLOCK_SIZE);
         }
         
         #endregion
