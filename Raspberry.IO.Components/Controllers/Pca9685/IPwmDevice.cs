@@ -5,6 +5,8 @@
     /// </summary>
     public interface IPwmDevice
     {
+        #region Methods
+
         /// <summary>
         /// Sets the PWM update rate.
         /// </summary>
@@ -25,5 +27,7 @@
         /// <param name="channel">The channel.</param>
         /// <param name="fullOn">if set to <c>true</c>, all values are on; otherwise they are all off.</param>
         void SetFull(PwmChannel channel, bool fullOn);
+
+        #endregion
     }
 }

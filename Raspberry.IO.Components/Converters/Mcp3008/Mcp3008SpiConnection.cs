@@ -47,6 +47,11 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
 
         #region Methods
 
+        /// <summary>
+        /// Reads the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel.</param>
+        /// <returns>The value</returns>
         public decimal Read(Mcp3008Channel channel)
         {
             using(spiConnection.SelectSlave())
@@ -70,6 +75,9 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
             }
         }
 
+        /// <summary>
+        /// Closes this instance.
+        /// </summary>
         public void Close()
         {
             spiConnection.Close();

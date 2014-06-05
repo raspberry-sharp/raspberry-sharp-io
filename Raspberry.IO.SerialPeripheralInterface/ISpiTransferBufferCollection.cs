@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region References
+
+using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
@@ -8,6 +12,8 @@ namespace Raspberry.IO.SerialPeripheralInterface
     /// </summary>
     public interface ISpiTransferBufferCollection : IDisposable, IEnumerable<ISpiTransferBuffer>
     {
+        #region Properties
+
         /// <summary>
         /// Number of <see cref="ISpiTransferBuffer"/> structures.
         /// </summary>
@@ -19,12 +25,18 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// <param name="index">Index</param>
         /// <returns>The requested <see cref="ISpiTransferBuffer"/></returns>
         ISpiTransferBuffer this[int index] { get; }
-        
+
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// A method that returns a specific <see cref="ISpiTransferBuffer"/> from the collection.
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns>The requested <see cref="ISpiTransferBuffer"/></returns>
         ISpiTransferBuffer Get(int index);
+
+        #endregion
     }
 }

@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region References
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Raspberry.IO.Interop;
+
+#endregion
 
 namespace Raspberry.IO.Components.Controllers.Tlc59711
 {
@@ -22,6 +26,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         #endregion
 
         #region Instance Management
+
         /// <summary>
         /// Creates a new instance of the <see cref="Tlc59711Cluster"/> class.
         /// </summary>
@@ -51,6 +56,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
             this.devices = devices.ToArray();
             channels = new Tlc59711ClusterChannels(this.devices);
         }
+
         #endregion
 
         #region Properties

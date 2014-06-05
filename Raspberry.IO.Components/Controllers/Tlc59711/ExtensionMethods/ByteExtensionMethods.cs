@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region References
+
+using System;
+
+#endregion
 
 namespace Raspberry.IO.Components.Controllers.Tlc59711
 {
@@ -9,6 +13,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         #endregion
 
         #region Methods
+
         public static void ThrowOnInvalidBrightnessControl(this byte value) {
             if (value <= BRIGHTNESS_CONTROL_MAX)
                 return;
@@ -17,6 +22,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
 
             throw new ArgumentException(message, "value");
         }
+
         #endregion
     }
 }

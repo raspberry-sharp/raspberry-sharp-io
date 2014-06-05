@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region References
+
+using System;
 using Raspberry.IO.Interop;
+
+#endregion
 
 namespace Raspberry.IO.Components.Controllers.Tlc59711
 {
@@ -81,6 +85,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         #endregion
 
         #region Private Helpers
+
         private static void ThrowOnInvalidChannelIndex(int index) {
             if (index >= 0 && index < NUMBER_OF_CHANNELS) {
                 return;
@@ -89,6 +94,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
             var message = string.Format("The index must be greater or equal than 0 and lower than {0}.", NUMBER_OF_CHANNELS);
             throw new ArgumentOutOfRangeException("index", index, message);
         }
+
         #endregion
     }
 }

@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region References
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+
+#endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
@@ -16,6 +20,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         #endregion
 
         #region Instance Management
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SpiTransferBufferCollection"/> class.
         /// </summary>
@@ -60,9 +65,11 @@ namespace Raspberry.IO.SerialPeripheralInterface
                 transferBuffers = new ISpiTransferBuffer[0];
             }
         }
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Number of <see cref="ISpiTransferBuffer"/> structures.
         /// </summary>
@@ -78,9 +85,11 @@ namespace Raspberry.IO.SerialPeripheralInterface
         public ISpiTransferBuffer this[int index] {
             get { return transferBuffers[index]; }
         }
+
         #endregion
 
         #region Methods
+
         /// <summary>
         /// A method that returns a specific <see cref="ISpiTransferBuffer"/> from the collection.
         /// </summary>
@@ -105,6 +114,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
+
         #endregion
     }
 }

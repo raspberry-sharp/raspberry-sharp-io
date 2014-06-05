@@ -3,12 +3,16 @@
     /// <summary>
     /// TLC59711 settings
     /// </summary>
-    public interface ITlc59711Settings {
+    public interface ITlc59711Settings
+    {
+
+        #region Properties
+
         /// <summary>
         /// BLANK: If set to <c>true</c> all outputs are forced off. Default value is <c>true</c>.
         /// </summary>
         bool Blank { get; set; }
-        
+
         /// <summary>
         /// DSPRPT: Auto display repeat mode. If <c>false</c> the auto repeat function is disabled. 
         /// </summary>
@@ -50,7 +54,7 @@
         /// If <c>false</c>, OUTXn are turned on or off at the falling edge of the selected clock.
         /// </remarks>
         bool ReferenceClockEdge { get; set; }
-        
+
         /// <summary>
         /// BCR: Global brightness control for OUTR0-3. Default value is <c>127</c>.
         /// </summary>
@@ -60,7 +64,7 @@
         /// maximum output current. 
         /// </remarks>
         byte BrightnessControlR { get; set; }
-        
+
         /// <summary>
         /// BCG: Global brightness control for OUTG0-3. Default value is <c>127</c>.
         /// </summary>
@@ -70,7 +74,7 @@
         /// maximum output current. 
         /// </remarks>
         byte BrightnessControlG { get; set; }
-        
+
         /// <summary>
         /// BCB: Global brightness control for OUTB0-3. Default value is <c>127</c>.
         /// </summary>
@@ -80,5 +84,7 @@
         /// maximum output current. 
         /// </remarks>
         byte BrightnessControlB { get; set; }
+
+        #endregion
     }
 }

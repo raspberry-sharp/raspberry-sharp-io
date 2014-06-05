@@ -5,9 +5,13 @@
     /// </summary>
     public interface ITlc59711Device : IPwmDevice, ITlc59711Settings
     {
+        #region Methods
+
         /// <summary>
         /// Initializes the device with default values.
         /// </summary>
         void Reset();
+
+        #endregion
     }
 }

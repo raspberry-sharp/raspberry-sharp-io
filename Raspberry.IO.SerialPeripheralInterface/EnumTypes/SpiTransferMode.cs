@@ -12,10 +12,12 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// Write data to the chip.
         /// </summary>
         Write = 1,
+
         /// <summary>
         /// Read data from the chip.
         /// </summary>
         Read = 2,
+
         /// <summary>
         /// Write and read data simultaneously.
         /// </summary>

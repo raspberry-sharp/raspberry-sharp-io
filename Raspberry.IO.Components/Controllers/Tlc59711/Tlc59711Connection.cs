@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region References
+
+using System;
 using Raspberry.IO.SerialPeripheralInterface;
+
+#endregion
 
 namespace Raspberry.IO.Components.Controllers.Tlc59711
 {
@@ -22,6 +26,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         #endregion
 
         #region Instance Management
+
         /// <summary>
         /// Creates a new instance of the <see cref="Tlc59711Connection"/> class and initializes it.
         /// </summary>
@@ -69,6 +74,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
                 connection.Dispose();
             }
         }
+
         #endregion
 
         #region Properties 

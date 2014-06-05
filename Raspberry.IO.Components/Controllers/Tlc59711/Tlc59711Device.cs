@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region References
+
+using System;
 using Raspberry.IO.Interop;
+
+#endregion
 
 namespace Raspberry.IO.Components.Controllers.Tlc59711
 {

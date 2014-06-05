@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region References
+
+using System;
 using System.Linq;
 using Raspberry.IO.Interop;
+
+#endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
@@ -117,6 +121,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Sets the <see cref="Delay"/>.
         /// </summary>
