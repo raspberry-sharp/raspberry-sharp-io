@@ -10,12 +10,10 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
 
         #region Methods
         public static void ThrowOnInvalidBrightnessControl(this byte value) {
-            if (value <= BRIGHTNESS_CONTROL_MAX) {
+            if (value <= BRIGHTNESS_CONTROL_MAX)
                 return;
-            }
 
-            var message = String.Format("The maximum value for brightness control is {0}. You set a value of {1}.",
-                BRIGHTNESS_CONTROL_MAX, value);
+            var message = String.Format("The maximum value for brightness control is {0}. You set a value of {1}.", BRIGHTNESS_CONTROL_MAX, value);
 
             throw new ArgumentException(message, "value");
         }

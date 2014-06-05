@@ -28,13 +28,11 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         /// <param name="memory">Memory to work with.</param>
         /// <param name="numberOfDevices">Number of <see cref="ITlc59711Device"/>s connected together.</param>
         public Tlc59711Cluster(IMemory memory, int numberOfDevices) {
-            if (ReferenceEquals(memory, null)) {
+            if (ReferenceEquals(memory, null))
                 throw new ArgumentNullException("memory");
-            }
-            if (numberOfDevices <= 0) {
+            if (numberOfDevices <= 0)
                 throw new ArgumentOutOfRangeException("numberOfDevices", "You cannot create a cluster with less than one device.");
-            }
-            
+
             var minimumRequiredMemorySize = (numberOfDevices * COMMAND_SIZE);
             if (memory.Length < minimumRequiredMemorySize) {
                 var message = string.Format("For {0} device(s) you have to provide a minimum of {1} bytes of memory.", numberOfDevices, minimumRequiredMemorySize);

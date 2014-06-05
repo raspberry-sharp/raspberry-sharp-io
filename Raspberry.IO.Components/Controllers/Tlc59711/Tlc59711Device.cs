@@ -38,23 +38,15 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         #endregion
 
         #region Instance Management
-        /// <summary>
-        /// Creates a new instance of the <see cref="Tlc59711Device"/> class.
-        /// </summary>
-        /// <param name="memory">Memory to work with.</param>
-        public Tlc59711Device(IMemory memory)
-            :this(memory, null)
-        {}
 
         /// <summary>
         /// Creates a new instance of the <see cref="Tlc59711Device"/> class.
         /// </summary>
         /// <param name="memory">Memory to work with.</param>
         /// <param name="settings">Initial settings</param>
-        public Tlc59711Device(IMemory memory, ITlc59711Settings settings) {
-            if (ReferenceEquals(memory, null)) {
+        public Tlc59711Device(IMemory memory, ITlc59711Settings settings = null) {
+            if (ReferenceEquals(memory, null))
                 throw new ArgumentNullException("memory");
-            }
 
             if (memory.Length < COMMAND_SIZE) {
                 throw new ArgumentException(

@@ -37,18 +37,15 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         /// </summary>
         /// <param name="devices">TLC59711 devices</param>
         public Tlc59711ClusterChannels(IEnumerable<ITlc59711Device> devices) {
-            if (devices == null) {
+            if (devices == null)
                 throw new ArgumentNullException("devices");
-            }
 
             foreach (var device in devices) {
-                if (ReferenceEquals(device, null)) {
+                if (ReferenceEquals(device, null))
                     continue;
-                }
 
-                for (var i = 0; i < device.Channels.Count; i++) {
+                for (var i = 0; i < device.Channels.Count; i++)
                     deviceMap.Add(new Mapping(device, i));
-                }
             }
         }
 

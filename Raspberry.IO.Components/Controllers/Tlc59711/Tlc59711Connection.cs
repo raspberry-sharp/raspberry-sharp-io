@@ -29,13 +29,11 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         /// <param name="initializeWithDefault">If <c>true</c> the SPI connection will be initialized with common data transfers settings.</param>
         /// <param name="numberOfDevices">Number of <see cref="ITlc59711Device"/>s connected together.</param>
         public Tlc59711Connection(INativeSpiConnection connection, bool initializeWithDefault, int numberOfDevices) {
-            if (ReferenceEquals(connection, null)) {
+            if (ReferenceEquals(connection, null))
                 throw new ArgumentNullException("connection");
-            }
 
-            if (numberOfDevices <= 0) {
+            if (numberOfDevices <= 0)
                 throw new ArgumentOutOfRangeException("numberOfDevices", "You need at least one device.");
-            }
 
             this.connection = connection;
             

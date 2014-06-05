@@ -108,8 +108,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// <param name="transferMode">Specifies read and/or write mode.</param>
         public SpiTransferBuffer(int lengthInBytes, SpiTransferMode transferMode) {
             if (transferMode == 0) {
-                throw new ArgumentException("An appropriate transfer mode must be specified (read/write)",
-                    "transferMode");
+                throw new ArgumentException("An appropriate transfer mode must be specified (read/write)", "transferMode");
             }
 
             mode = transferMode;
