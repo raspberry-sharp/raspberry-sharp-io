@@ -85,14 +85,14 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             width = settings.ScreenWidth;
             height = settings.ScreenHeight;
             if (height < 1 || height > 2)
-                throw new ArgumentOutOfRangeException("ScreenHeight", height, "Screen must have either 1 or 2 rows");
+                throw new ArgumentOutOfRangeException("settings", height, "ScreenHeight must be either 1 or 2 rows");
             if (width * height > 80)
                 throw new ArgumentException("At most 80 characters are allowed");
 
             if (settings.PatternWidth != 5)
-                throw new ArgumentOutOfRangeException("PatternWidth", settings.PatternWidth, "Pattern must be 5 pixels width");
+                throw new ArgumentOutOfRangeException("settings", settings.PatternWidth, "PatternWidth must be 5 pixels");
             if (settings.PatternHeight != 8 && settings.PatternHeight != 10)
-                throw new ArgumentOutOfRangeException("PatternHeight", settings.PatternWidth, "Pattern must be either 7 or 10 pixels height");
+                throw new ArgumentOutOfRangeException("settings", settings.PatternWidth, "PatternWidth must be either 7 or 10 pixels height");
             if (settings.PatternHeight == 10 && height == 2)
                 throw new ArgumentException("10 pixels height pattern cannot be used with 2 rows");
 

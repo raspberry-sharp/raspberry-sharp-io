@@ -1,12 +1,19 @@
+#region References
+
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Raspberry.IO.GeneralPurpose;
+
+#endregion
 
 namespace Test.Gpio.Chaser
 {
     internal static class CommandLineExtensionMethods
     {
+        #region Methods
+
         public static bool GetLoop(this IEnumerable<string> args)
         {
             return args.SkipWhile(a => a != "-loop").Any();
@@ -31,6 +38,15 @@ namespace Test.Gpio.Chaser
         {
             var driverName = args.SkipWhile(a => a != "-driver").Skip(1).DefaultIfEmpty("").First();
 
+            return GetDriver(driverName);
+        }
+
+        #endregion
+
+        #region Private Helpers
+
+        private static IGpioConnectionDriver GetDriver(string driverName)
+        {
             switch (driverName)
             {
                 case "default":
@@ -43,8 +59,11 @@ namespace Test.Gpio.Chaser
                     return null;
 
                 default:
-                    throw new InvalidOperationException("Unsupported driver");
+                    throw new ArgumentOutOfRangeException("driverName", driverName,
+                        string.Format(CultureInfo.InvariantCulture, "{0} is not a valid driver name", driverName));
             }
         }
+
+        #endregion
     }
 }

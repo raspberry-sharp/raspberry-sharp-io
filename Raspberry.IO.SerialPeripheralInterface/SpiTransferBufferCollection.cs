@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Raspberry.IO.SerialPeripheralInterface
@@ -23,7 +24,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// <param name="transferMode">Transfer mode</param>
         public SpiTransferBufferCollection(int numberOfMessages, int messageLengthInBytes, SpiTransferMode transferMode) {
             if (numberOfMessages <= 0) {
-                throw new ArgumentOutOfRangeException("numberOfMessages");
+                throw new ArgumentOutOfRangeException("numberOfMessages", numberOfMessages, string.Format(CultureInfo.InvariantCulture, "{0} is not a valid number of messages", numberOfMessages));
             }
 
             transferBuffers = new ISpiTransferBuffer[numberOfMessages];

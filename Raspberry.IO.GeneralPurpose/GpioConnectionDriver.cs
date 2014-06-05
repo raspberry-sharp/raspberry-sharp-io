@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using Raspberry.IO.Interop;
@@ -130,7 +131,7 @@ namespace Raspberry.IO.GeneralPurpose
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException("resistor");
+                    throw new ArgumentOutOfRangeException("resistor", resistor, string.Format(CultureInfo.InvariantCulture, "{0} is not a valid value for pin resistor", resistor));
             }
 
             WriteResistor(pud);
@@ -180,9 +181,9 @@ namespace Raspberry.IO.GeneralPurpose
                         break;
                 }
                 else if (waitResult == 0)
-                    throw new TimeoutException(string.Format("Operation timed out after waiting {0}ms for the pin {1} to be {2}", actualTimeout, pin, (waitForUp ? "up" : "down")));
+                    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "Operation timed out after waiting {0}ms for the pin {1} to be {2}", actualTimeout, pin, (waitForUp ? "up" : "down")));
                 else
-                    throw new IOException("epoll_wait failed");
+                    throw new IOException("Call to epoll_wait API failed");
             }
         }
 
@@ -254,10 +255,11 @@ namespace Raspberry.IO.GeneralPurpose
         {
             if (timeout > 1)
                 return (int)timeout;
-            else if (timeout > 0)
+            
+            if (timeout > 0)
                 return 1;
-            else 
-                return 5000;
+            
+            return 5000;
         }
 
         private void InitializePoll(ProcessorPin pin)
@@ -272,7 +274,7 @@ namespace Raspberry.IO.GeneralPurpose
 
                 pinPoll.PollDescriptor = Interop.epoll_create(1);
                 if (pinPoll.PollDescriptor < 0)
-                    throw new IOException("epoll_create failed with the following return value: " + pinPoll.PollDescriptor);
+                    throw new IOException("Call to epoll_create(1) API failed with the following return value: " + pinPoll.PollDescriptor);
 
                 var valuePath = Path.Combine(gpioPath, string.Format("gpio{0}/value", (int)pin));
                 
@@ -289,7 +291,7 @@ namespace Raspberry.IO.GeneralPurpose
 
                 var controlResult = Interop.epoll_ctl(pinPoll.PollDescriptor, Interop.EPOLL_CTL_ADD, pinPoll.FileDescriptor, pinPoll.InEventPtr);
                 if (controlResult != 0)
-                    throw new IOException("epoll_ctl(EPOLL_CTL_ADD) failed with the following return value: " + controlResult);
+                    throw new IOException("Call to epoll_ctl(EPOLL_CTL_ADD) API failed with the following return value: " + controlResult);
 
                 pinPoll.OutEventPtr = Marshal.AllocHGlobal(64);
                 polls[pin] = pinPoll;
@@ -312,7 +314,7 @@ namespace Raspberry.IO.GeneralPurpose
                 UnixFile.CloseFileDescriptor(poll.FileDescriptor);
 
                 if (controlResult != 0)
-                    throw new IOException("epoll_ctl(EPOLL_CTL_DEL) failed with the following return value: " + controlResult);
+                    throw new IOException("Call to epoll_ctl(EPOLL_CTL_DEL) API failed with the following return value: " + controlResult);
             }
         }
 
@@ -329,7 +331,7 @@ namespace Raspberry.IO.GeneralPurpose
                 case PinDetectedEdges.None:
                     return "none";
                 default:
-                    throw new ArgumentOutOfRangeException("edges");
+                    throw new ArgumentOutOfRangeException("edges", edges, string.Format(CultureInfo.InvariantCulture, "{0} is not a valid value for edge detection", edges));
             }
         }
 

@@ -60,7 +60,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="resistor">The resistor.</param>
         public void SetPinResistor(ProcessorPin pin, PinResistor resistor)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException("Resistor are not supported by file GPIO connection driver");
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </remarks>
         public void SetPinDetectedEdges(ProcessorPin pin, PinDetectedEdges edges)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException("Edge detection is not supported by file GPIO connection driver");
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Raspberry.IO.GeneralPurpose
             while (Read(pin) != waitForUp)
             {
                 if (DateTime.Now.Ticks - startWait.Ticks >= 10000 * timeout)
-                    throw new TimeoutException("A timeout occurred while waiting");
+                    throw new TimeoutException("A timeout occurred while waiting for pin status to change");
             }
         }
 

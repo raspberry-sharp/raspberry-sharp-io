@@ -127,7 +127,7 @@ namespace Raspberry.IO.GeneralPurpose
                     OnPinStatusChanged(new PinStatusEventArgs {Enabled = value, Configuration = pin});
                 }
                 else
-                    throw new InvalidOperationException("Input pin value cannot be set");
+                    throw new InvalidOperationException("Value of input pins cannot be modified");
 
             }
         }

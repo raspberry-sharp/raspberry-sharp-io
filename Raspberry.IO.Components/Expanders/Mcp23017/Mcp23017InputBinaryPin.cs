@@ -33,7 +33,7 @@ namespace Raspberry.IO.Components.Expanders.Mcp23017
             while (Read() != waitForUp)
             {
                 if (DateTime.Now.Ticks - startWait.Ticks >= 10000 * timeout)
-                    throw new TimeoutException("A timeout occurred while waiting");
+                    throw new TimeoutException("A timeout occurred while waiting for pin status to change");
             }
         }
     }
