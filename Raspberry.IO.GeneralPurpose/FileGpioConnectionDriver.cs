@@ -3,6 +3,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Security;
+using System.Threading;
 
 #endregion
 
@@ -49,10 +51,15 @@ namespace Raspberry.IO.GeneralPurpose
                 streamWriter.Write((int)pin);
 
             var filePath = Path.Combine(gpioId, "direction");
-            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
-                streamWriter.Write(direction == PinDirection.Input ? "in" : "out");
+            try {
+                SetPinDirection(filePath, direction);
+            } catch (UnauthorizedAccessException) {
+                // program hasn't been started as root, give it a second to correct file permissions
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+                SetPinDirection(filePath, direction);
+            }
         }
-
+        
         /// <summary>
         /// Sets the pin resistor.
         /// </summary>
@@ -153,6 +160,18 @@ namespace Raspberry.IO.GeneralPurpose
                 .Aggregate(
                     ProcessorPins.None, 
                     (a, p) => a | p);
+        }
+
+        #endregion
+
+        #region Private Helpers
+
+        private static void SetPinDirection(string filePath, PinDirection direction) {
+            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false)) {
+                streamWriter.Write(direction == PinDirection.Input
+                    ? "in"
+                    : "out");
+            }
         }
 
         #endregion
