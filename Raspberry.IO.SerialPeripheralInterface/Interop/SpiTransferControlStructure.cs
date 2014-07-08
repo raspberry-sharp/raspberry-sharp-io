@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region References
+
+using System;
 using System.Runtime.InteropServices;
+
+#endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
@@ -9,11 +13,13 @@ namespace Raspberry.IO.SerialPeripheralInterface
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
     public struct SpiTransferControlStructure
     {
+        #region Properties
+
         /// <summary>
         /// Holds pointer to userspace buffer with transmit data, or 0. If no data is provided, zeroes are shifted out
         /// </summary>
         public UInt64 Tx;
-        
+
         /// <summary>
         /// Holds pointer to userspace buffer for receive data, or 0
         /// </summary>
@@ -23,7 +29,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// Length of <see cref="Tx"/> and <see cref="Rx"/> buffers, in bytes
         /// </summary>
         public UInt32 Length;
-        
+
         /// <summary>
         /// Temporary override of the device's bitrate (in Hz)
         /// </summary>
@@ -48,5 +54,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// Pad
         /// </summary>
         public UInt32 Pad;
+
+        #endregion
     }
 }

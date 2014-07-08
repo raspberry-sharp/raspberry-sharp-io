@@ -1,6 +1,7 @@
 #region References
 
 using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
@@ -55,7 +56,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
             }
 
             if (bscAddress == (IntPtr) Interop.MAP_FAILED)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Unable to access device memory");
 
             // Set the I2C pins to the Alt 0 function to enable I2C access on them
             SetPinMode((uint) (int) sdaPin, Interop.BCM2835_GPIO_FSEL_ALT0); // SDA
@@ -177,11 +178,11 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 }
 
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_ERR) != 0) // Received a NACK
-                    throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_NACK");
+                    throw new InvalidOperationException("Read operation failed with BCM2835_I2C_REASON_ERROR_NACK status");
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_CLKT) != 0) // Received Clock Stretch Timeout
-                    throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_CLKT");
+                    throw new InvalidOperationException("Read operation failed with BCM2835_I2C_REASON_ERROR_CLKT status");
                 if (remaining != 0) // Not all data is sent
-                    throw new InvalidOperationException(string.Format("BCM2835_I2C_REASON_ERROR_DATA. Missing {0} bytes", remaining));
+                    throw new InvalidOperationException(string.Format("Read operation failed with BCM2835_I2C_REASON_ERROR_DATA status, missing {0} bytes", remaining));
                 
                 WriteUInt32Mask(control, Interop.BCM2835_BSC_S_DONE, Interop.BCM2835_BSC_S_DONE);
             }
@@ -236,11 +237,11 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 }
 
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_ERR) != 0) // Received a NACK
-                    throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_NACK");
+                    throw new InvalidOperationException("Read operation failed with BCM2835_I2C_REASON_ERROR_NACK status");
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_CLKT) != 0) // Received Clock Stretch Timeout
-                    throw new InvalidOperationException("BCM2835_I2C_REASON_ERROR_CLKT");
+                    throw new InvalidOperationException("Read operation failed with BCM2835_I2C_REASON_ERROR_CLKT status");
                 if (remaining != 0) // Not all data is received
-                    throw new InvalidOperationException(string.Format("BCM2835_I2C_REASON_ERROR_DATA. Missing {0} bytes", remaining));
+                    throw new InvalidOperationException(string.Format("Read operation failed with BCM2835_I2C_REASON_ERROR_DATA status, missing {0} bytes", remaining));
 
                 WriteUInt32Mask(control, Interop.BCM2835_BSC_S_DONE, Interop.BCM2835_BSC_S_DONE);
 
@@ -286,17 +287,17 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 case 1:
                     if (sdaPin == ProcessorPin.Pin0 && sclPin == ProcessorPin.Pin1)
                         return Interop.BCM2835_BSC0_BASE;
-                    throw new InvalidOperationException("I2C cannot be initialized for specified pins");
+                    throw new InvalidOperationException("No I2C device exist on the specified pins");
 
                 case 2:
                     if (sdaPin == ProcessorPin.Pin28 && sclPin == ProcessorPin.Pin29)
                         return Interop.BCM2835_BSC0_BASE;
                     if (sdaPin == ProcessorPin.Pin2 && sclPin == ProcessorPin.Pin3)
                         return Interop.BCM2835_BSC1_BASE;
-                    throw new InvalidOperationException("I2C cannot be initialized for specified pins");
+                    throw new InvalidOperationException("No I2C device exist on the specified pins");
 
                 default:
-                    throw new InvalidOperationException("Board revision not supported");
+                    throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Board revision {0} is not supported", GpioConnectionSettings.BoardConnectorRevision));
             }
         }
 

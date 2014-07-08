@@ -2,10 +2,22 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
 {
     public class Mcp4822OutputAnalogPin : IOutputAnalogPin
     {
+        #region Fields
+
         private readonly Mcp4822SpiConnection connection;
         private readonly Mcp4822Channel channel;
         private readonly decimal scale;
 
+        #endregion
+
+        #region Instance Management
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mcp4822OutputAnalogPin"/> class.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
+        /// <param name="channel">The channel.</param>
+        /// <param name="scale">The scale.</param>
         public Mcp4822OutputAnalogPin(Mcp4822SpiConnection connection, Mcp4822Channel channel, decimal scale = 1.0m)
         {
             this.connection = connection;
@@ -13,11 +25,26 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
             this.scale = scale;
         }
 
-        public void Dispose() { }
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+        }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Writes the specified value to the pin.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public void Write(decimal value)
         {
-            connection.Write(channel, value / scale);
+            connection.Write(channel, value/scale);
         }
+
+        #endregion
     }
 }

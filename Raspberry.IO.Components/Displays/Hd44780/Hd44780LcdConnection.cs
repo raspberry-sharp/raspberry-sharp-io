@@ -85,14 +85,14 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             width = settings.ScreenWidth;
             height = settings.ScreenHeight;
             if (height < 1 || height > 2)
-                throw new ArgumentOutOfRangeException("ScreenHeight", height, "Screen must have either 1 or 2 rows");
+                throw new ArgumentOutOfRangeException("settings", height, "ScreenHeight must be either 1 or 2 rows");
             if (width * height > 80)
                 throw new ArgumentException("At most 80 characters are allowed");
 
             if (settings.PatternWidth != 5)
-                throw new ArgumentOutOfRangeException("PatternWidth", settings.PatternWidth, "Pattern must be 5 pixels width");
+                throw new ArgumentOutOfRangeException("settings", settings.PatternWidth, "PatternWidth must be 5 pixels");
             if (settings.PatternHeight != 8 && settings.PatternHeight != 10)
-                throw new ArgumentOutOfRangeException("PatternHeight", settings.PatternWidth, "Pattern must be either 7 or 10 pixels height");
+                throw new ArgumentOutOfRangeException("settings", settings.PatternWidth, "PatternWidth must be either 7 or 10 pixels height");
             if (settings.PatternHeight == 10 && height == 2)
                 throw new ArgumentException("10 pixels height pattern cannot be used with 2 rows");
 
@@ -130,6 +130,12 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether display is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if display is enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool DisplayEnabled
         {
             get { return (displayFlags & DisplayFlags.DisplayOn) == DisplayFlags.DisplayOn; }
@@ -144,6 +150,12 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether cursor is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if cursor is enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool CursorEnabled
         {
             get { return (displayFlags & DisplayFlags.CursorOn) == DisplayFlags.CursorOn; }
@@ -158,6 +170,12 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether cursor is blinking.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if cursor is blinking; otherwise, <c>false</c>.
+        /// </value>
         public bool CursorBlinking
         {
             get { return (displayFlags & DisplayFlags.BlinkOn) == DisplayFlags.BlinkOn; }
@@ -176,6 +194,9 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
         #region Methods
 
+        /// <summary>
+        /// Closes this instance.
+        /// </summary>
         public void Close()
         {
             Clear();
@@ -186,6 +207,9 @@ namespace Raspberry.IO.Components.Displays.Hd44780
                 dataPin.Dispose();
         }
 
+        /// <summary>
+        /// Set cursor to top left corner.
+        /// </summary>
         public void Home()
         {
             WriteCommand(Command.ReturnHome);
@@ -195,6 +219,9 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             Sleep(3);
         }
 
+        /// <summary>
+        /// Clears the display.
+        /// </summary>
         public void Clear()
         {
             WriteCommand(Command.ClearDisplay);
@@ -204,6 +231,10 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             Sleep(3); // Clearing the display takes a long time
         }
 
+        /// <summary>
+        /// Moves the cursor of the specified offset.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
         public void Move(int offset)
         {
             var count = offset > 0 ? offset : -offset;
@@ -211,6 +242,11 @@ namespace Raspberry.IO.Components.Displays.Hd44780
                 WriteCommand(Command.MoveCursor, (int)(CursorShiftFlags.DisplayMove | (offset < 0 ? CursorShiftFlags.MoveLeft : CursorShiftFlags.MoveRight)));
         }
 
+        /// <summary>
+        /// Sets the custom character.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        /// <param name="pattern">The pattern.</param>
         public void SetCustomCharacter(byte character, byte[] pattern)
         {
             if ((functions & Functions.Matrix5x8) == Functions.Matrix5x8)
@@ -219,41 +255,83 @@ namespace Raspberry.IO.Components.Displays.Hd44780
                 Set5x10CustomCharacter(character, pattern);
         }
 
+        /// <summary>
+        /// Writes the line.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="animationDelay">The animation delay.</param>
         public void WriteLine(object value, decimal animationDelay = 0m)
         {
             WriteLine("{0}", value, animationDelay);
         }
 
+        /// <summary>
+        /// Writes the line.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="animationDelay">The animation delay.</param>
         public void WriteLine(string text, decimal animationDelay = 0m)
         {
             Write(text + Environment.NewLine, animationDelay);
         }
 
+        /// <summary>
+        /// Writes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="animationDelay">The animation delay.</param>
         public void Write(object value, decimal animationDelay = 0m)
         {
             Write("{0}", value, animationDelay);
         }
 
+        /// <summary>
+        /// Writes the line.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="values">The values.</param>
         public void WriteLine(string format, params object[] values)
         {
             WriteLine(string.Format(format, values));
         }
 
+        /// <summary>
+        /// Writes the specified format.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="values">The values.</param>
         public void Write(string format, params object[] values)
         {
             Write(string.Format(format, values));
         }
 
+        /// <summary>
+        /// Writes the line.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="animationDelay">The animation delay.</param>
+        /// <param name="values">The values.</param>
         public void WriteLine(string format, decimal animationDelay, params object[] values)
         {
             WriteLine(string.Format(format, values), animationDelay);
         }
 
+        /// <summary>
+        /// Writes the specified format.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="animationDelay">The animation delay.</param>
+        /// <param name="values">The values.</param>
         public void Write(string format, decimal animationDelay, params object[] values)
         {
             Write(string.Format(format, values), animationDelay);
         }
 
+        /// <summary>
+        /// Writes the specified text.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="animationDelay">The animation delay.</param>
         public void Write(string text, decimal animationDelay = 0m)
         {
             var lines = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);

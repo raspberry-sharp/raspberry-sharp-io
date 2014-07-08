@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region References
+
+using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace Raspberry.IO.Components.Controllers.Tlc59711
 {
@@ -32,26 +36,29 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         private readonly List<Mapping> deviceMap = new List<Mapping>();
         #endregion
 
+        #region Instance Management
+
         /// <summary>
         /// Creates a new instance of the <see cref="Tlc59711ClusterChannels"/> class.
         /// </summary>
         /// <param name="devices">TLC59711 devices</param>
-        public Tlc59711ClusterChannels(IEnumerable<ITlc59711Device> devices) {
-            if (devices == null) {
+        public Tlc59711ClusterChannels(IEnumerable<ITlc59711Device> devices)
+        {
+            if (devices == null)
                 throw new ArgumentNullException("devices");
-            }
 
-            foreach (var device in devices) {
-                if (ReferenceEquals(device, null)) {
+            foreach (var device in devices)
+            {
+                if (ReferenceEquals(device, null))
                     continue;
-                }
 
-                for (var i = 0; i < device.Channels.Count; i++) {
+                for (var i = 0; i < device.Channels.Count; i++)
                     deviceMap.Add(new Mapping(device, i));
-                }
             }
         }
 
+        #endregion
+        
         #region Properties
         /// <summary>
         /// Indexer, which will allow client code to use [] notation on the class instance itself to modify PWM channel values.

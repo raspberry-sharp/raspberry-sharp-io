@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region References
+
+using System;
+
+#endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
@@ -7,22 +11,31 @@ namespace Raspberry.IO.SerialPeripheralInterface
     /// </summary>
     public interface INativeSpiConnection : IDisposable
     {
+        #region Properties
+
         /// <summary>
         /// If nonzero, how long to delay (in µ seconds) after the last bit transfer before optionally deselecting the device before the next transfer.
         /// </summary>
         UInt16 Delay { get; }
+
         /// <summary>
         /// Maximum clock speed in Hz.
         /// </summary>
         UInt32 MaxSpeed { get; }
+
         /// <summary>
         /// SPI mode
         /// </summary>
         SpiMode Mode { get; }
+
         /// <summary>
         /// The device's wordsize
         /// </summary>
         byte BitsPerWord { get; }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Sets the <see cref="INativeSpiConnection.Delay"/>.
@@ -63,7 +76,8 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// <param name="messageSizeInBytes">Message size in bytes.</param>
         /// <param name="transferMode">The transfer mode.</param>
         /// <returns>The requested transfer buffer collection.</returns>
-        ISpiTransferBufferCollection CreateTransferBufferCollection(int numberOfMessages, int messageSizeInBytes, SpiTransferMode transferMode);
+        ISpiTransferBufferCollection CreateTransferBufferCollection(int numberOfMessages, int messageSizeInBytes,
+            SpiTransferMode transferMode);
 
         /// <summary>
         /// Starts the SPI data transfer.
@@ -78,5 +92,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// <param name="transferBuffers">The transfer buffers that contain data to be send and/or the received data.</param>
         /// <returns>An <see cref="int"/> that contains the result of the transfer operation.</returns>
         int Transfer(ISpiTransferBufferCollection transferBuffers);
+
+        #endregion
     }
 }

@@ -13,7 +13,6 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
     /// <remarks>See http://ww1.microchip.com/downloads/en/DeviceDoc/22249A.pdf for specifications.</remarks>
     public class Mcp4822SpiConnection : IDisposable
     {
-
         #region Fields
 
         private readonly SpiConnection spiConnection;
@@ -45,11 +44,19 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
 
         #region Methods
 
+        /// <summary>
+        /// Closes this instance.
+        /// </summary>
         public void Close()
         {
             spiConnection.Close();
         }
 
+        /// <summary>
+        /// Writes the specified data.
+        /// </summary>
+        /// <param name="channel">The channel.</param>
+        /// <param name="data">The data.</param>
         public void Write(Mcp4822Channel channel, decimal data)
         {
             using (spiConnection.SelectSlave())

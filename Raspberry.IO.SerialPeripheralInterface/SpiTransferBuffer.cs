@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region References
+
+using System;
 using Raspberry.IO.Interop;
+
+#endregion
 
 namespace Raspberry.IO.SerialPeripheralInterface
 {
@@ -101,6 +105,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         #endregion
 
         #region Instance Management
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SpiTransferBuffer"/> class.
         /// </summary>
@@ -108,8 +113,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// <param name="transferMode">Specifies read and/or write mode.</param>
         public SpiTransferBuffer(int lengthInBytes, SpiTransferMode transferMode) {
             if (transferMode == 0) {
-                throw new ArgumentException("An appropriate transfer mode must be specified (read/write)",
-                    "transferMode");
+                throw new ArgumentException("An appropriate transfer mode must be specified (read/write)", "transferMode");
             }
 
             mode = transferMode;
@@ -171,6 +175,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
                 rxBuf.Dispose();
             }
         }
+
         #endregion
     }
 }

@@ -87,7 +87,7 @@ namespace Raspberry.IO.Components.Sensors.HcSr04
             triggerPin.Write(false);
 
             var upTime = echoPin.Time(true, echoUpTimeout, Timeout);
-            return Units.Velocity.Sound.ToDistance(upTime);
+            return Units.Velocity.Sound.ToDistance(upTime) / 2;
         }
 
         /// <summary>

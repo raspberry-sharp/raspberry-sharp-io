@@ -1,6 +1,7 @@
 #region References
 
 using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using Raspberry.IO.Interop;
 
@@ -103,7 +104,7 @@ namespace Raspberry.IO.GeneralPurpose
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException("resistor");
+                    throw new ArgumentOutOfRangeException("resistor", resistor, string.Format(CultureInfo.InvariantCulture, "{0} is not a valid value for pin resistor", resistor));
             }
 
             WriteResistor(pud);
@@ -125,7 +126,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </remarks>
         public void SetPinDetectedEdges(ProcessorPin pin, PinDetectedEdges edges)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException("Edge detection is not supported by memory GPIO connection driver");
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Raspberry.IO.GeneralPurpose
             while (Read(pin) != waitForUp)
             {
                 if (DateTime.Now.Ticks - startWait.Ticks >= 10000 * timeout)
-                    throw new TimeoutException("A timeout occurred while waiting");
+                    throw new TimeoutException("A timeout occurred while waiting for pin status to change");
             }
         }
 
