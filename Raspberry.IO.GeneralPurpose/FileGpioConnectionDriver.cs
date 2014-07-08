@@ -50,7 +50,7 @@ namespace Raspberry.IO.GeneralPurpose
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "export"), false))
                 streamWriter.Write((int)pin);
 
-            var filePath = Path.Combine(gpioId, "direction");
+            var filePath = Path.Combine(gpioPath, gpioId, "direction");
             try {
                 SetPinDirection(filePath, direction);
             } catch (UnauthorizedAccessException) {
@@ -166,8 +166,8 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Private Helpers
 
-        private static void SetPinDirection(string filePath, PinDirection direction) {
-            using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false)) {
+        private static void SetPinDirection(string fullFilePath, PinDirection direction) {
+            using (var streamWriter = new StreamWriter(fullFilePath, false)) {
                 streamWriter.Write(direction == PinDirection.Input
                     ? "in"
                     : "out");
