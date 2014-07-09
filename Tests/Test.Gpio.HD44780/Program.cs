@@ -1,6 +1,8 @@
 ﻿#region References
 
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
@@ -27,7 +29,7 @@ namespace Test.Gpio.HD44780
 
             var useI2c = args.Contains("i2c", StringComparer.InvariantCultureIgnoreCase);
 
-            using (var configuration = useI2c ? LoadI2cConfiguration() : LoadGpioConfiguration())
+            using (var configuration = useI2c ? LoadI2cConfiguration(args) : LoadGpioConfiguration())
             using (var connection = new Hd44780LcdConnection(
                 settings,
                 configuration.RegisterSelect,
@@ -116,8 +118,13 @@ namespace Test.Gpio.HD44780
 
         #region Private Helpers
 
-        private static Hd44780Configuration LoadI2cConfiguration()
+        private static Hd44780Configuration LoadI2cConfiguration(IEnumerable<string> args)
         {
+            var addressText = args.SkipWhile(s => !string.Equals(s, "i2c", StringComparison.InvariantCultureIgnoreCase)).Skip(1).DefaultIfEmpty("0x20").First();
+            var address = addressText.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase) 
+                ? int.Parse(addressText.Substring(2), NumberStyles.HexNumber)
+                : int.Parse(addressText);
+
             const Mcp23017Pin registerSelectPin = Mcp23017Pin.B7;
             const Mcp23017Pin clockPin = Mcp23017Pin.B5;
             var dataPins = new[]
@@ -142,7 +149,7 @@ namespace Test.Gpio.HD44780
             const ConnectorPin sclPin = ConnectorPin.P1Pin05;
 
             var driver = new I2cDriver(sdaPin.ToProcessor(), sclPin.ToProcessor()) {ClockDivider = 512};
-            var connection = new Mcp23017I2cConnection(driver.Connect(0x20));
+            var connection = new Mcp23017I2cConnection(driver.Connect(address));
 
             return new Hd44780Configuration(driver)
                 {
