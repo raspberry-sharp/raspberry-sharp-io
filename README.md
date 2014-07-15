@@ -10,7 +10,7 @@ Raspberry# IO is a .NET/Mono IO Library for Raspberry Pi. This project is an ini
 Current release is an early public release. Some features may not have been extensively tested.
 Raspberry# IO currently supports low- and high-level GPIO input/output, support for SPI and I2C peripherals.
 
-Samples for SPI (for MCP3008 ADC or MCP4822 DAC), I2C (for MCP23017 I/O Expander), HD44780 LCD display and HC-SR04 distance sensor are provided.
+Samples for SPI (for MCP3008 ADC or MCP4822 DAC), I2C (for MCP23017 and PCF8574 I/O Expanders), HD44780 LCD display and HC-SR04 distance sensor are provided.
 
 Support for extended I/O (such as SDI, or PWM for motor control) is planned for future releases.
 
@@ -31,7 +31,7 @@ Low-level:
 
 + Access to GPIO pins through in 3 flavors: basic (using files), through memory, and full (memory with support for edge detection through "pseudo-interrupt"). By default, full driver is used.
 + Addressing through **processor pin number or connector pin number**
-+ Pin assignment of various Raspberry Pi revisions (as of 2013-09, **Raspberry Pi model B rev1 and rev2 as well as Raspberry Pi model A**, including rev2 P5 connector)
++ Pin assignment of various Raspberry Pi revisions (as of 2013-09, **Raspberry Pi model B rev1, rev2 and model B+, as well as Raspberry Pi model A**, including rev2 P5 connector)
 + Controlled use of resources using a IDisposable component and ability to use edge detection instead of polling
 + Support sub-millisecond polling of input pins
 
@@ -59,7 +59,7 @@ High-level:
 + Includes samples for
     - HD44780 LCD display
     - HC-SR04 distance detector
-    - Pca9685 PWM LED Controller (as used in the [Adafruit 16-Channel 12-bit PWM/Servo Driver](http://www.adafruit.com/products/815))
+    - PCA9685 PWM LED Controller (as used in the [Adafruit 16-Channel 12-bit PWM/Servo Driver](http://www.adafruit.com/products/815))
     - TLC59711 PWM LED Controller (as used in the [Adafruit 12-Channel 16-bit PWM LED Driver](http://www.adafruit.com/products/1455))
 
 Parts of Raspberry# IO are inspired by [BCM2835 C Library](http://www.airspayce.com/mikem/bcm2835/) and Gordon Henderson's [WiringPi](http://wiringpi.com/).
