@@ -124,6 +124,9 @@ namespace Raspberry.IO.GeneralPurpose
                 if (board.Model == 'B' && board.Revision == 1)
                     return 1;
 
+                if (board.Model == 'B' && board.Revision == 3)
+                    return 3;
+
                 return 2;
             }
         }

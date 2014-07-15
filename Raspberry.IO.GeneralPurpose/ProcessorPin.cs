@@ -56,6 +56,26 @@ namespace Raspberry.IO.GeneralPurpose
         Pin04 = Pin4,
 
         /// <summary>
+        /// Pin 5.
+        /// </summary>
+        Pin5 = 5,
+
+        /// <summary>
+        /// Pin 5.
+        /// </summary>
+        Pin05 = Pin5,
+
+        /// <summary>
+        /// Pin 6.
+        /// </summary>
+        Pin6 = 6,
+
+        /// <summary>
+        /// Pin 6.
+        /// </summary>
+        Pin06 = Pin6,
+
+        /// <summary>
         /// Pin 7.
         /// </summary>
         Pin7 = 7,
@@ -96,6 +116,16 @@ namespace Raspberry.IO.GeneralPurpose
         Pin11 = 11,
 
         /// <summary>
+        /// Pin 12.
+        /// </summary>
+        Pin12 = 12,
+
+        /// <summary>
+        /// Pin 13.
+        /// </summary>
+        Pin13 = 13,
+
+        /// <summary>
         /// Pin 14.
         /// </summary>
         Pin14 = 14,
@@ -106,6 +136,11 @@ namespace Raspberry.IO.GeneralPurpose
         Pin15 = 15,
 
         /// <summary>
+        /// Pin 16.
+        /// </summary>
+        Pin16 = 16,
+
+        /// <summary>
         /// Pin 17.
         /// </summary>
         Pin17 = 17,
@@ -114,6 +149,16 @@ namespace Raspberry.IO.GeneralPurpose
         /// Pin 18.
         /// </summary>
         Pin18 = 18,
+
+        /// <summary>
+        /// Pin 19.
+        /// </summary>
+        Pin19 = 19,
+
+        /// <summary>
+        /// Pin 20.
+        /// </summary>
+        Pin20 = 20,
 
         /// <summary>
         /// Pin 21.
@@ -139,6 +184,11 @@ namespace Raspberry.IO.GeneralPurpose
         /// Pin 25.
         /// </summary>
         Pin25 = 25,
+
+        /// <summary>
+        /// Pin 26.
+        /// </summary>
+        Pin26 = 26,
 
         /// <summary>
         /// Pin 27.

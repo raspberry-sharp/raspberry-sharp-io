@@ -111,6 +111,66 @@ namespace Raspberry.IO.GeneralPurpose
         P1Pin26,
 
 
+        // Pins 27+ exist starting from Model B+
+
+        /// <summary>
+        /// Connector P1, pin 27.
+        /// </summary>
+        P1Pin27,
+
+        /// <summary>
+        /// Connector P1, pin 28.
+        /// </summary>
+        P1Pin28,
+
+        /// <summary>
+        /// Connector P1, pin 29.
+        /// </summary>
+        P1Pin29,
+
+        /// <summary>
+        /// Connector P1, pin 31.
+        /// </summary>
+        P1Pin31,
+
+        /// <summary>
+        /// Connector P1, pin 32.
+        /// </summary>
+        P1Pin32,
+
+        /// <summary>
+        /// Connector P1, pin 33.
+        /// </summary>
+        P1Pin33,
+
+        /// <summary>
+        /// Connector P1, pin 35.
+        /// </summary>
+        P1Pin35,
+
+        /// <summary>
+        /// Connector P1, pin 36.
+        /// </summary>
+        P1Pin36,
+
+        /// <summary>
+        /// Connector P1, pin 37.
+        /// </summary>
+        P1Pin37,
+
+        /// <summary>
+        /// Connector P1, pin 38.
+        /// </summary>
+        P1Pin38,
+
+        /// <summary>
+        /// Connector P1, pin 40.
+        /// </summary>
+        P1Pin40,
+
+
+        // P5 Connector exist on Rev2 boards (no longer on B+)
+
         /// <summary>
         /// Connector P5, pin 3.
         /// </summary>

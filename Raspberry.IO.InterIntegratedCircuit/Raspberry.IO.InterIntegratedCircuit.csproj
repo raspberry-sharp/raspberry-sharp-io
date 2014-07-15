@@ -37,7 +37,7 @@
   <ItemGroup>
     <Reference Include="Raspberry.System, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Raspberry.System.1.2.0\lib\net40\Raspberry.System.dll</HintPath>
+      <HintPath>..\packages\Raspberry.System.1.3.0\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
