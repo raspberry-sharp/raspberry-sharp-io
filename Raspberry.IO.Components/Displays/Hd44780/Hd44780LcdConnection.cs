@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Raspberry.Timers;
 
@@ -20,9 +19,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
     {
         #region Fields
 
-        private readonly IOutputBinaryPin registerSelectPin;
-        private readonly IOutputBinaryPin clockPin;
-        private readonly IOutputBinaryPin[] dataPins;
+        private readonly Hd44780Pins pins;
 
         private readonly int width;
         private readonly int height;
@@ -35,52 +32,54 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         private int currentRow;
         private int currentColumn;
 
+        private bool backlightEnabled;
+
         #endregion
 
         #region Instance Management
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection" /> class.
         /// </summary>
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, params IOutputBinaryPin[] dataPins) : this(null, registerSelectPin, clockPin, (IEnumerable<IOutputBinaryPin>)dataPins) { }
+        public Hd44780LcdConnection(IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, params IOutputBinaryPin[] dataPins) : this(null, new Hd44780Pins(registerSelectPin, clockPin, dataPins)) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection" /> class.
         /// </summary>
         /// <param name="registerSelectPin">The register select pin.</param>
         /// <param name="clockPin">The clock pin.</param>
         /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, IEnumerable<IOutputBinaryPin> dataPins) : this(null, registerSelectPin, clockPin, dataPins) { }
+        public Hd44780LcdConnection(IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, IEnumerable<IOutputBinaryPin> dataPins) : this(null, new Hd44780Pins(registerSelectPin, clockPin, dataPins)) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
+        /// Initializes a new instance of the <see cref="Hd44780LcdConnection" /> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="registerSelectPin">The register select pin.</param>
-        /// <param name="clockPin">The clock pin.</param>
-        /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, params IOutputBinaryPin[] dataPins) : this(settings, registerSelectPin, clockPin, (IEnumerable<IOutputBinaryPin>)dataPins) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hd44780LcdConnection"/> class.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="registerSelectPin">The register select pin.</param>
-        /// <param name="clockPin">The clock pin.</param>
-        /// <param name="dataPins">The data pins.</param>
-        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, IOutputBinaryPin registerSelectPin, IOutputBinaryPin clockPin, IEnumerable<IOutputBinaryPin> dataPins)
+        /// <param name="pins">The pins.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// dataPins;There must be either 4 or 8 data pins
+        /// or
+        /// settings;ScreenHeight must be either 1 or 2 rows
+        /// or
+        /// settings;PatternWidth must be 5 pixels
+        /// or
+        /// settings;PatternWidth must be either 7 or 10 pixels height
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        /// At most 80 characters are allowed
+        /// or
+        /// 10 pixels height pattern cannot be used with 2 rows
+        /// </exception>
+        public Hd44780LcdConnection(Hd44780LcdConnectionSettings settings, Hd44780Pins pins)
         {
             settings = settings ?? new Hd44780LcdConnectionSettings();
+            this.pins = pins;
 
-            this.registerSelectPin = registerSelectPin;
-            this.clockPin = clockPin;
-            this.dataPins = dataPins.ToArray();
-
-            if (this.dataPins.Length != 4 && this.dataPins.Length != 8)
-                throw new ArgumentOutOfRangeException("dataPins", this.dataPins.Length, "There must be either 4 or 8 data pins");
+            if (pins.Data.Length != 4 && pins.Data.Length != 8)
+                throw new ArgumentOutOfRangeException("pins", pins.Data.Length, "There must be either 4 or 8 data pins");
             
             width = settings.ScreenWidth;
             height = settings.ScreenHeight;
@@ -98,7 +97,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
             functions = (settings.PatternHeight == 8 ? Functions.Matrix5x8 : Functions.Matrix5x10) 
                 | (height == 1 ? Functions.OneLine : Functions.TwoLines)
-                | (this.dataPins.Length == 4 ? Functions.Data4bits : Functions.Data8bits);
+                | (pins.Data.Length == 4 ? Functions.Data4bits : Functions.Data8bits);
 
             entryModeFlags = /*settings.RightToLeft 
                 ? EntryModeFlags.EntryRight | EntryModeFlags.EntryShiftDecrement
@@ -106,9 +105,14 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
             encoding = settings.Encoding;
 
-            registerSelectPin.Write(false);
-            clockPin.Write(false);
-            foreach (var dataPin in this.dataPins)
+            BacklightEnabled = false;
+
+            if (pins.ReadWrite != null)
+                pins.ReadWrite.Write(false);
+
+            pins.RegisterSelect.Write(false);
+            pins.Clock.Write(false);
+            foreach (var dataPin in pins.Data)
                 dataPin.Write(false);
 
             WriteByte(0x33, false); // Initialize
@@ -119,6 +123,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             WriteCommand(Command.SetEntryModeFlags, (int) entryModeFlags);
 
             Clear();
+            BacklightEnabled = true;
         }
 
         void IDisposable.Dispose()
@@ -147,6 +152,25 @@ namespace Raspberry.IO.Components.Displays.Hd44780
                     displayFlags &= ~DisplayFlags.DisplayOn;
 
                 WriteCommand(Command.SetDisplayFlags, (int) displayFlags);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether backlight is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if backlight is enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool BacklightEnabled
+        {
+            get { return backlightEnabled; }
+            set
+            {
+                if (pins.Backlight == null) 
+                    return;
+
+                pins.Backlight.Write(value);
+                backlightEnabled = value;
             }
         }
 
@@ -200,11 +224,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         public void Close()
         {
             Clear();
-
-            registerSelectPin.Dispose();
-            clockPin.Dispose();
-            foreach (var dataPin in dataPins)
-                dataPin.Dispose();
+            pins.Close();
         }
 
         /// <summary>
@@ -408,7 +428,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
         private void WriteByte(int bits, bool charMode)
         {
-            if (dataPins.Length == 4)
+            if (pins.Data.Length == 4)
                 WriteByte4Pins(bits, charMode);
             else
                 throw new NotImplementedException("8 bits mode is currently not implemented");
@@ -416,29 +436,29 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
         private void WriteByte4Pins(int bits, bool charMode)
         {
-            registerSelectPin.Write(charMode);
+            pins.RegisterSelect.Write(charMode);
 
-            dataPins[0].Write((bits & 0x10) != 0);
-            dataPins[1].Write((bits & 0x20) != 0);
-            dataPins[2].Write((bits & 0x40) != 0);
-            dataPins[3].Write((bits & 0x80) != 0);
+            pins.Data[0].Write((bits & 0x10) != 0);
+            pins.Data[1].Write((bits & 0x20) != 0);
+            pins.Data[2].Write((bits & 0x40) != 0);
+            pins.Data[3].Write((bits & 0x80) != 0);
 
             Synchronize();
 
-            dataPins[0].Write((bits & 0x01) != 0);
-            dataPins[1].Write((bits & 0x02) != 0);
-            dataPins[2].Write((bits & 0x04) != 0);
-            dataPins[3].Write((bits & 0x08) != 0);
+            pins.Data[0].Write((bits & 0x01) != 0);
+            pins.Data[1].Write((bits & 0x02) != 0);
+            pins.Data[2].Write((bits & 0x04) != 0);
+            pins.Data[3].Write((bits & 0x08) != 0);
 
             Synchronize();
         }
 
         private void Synchronize()
         {
-            clockPin.Write(true);
+            pins.Clock.Write(true);
             Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
 
-            clockPin.Write(false);
+            pins.Clock.Write(false);
             Sleep(0.001m); // commands need > 37us to settle
         }
 

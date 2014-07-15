@@ -84,6 +84,7 @@
     <Compile Include="Displays\Hd44780\Hd44780A00Encoding.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnection.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
+    <Compile Include="Displays\Hd44780\Hd44780Pins.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017InputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017OutputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
@@ -93,6 +94,11 @@
     <Compile Include="Expanders\Mcp23017\Mcp23017PinDirection.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinPolarity.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinResistor.cs" />
+    <Compile Include="Expanders\Pcf8574\Pcf8574I2cConnection.cs" />
+    <Compile Include="Expanders\Pcf8574\Pcf8574InputBinaryPin.cs" />
+    <Compile Include="Expanders\Pcf8574\Pcf8574OutputBinaryPin.cs" />
+    <Compile Include="Expanders\Pcf8574\Pcf8574Pin.cs" />
+    <Compile Include="Expanders\Pcf8574\Pcf8574PinExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensors\HcSr04\HcSr04Connection.cs" />
     <Compile Include="Sensors\HcSr04\Units.cs" />

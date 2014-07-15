@@ -1,4 +1,8 @@
+#region References
+
 using Raspberry.IO.InterIntegratedCircuit;
+
+#endregion
 
 namespace Raspberry.IO.Components.Expanders.Mcp23017
 {
@@ -93,7 +97,7 @@ namespace Raspberry.IO.Components.Expanders.Mcp23017
         /// Sets the pin status.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        /// <param name="enabled">if set to <c>true</c> [enabled].</param>
+        /// <param name="enabled">if set to <c>true</c>, pin is enabled.</param>
         public void SetPinStatus(Mcp23017Pin pin, bool enabled)
         {
             var register = ((int) pin & 0x0100) == 0x0000 ? Register.GPIOA : Register.GPIOB;
@@ -113,7 +117,7 @@ namespace Raspberry.IO.Components.Expanders.Mcp23017
         /// Gets the pin status.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        /// <returns></returns>
+        /// <returns>The pin status.</returns>
         public bool GetPinStatus(Mcp23017Pin pin)
         {
             var register = ((int) pin & 0x0100) == 0x0000 ? Register.GPIOA : Register.GPIOB;

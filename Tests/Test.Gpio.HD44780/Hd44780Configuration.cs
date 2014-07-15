@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Raspberry.IO;
+using Raspberry.IO.Components.Displays.Hd44780;
 
 namespace Test.Gpio.HD44780
 {
@@ -19,8 +20,6 @@ namespace Test.Gpio.HD44780
                 driver.Dispose();
         }
 
-        public IOutputBinaryPin RegisterSelect;
-        public IOutputBinaryPin Clock;
-        public IEnumerable<IOutputBinaryPin> Data;
+        public Hd44780Pins Pins;
     }
 }
