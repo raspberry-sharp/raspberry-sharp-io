@@ -5,18 +5,18 @@ namespace Raspberry.IO
     /// </summary>
     public class AnalogValue
     {
-        private decimal discrete;
-        private decimal scale;
+        private decimal value;
+        private decimal maximum;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalogValue"/> class.
         /// </summary>
-        /// <param name="scale">The scale.</param>
-        /// <param name="discrete">The value.</param>
-        public AnalogValue(decimal discrete, decimal scale = 1)
+        /// <param name="maximum">The maximum.</param>
+        /// <param name="value">The value.</param>
+        public AnalogValue(decimal value, decimal maximum = 1)
         {
-            this.scale = scale;
-            this.discrete = discrete;
+            this.maximum = maximum;
+            this.value = value;
         }
 
         /// <summary>
@@ -25,22 +25,22 @@ namespace Raspberry.IO
         /// <value>
         /// The discrete value.
         /// </value>
-        public decimal Discrete
+        public decimal Value
         {
-            get { return discrete; }
-            set { discrete = value; }
+            get { return value; }
+            set { this.value = value; }
         }
 
         /// <summary>
-        /// Gets or sets the scale.
+        /// Gets or sets the maximum.
         /// </summary>
         /// <value>
-        /// The scale.
+        /// The maximum.
         /// </value>
-        public decimal Scale
+        public decimal Maximum
         {
-            get { return scale; }
-            set { scale = value; }
+            get { return maximum; }
+            set { maximum = value; }
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Raspberry.IO
         /// </value>
         public decimal Relative
         {
-            get { return (1.0m*discrete)/scale; }
+            get { return value / maximum; }
         }
     }
 }

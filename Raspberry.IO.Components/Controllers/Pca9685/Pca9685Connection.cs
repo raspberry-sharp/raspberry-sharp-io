@@ -57,11 +57,11 @@ namespace Raspberry.IO.Components.Controllers.Pca9685
             preScale -= 1.0m;
 
             log.Trace(m => m("Setting PWM frequency to {0} Hz", frequencyHz));
-            log.Trace(m => m("Estimated pre-scale: {0}", preScale));
+            log.Trace(m => m("Estimated pre-maximum: {0}", preScale));
 
             var prescale = Math.Floor(preScale + 0.5m);
 
-            log.Trace(m => m("Final pre-scale: {0}", prescale));
+            log.Trace(m => m("Final pre-maximum: {0}", prescale));
 
             var oldmode = ReadRegister(Register.MODE1);
             var newmode = (byte) ((oldmode & 0x7F) | 0x10); // sleep
