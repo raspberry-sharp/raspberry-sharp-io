@@ -6,23 +6,20 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
 
         private readonly Mcp3008SpiConnection connection;
         private readonly Mcp3008Channel channel;
-        private readonly decimal scale;
 
         #endregion
 
         #region Instance Management
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Mcp3008InputAnalogPin"/> class.
+        /// Initializes a new instance of the <see cref="Mcp3008InputAnalogPin" /> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
         /// <param name="channel">The channel.</param>
-        /// <param name="scale">The scale.</param>
-        public Mcp3008InputAnalogPin(Mcp3008SpiConnection connection, Mcp3008Channel channel, decimal scale = 1.0m)
+        public Mcp3008InputAnalogPin(Mcp3008SpiConnection connection, Mcp3008Channel channel)
         {
             this.connection = connection;
             this.channel = channel;
-            this.scale = scale;
         }
 
         /// <summary>
@@ -40,9 +37,9 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
         /// <returns>
         /// The value.
         /// </returns>
-        public decimal Read()
+        public AnalogValue Read()
         {
-            return connection.Read(channel)*scale;
+            return connection.Read(channel);
         }
 
         #endregion

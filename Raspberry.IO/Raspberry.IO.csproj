@@ -40,6 +40,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AnalogValue.cs" />
     <Compile Include="BinaryPinExtensionMethods.cs" />
     <Compile Include="ByteExtensionMethods.cs" />
     <Compile Include="IInputAnalogPin.cs" />

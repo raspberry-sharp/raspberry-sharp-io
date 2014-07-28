@@ -5,7 +5,7 @@ using Raspberry.Timers;
 
 #endregion
 
-namespace Raspberry.IO.Components.Sensors.HcSr04
+namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
 {
     /// <summary>
     /// Represents a connection to HC-SR04 distance sensor.

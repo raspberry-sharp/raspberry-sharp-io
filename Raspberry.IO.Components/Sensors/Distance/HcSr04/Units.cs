@@ -1,4 +1,4 @@
-namespace Raspberry.IO.Components.Sensors.HcSr04
+namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
 {
     internal static class Units
     {

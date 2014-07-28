@@ -9,11 +9,10 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
         /// </summary>
         /// <param name="connection">The connection.</param>
         /// <param name="channel">The channel.</param>
-        /// <param name="scale">The scale.</param>
         /// <returns>The pin.</returns>
-        public static Mcp3008InputAnalogPin In(this Mcp3008SpiConnection connection, Mcp3008Channel channel, decimal scale = 1.0m)
+        public static Mcp3008InputAnalogPin In(this Mcp3008SpiConnection connection, Mcp3008Channel channel)
         {
-            return new Mcp3008InputAnalogPin(connection, channel, scale);
+            return new Mcp3008InputAnalogPin(connection, channel);
         }
 
         #endregion

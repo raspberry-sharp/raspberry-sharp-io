@@ -52,7 +52,7 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
         /// </summary>
         /// <param name="channel">The channel.</param>
         /// <returns>The value</returns>
-        public decimal Read(Mcp3008Channel channel)
+        public AnalogValue Read(Mcp3008Channel channel)
         {
             using(spiConnection.SelectSlave())
             {
@@ -69,9 +69,9 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
                 spiConnection.Synchronize();
 
                 // Read 10 bits
-                var data = spiConnection.Read(10);
+                var data = (int)spiConnection.Read(10);
                 
-                return data/1024m;
+                return new AnalogValue(data, 1024);
             }
         }
 

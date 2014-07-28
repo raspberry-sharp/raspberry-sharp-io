@@ -3,6 +3,8 @@
 using System;
 using System.Threading;
 using Raspberry.IO.Components.Converters.Mcp3008;
+using Raspberry.IO.Components.Sensors;
+using Raspberry.IO.Components.Sensors.Temperature.Tmp36;
 using Raspberry.IO.GeneralPurpose;
 
 #endregion
@@ -39,20 +41,22 @@ namespace Test.Gpio.MCP3008
             using (var misoPin = driver.In(adcMiso))
             using (var mosiPin = driver.Out(adcMosi))
             using (var adcConnection = new Mcp3008SpiConnection(clockPin, csPin, misoPin, mosiPin))
-            using (var temperaturePin = adcConnection.In(Mcp3008Channel.Channel0, voltage.ToCelsius()))
-            using (var luxPin = adcConnection.In(Mcp3008Channel.Channel1, voltage))
+
+            using (var temperatureConnection = new Tmp36Connection(adcConnection.In(Mcp3008Channel.Channel0), voltage))
+            using(var lightConnection = new VariableResistiveDividerConnection(adcConnection.In(Mcp3008Channel.Channel1), ResistiveDivider.ForLowerResistor(10000)))
             {
                 Console.CursorVisible = false;
 
                 while (!Console.KeyAvailable)
                 {
-                    var temperature = temperaturePin.Read();
-                    var lux = luxPin.Read().ToLux(voltage);
+                    var temperature = temperatureConnection.GetTemperature();
+                    decimal resistor = lightConnection.GetResistor();
+                    var lux = resistor.ToLux();
 
-                    Console.WriteLine("Temperature = {0,5:0.0} Celsius\t\tLuminosity = {1,5:0.0} Lux", temperature, lux);
+                    Console.WriteLine("Temperature = {0,5:0.0} °C\tLight = {1,5:0.0} Lux ({2} ohms)", temperature, lux, (int)resistor);
                     Console.CursorTop--;
 
-                    Thread.Sleep(100);
+                    Thread.Sleep(1000);
                 }
             }
 

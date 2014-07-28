@@ -17,7 +17,7 @@ namespace Raspberry.IO
         /// Writes the specified value to the pin.
         /// </summary>
         /// <param name="value">The value.</param>
-        void Write(decimal value);
+        void Write(AnalogValue value);
 
         #endregion
     }

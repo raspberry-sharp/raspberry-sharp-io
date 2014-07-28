@@ -17,7 +17,7 @@ namespace Raspberry.IO
         /// Reads the value of the pin.
         /// </summary>
         /// <returns>The value.</returns>
-        decimal Read();
+        AnalogValue Read();
 
         #endregion
     }

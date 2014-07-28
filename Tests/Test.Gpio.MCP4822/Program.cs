@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading;
+using Raspberry.IO;
 using Raspberry.IO.Components.Converters.Mcp4822;
 using Raspberry.IO.GeneralPurpose;
 
@@ -42,7 +43,7 @@ namespace Test.Gpio.MCP4822
 
                 while (!Console.KeyAvailable)
                 {
-                    channel.Write(ticks);
+                    channel.Write(new AnalogValue(ticks));
 
                     if (up)
                     {

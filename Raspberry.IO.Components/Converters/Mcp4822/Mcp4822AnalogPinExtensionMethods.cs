@@ -11,9 +11,9 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
         /// <param name="channel">The channel.</param>
         /// <param name="scale">The scale.</param>
         /// <returns>The pin.</returns>
-        public static Mcp4822OutputAnalogPin Out(this Mcp4822SpiConnection connection, Mcp4822Channel channel, decimal scale = 1.0m)
+        public static Mcp4822OutputAnalogPin Out(this Mcp4822SpiConnection connection, Mcp4822Channel channel)
         {
-            return new Mcp4822OutputAnalogPin(connection, channel, scale);
+            return new Mcp4822OutputAnalogPin(connection, channel);
         }
             
         #endregion

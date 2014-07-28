@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Raspberry.IO;
-using Raspberry.IO.Components;
-using Raspberry.IO.Components.Sensors.HcSr04;
+using Raspberry.IO.Components.Sensors.Distance.HcSr04;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
 
