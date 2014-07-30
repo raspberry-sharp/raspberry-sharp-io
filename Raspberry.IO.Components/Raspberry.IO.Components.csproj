@@ -101,6 +101,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensors\Distance\HcSr04\HcSr04Connection.cs" />
     <Compile Include="Sensors\Distance\HcSr04\Units.cs" />
+    <Compile Include="Sensors\Temperature\Dht\DhtConnection.cs" />
+    <Compile Include="Sensors\Temperature\Dht\DhtData.cs" />
     <Compile Include="Sensors\VariableResistiveDividerConnection.cs" />
     <Compile Include="Sensors\Temperature\Tmp36\Tmp36Connection.cs" />
     <Compile Include="Sensors\ResistiveDivider.cs" />

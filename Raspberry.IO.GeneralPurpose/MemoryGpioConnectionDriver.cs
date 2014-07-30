@@ -4,6 +4,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Raspberry.IO.Interop;
+using Raspberry.Timers;
 
 #endregion
 
@@ -108,9 +109,9 @@ namespace Raspberry.IO.GeneralPurpose
             }
 
             WriteResistor(pud);
-            Timers.Timer.Sleep(1);
+            HighResolutionTimer.Sleep(0.005m);
             SetPinResistorClock(pin, true);
-            Timers.Timer.Sleep(1);
+            HighResolutionTimer.Sleep(0.005m);
             WriteResistor(Interop.BCM2835_GPIO_PUD_OFF);
             SetPinResistorClock(pin, false);
         }

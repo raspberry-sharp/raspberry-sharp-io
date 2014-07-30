@@ -57,6 +57,34 @@ namespace Raspberry.IO.GeneralPurpose
             return new GpioInputBinaryPin(driver, pin, resistor);
         }
 
+        /// <summary>
+        /// Gets a bidirectional pin on the current driver.
+        /// </summary>
+        /// <param name="driver">The driver.</param>
+        /// <param name="pin">The pin.</param>
+        /// <param name="resistor">The resistor.</param>
+        /// <returns>
+        /// The GPIO input binary pin.
+        /// </returns>
+        public static GpioInputOutputBinaryPin InOut(this IGpioConnectionDriver driver, ConnectorPin pin, PinResistor resistor = PinResistor.None)
+        {
+            return driver.InOut(pin.ToProcessor(), resistor);
+        }
+
+        /// <summary>
+        /// Gets a bidirectional pin on the current driver.
+        /// </summary>
+        /// <param name="driver">The driver.</param>
+        /// <param name="pin">The pin.</param>
+        /// <param name="resistor">The resistor.</param>
+        /// <returns>
+        /// The GPIO input binary pin.
+        /// </returns>
+        public static GpioInputOutputBinaryPin InOut(this IGpioConnectionDriver driver, ProcessorPin pin, PinResistor resistor = PinResistor.None)
+        {
+            return new GpioInputOutputBinaryPin(driver, pin, resistor);
+        }
+
         #endregion
     }
 }

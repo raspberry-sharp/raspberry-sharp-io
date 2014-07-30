@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using Raspberry.IO.Components.Converters.Mcp3008;
 using Raspberry.IO.Components.Sensors;
+using Raspberry.IO.Components.Sensors.Temperature.Dht;
 using Raspberry.IO.Components.Sensors.Temperature.Tmp36;
 using Raspberry.IO.GeneralPurpose;
 
@@ -34,16 +35,19 @@ namespace Test.Gpio.MCP3008
 
             const decimal voltage = 3.3m;
 
-            var driver = GpioConnectionSettings.DefaultDriver;
+            var driver = new MemoryGpioConnectionDriver(); //GpioConnectionSettings.DefaultDriver;
 
-            using (var clockPin = driver.Out(adcClock))
-            using (var csPin = driver.Out(adcCs))
-            using (var misoPin = driver.In(adcMiso))
-            using (var mosiPin = driver.Out(adcMosi))
-            using (var adcConnection = new Mcp3008SpiConnection(clockPin, csPin, misoPin, mosiPin))
-
-            using (var temperatureConnection = new Tmp36Connection(adcConnection.In(Mcp3008Channel.Channel0), voltage))
-            using(var lightConnection = new VariableResistiveDividerConnection(adcConnection.In(Mcp3008Channel.Channel1), ResistiveDivider.ForLowerResistor(10000)))
+            using (var adcConnection = new Mcp3008SpiConnection( 
+                driver.Out(adcClock), 
+                driver.Out(adcCs), 
+                driver.In(adcMiso), 
+                driver.Out(adcMosi)))
+            using (var temperatureConnection = new Tmp36Connection(
+                adcConnection.In(Mcp3008Channel.Channel0),
+                voltage))
+            using (var lightConnection = new VariableResistiveDividerConnection(
+                adcConnection.In(Mcp3008Channel.Channel1), 
+                ResistiveDivider.ForLowerResistor(10000)))
             {
                 Console.CursorVisible = false;
 
@@ -53,7 +57,8 @@ namespace Test.Gpio.MCP3008
                     decimal resistor = lightConnection.GetResistor();
                     var lux = resistor.ToLux();
 
-                    Console.WriteLine("Temperature = {0,5:0.0} °C\tLight = {1,5:0.0} Lux ({2} ohms)", temperature, lux, (int)resistor);
+                    Console.WriteLine("Temperature = {0,5:0.0} °C\tLight = {1,5:0.0} Lux ({2} ohms)", temperature, lux, (int) resistor);
+
                     Console.CursorTop--;
 
                     Thread.Sleep(1000);

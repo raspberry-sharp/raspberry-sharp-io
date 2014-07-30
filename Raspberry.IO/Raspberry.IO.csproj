@@ -45,6 +45,7 @@
     <Compile Include="ByteExtensionMethods.cs" />
     <Compile Include="IInputAnalogPin.cs" />
     <Compile Include="IInputBinaryPin.cs" />
+    <Compile Include="IInputOutputBinaryPin.cs" />
     <Compile Include="IOutputAnalogPin.cs" />
     <Compile Include="IOutputBinaryPin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

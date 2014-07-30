@@ -1,7 +1,7 @@
 namespace Raspberry.IO.GeneralPurpose
 {
     /// <summary>
-    /// Represents an output pin on GPIO interface
+    /// Represents an output pin on GPIO interface.
     /// </summary>
     public class GpioOutputBinaryPin : IOutputBinaryPin
     {
