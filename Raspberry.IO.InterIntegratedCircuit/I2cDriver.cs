@@ -296,6 +296,11 @@ namespace Raspberry.IO.InterIntegratedCircuit
                         return Interop.BCM2835_BSC1_BASE;
                     throw new InvalidOperationException("No I2C device exist on the specified pins");
 
+                case 3:
+                    if (sdaPin == ProcessorPin.Pin2 && sclPin == ProcessorPin.Pin3)
+                        return Interop.BCM2835_BSC1_BASE;
+                    throw new InvalidOperationException("No I2C device exist on the specified pins");
+
                 default:
                     throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Board revision {0} is not supported", GpioConnectionSettings.BoardConnectorRevision));
             }
