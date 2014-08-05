@@ -71,7 +71,7 @@ namespace Raspberry.IO.Components.Converters.Mcp3008
                 // Read 10 bits
                 var data = (int)spiConnection.Read(10);
                 
-                return new AnalogValue(data, 1024);
+                return new AnalogValue(data, 0x3FF);
             }
         }
 

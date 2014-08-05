@@ -61,7 +61,7 @@ namespace Raspberry.IO.Components.Converters.Mcp4822
         {
             using (spiConnection.SelectSlave())
             {
-                var value = (uint) (data.Relative*4096m);
+                var value = (uint)(data.Relative * 0xFFF);
                 if (value > 0xFFF)
                     value = 0xFFF;
 
