@@ -13,7 +13,9 @@ namespace Raspberry.IO.Components.Sensors
         /// </returns>
         public static Func<AnalogValue, decimal> ForUpperResistor(decimal lowerResistorValue)
         {
-            return v => lowerResistorValue * (1 - v.Relative) / v.Relative;
+            return v => v.Relative != 0 
+                ? lowerResistorValue * (1 - v.Relative) / v.Relative
+                : decimal.MaxValue;
         }
 
         /// <summary>
@@ -25,7 +27,9 @@ namespace Raspberry.IO.Components.Sensors
         /// </returns>
         public static Func<AnalogValue, decimal> ForLowerResistor(decimal upperResistorValue)
         {
-            return v => upperResistorValue * v.Relative / (1 - v.Relative);
+            return v => v.Relative != 1 
+                ? upperResistorValue * v.Relative / (1 - v.Relative)
+                : decimal.MaxValue;
         }
     }
 }
