@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region References
+
+using System;
 using Raspberry.IO.InterIntegratedCircuit;
 using Raspberry.Timers;
+
+#endregion
 
 namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
 {
@@ -54,10 +58,19 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
         #region Methods
 
         /// <summary>
-        /// Gets the pressure, in hPa.
+        /// Gets the pressure, in pascal.
         /// </summary>
         /// <returns>The pressure.</returns>
         public decimal GetPressure()
+        {
+            return GetData().Pressure;
+        }
+
+        /// <summary>
+        /// Gets the data.
+        /// </summary>
+        /// <returns>The data.</returns>
+        public Bmp085Data GetData()
         {
             var rawTemperature = GetRawTemperature();
             var rawPressure = GetRawPressure();
@@ -78,7 +91,9 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
             var b7 = (uint) ((rawPressure - b3)*(uint) (50000UL >> (int) precision));
 
             int p;
-            if (b7 < 0x80000000)
+            if (b4 == 0)
+                p = int.MaxValue;
+            else if (b7 < 0x80000000)
                 p = (int) ((b7*2)/b4);
             else
                 p = (int) ((b7/b4)*2);
@@ -87,7 +102,11 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
             x1 = (x1*3038) >> 16;
             x2 = (-7357*p) >> 16;
 
-            return p + ((x1 + x2 + 3791) >> 4);
+            return new Bmp085Data
+            {
+                Pressure = p + ((x1 + x2 + 3791) >> 4),
+                Temperature = ((b5 + 8) >> 4)/10m
+            };
         }
 
         /// <summary>
@@ -96,6 +115,7 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
         /// <returns>The temperature.</returns>
         public decimal GetTemperature()
         {
+            // Do not use GetData here since it would imply useless I/O and computation.
             var rawTemperature = GetRawTemperature();
             var b5 = ComputeB5(rawTemperature);
 
@@ -193,8 +213,11 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
         private int ComputeB5(int ut)
         {
             var x1 = (ut - ac6)*ac5 >> 15;
-            var x2 = (mc << 11)/(x1 + md);
 
+            if (x1 + md == 0) 
+                return int.MaxValue;
+            
+            var x2 = (mc << 11)/(x1 + md);
             return x1 + x2;
         }
 
