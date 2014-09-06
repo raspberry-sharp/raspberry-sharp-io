@@ -141,7 +141,7 @@ namespace Raspberry.IO.GeneralPurpose
                 var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
                 return configurationSection != null && !String.IsNullOrEmpty(configurationSection.DriverTypeName)
                            ? (IGpioConnectionDriver) Activator.CreateInstance(Type.GetType(configurationSection.DriverTypeName, true))
-                           : new GpioConnectionDriver();
+						: (Raspberry.Board.Current.IsRaspberryPi ? (IGpioConnectionDriver)new GpioConnectionDriver() : (IGpioConnectionDriver)new FileGpioConnectionDriver());
             }
         }
 
