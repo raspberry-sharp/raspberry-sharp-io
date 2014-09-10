@@ -28,8 +28,8 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         public FileGpioConnectionDriver()
         {
-            if (!Board.Current.IsRaspberryPi)
-                throw new NotSupportedException("FileGpioConnectionDriver is only supported on Raspberry Pi");
+			if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                throw new NotSupportedException("FileGpioConnectionDriver is only supported in Unix");
         }
 
         #endregion

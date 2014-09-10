@@ -224,7 +224,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.SpiTransferBufferSpecs
         [Test]
         public void Should_the_control_structure_have_the_requested_chip_select_change_value() {
             // ReSharper disable once UnreachableCode
-            buffer.ControlStructure.ChipSelectChange.Should().Be(REQUESTED_CHIP_SELECT_CHANGE ? 1 : 0);
+			buffer.ControlStructure.ChipSelectChange.Should().Be(REQUESTED_CHIP_SELECT_CHANGE ? (byte)1 : (byte)0);
         }
 
         [Test]
