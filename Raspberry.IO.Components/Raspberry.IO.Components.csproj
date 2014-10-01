@@ -97,7 +97,7 @@
     <Compile Include="Sensors\Distance\HcSr04\HcSr04Connection.cs" />
     <Compile Include="Sensors\Distance\HcSr04\Units.cs" />
     <Compile Include="Sensors\Pressure\Bmp085\Bmp085Data.cs" />
-    <Compile Include="Sensors\Pressure\Bmp085\Bmp085I2CConnection.cs" />
+    <Compile Include="Sensors\Pressure\Bmp085\Bmp085I2cConnection.cs" />
     <Compile Include="Sensors\Pressure\Bmp085\Bmp085I2cConnectionExtensionMethods.cs" />
     <Compile Include="Sensors\Pressure\Bmp085\Bmp085Precision.cs" />
     <Compile Include="Sensors\Temperature\Dht\DhtConnection.cs" />
@@ -143,8 +143,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Leds\" />
-    <Folder Include="Leds\GroveRgb\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
