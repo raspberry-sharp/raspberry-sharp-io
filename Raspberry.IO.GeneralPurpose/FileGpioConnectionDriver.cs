@@ -67,7 +67,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="resistor">The resistor.</param>
         public void SetPinResistor(ProcessorPin pin, PinResistor resistor)
         {
-            throw new NotSupportedException("Resistor are not supported by file GPIO connection driver");
+            //throw new NotSupportedException("Resistor are not supported by file GPIO connection driver");
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </remarks>
         public void SetPinDetectedEdges(ProcessorPin pin, PinDetectedEdges edges)
         {
-            throw new NotSupportedException("Edge detection is not supported by file GPIO connection driver");
+            //throw new NotSupportedException("Edge detection is not supported by file GPIO connection driver");
         }
 
         /// <summary>
