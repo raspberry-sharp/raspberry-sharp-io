@@ -12,6 +12,8 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -106,6 +108,12 @@
     <Compile Include="Sensors\Temperature\Tmp36\Tmp36Connection.cs" />
     <Compile Include="Sensors\ResistiveDivider.cs" />
     <Compile Include="Leds\GroveRgb\GroveRgbConnection.cs" />
+    <Compile Include="Displays\Ssd1306\Command.cs" />
+    <Compile Include="Displays\Ssd1306\Ssd1306Connection.cs" />
+    <Compile Include="Displays\Ssd1306\Fonts\IFont.cs" />
+    <Compile Include="Displays\Ssd1306\Fonts\Fixed1L.cs" />
+    <Compile Include="Displays\Ssd1306\Fonts\Proportional2L.cs" />
+    <Compile Include="Displays\Ssd1306\Fonts\Proportional3L.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
@@ -146,5 +154,7 @@
   <ItemGroup>
     <Folder Include="Leds\" />
     <Folder Include="Leds\GroveRgb\" />
+    <Folder Include="Displays\Ssd1306\" />
+    <Folder Include="Displays\Ssd1306\Fonts\" />
   </ItemGroup>
 </Project>
