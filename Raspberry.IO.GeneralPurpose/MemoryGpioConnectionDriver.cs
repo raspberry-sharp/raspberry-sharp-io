@@ -58,7 +58,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <returns>The capabilites.</returns>
         public GpioConnectionDriverCapabilities GetCapabilities()
         {
-            return GpioConnectionDriverCapabilities.CanSetPinResistor | GpioConnectionDriverCapabilities.CanSetPinDetectedEdges;
+            return GpioConnectionDriverCapabilities.CanSetPinResistor;
         }
 
         /// <summary>

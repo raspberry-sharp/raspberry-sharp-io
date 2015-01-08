@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 #endregion
 
@@ -27,22 +26,6 @@ namespace Raspberry.IO.GeneralPurpose
                 .Distinct()
                 .Where(p => (pins & (ProcessorPins) ((uint) 1 << (int) p)) != ProcessorPins.None)
                 .ToArray();
-        }
-
-        public static string ToGpioName(this Enum en)
-        {
-            Type type = en.GetType();
-            MemberInfo[] memInfo = type.GetMember(en.ToString());
-            if (memInfo != null && memInfo.Length > 0)
-            {
-                object[] attrs = memInfo[0].GetCustomAttributes(
-                    typeof(GpioName),
-                    false);
-
-                if (attrs != null && attrs.Length > 0)
-                    return ((GpioName)attrs[0]).Name;
-            }
-            return en.ToString();
         }
 
         #endregion
