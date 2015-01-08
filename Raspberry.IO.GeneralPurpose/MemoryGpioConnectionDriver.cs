@@ -51,6 +51,15 @@ namespace Raspberry.IO.GeneralPurpose
         #endregion
 
         #region Methods
+        
+        /// <summary>
+        /// Gets driver capabilities.
+        /// </summary>
+        /// <returns>The capabilites.</returns>
+        public GpioConnectionDriverCapabilities GetCapabilities()
+        {
+            return GpioConnectionDriverCapabilities.CanSetPinResistor | GpioConnectionDriverCapabilities.CanSetPinDetectedEdges;
+        }
 
         /// <summary>
         /// Allocates the specified pin.

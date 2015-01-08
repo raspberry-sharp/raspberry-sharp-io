@@ -26,8 +26,10 @@ namespace Raspberry.IO.GeneralPurpose
             this.pin = pin;
 
             driver.Allocate(pin, PinDirection.Input);
-            driver.SetPinResistor(pin, resistor);
-            driver.SetPinDetectedEdges(pin, PinDetectedEdges.Both);
+            if ((driver.GetCapabilities() & GpioConnectionDriverCapabilities.CanSetPinResistor) > 0)
+                driver.SetPinResistor(pin, resistor);
+            if ((driver.GetCapabilities() & GpioConnectionDriverCapabilities.CanSetPinDetectedEdges) > 0)
+                driver.SetPinDetectedEdges(pin, PinDetectedEdges.Both);
         }
 
         /// <summary>

@@ -59,13 +59,22 @@ namespace Raspberry.IO.GeneralPurpose
         #region Methods
 
         /// <summary>
+        /// Gets driver capabilities.
+        /// </summary>
+        /// <returns>The capabilites.</returns>
+        public GpioConnectionDriverCapabilities GetCapabilities()
+        {
+            return GpioConnectionDriverCapabilities.CanSetPinResistor | GpioConnectionDriverCapabilities.CanSetPinDetectedEdges;
+        }
+
+        /// <summary>
         /// Allocates the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
         /// <param name="direction">The direction.</param>
         public void Allocate(ProcessorPin pin, PinDirection direction)
         {
-            var gpioId = string.Format("gpio{0}", (int)pin);
+            var gpioId = pin.ToGpioName(); // string.Format("gpio{0}", (int)pin);
             if (Directory.Exists(Path.Combine(gpioPath, gpioId)))
             {
                 // Reinitialize pin virtual file
@@ -87,11 +96,8 @@ namespace Raspberry.IO.GeneralPurpose
 
 			if (direction == PinDirection.Input)
             {
-				if (Raspberry.Board.Current.IsRaspberryPi) 
-				{
-					SetPinResistor (pin, PinResistor.None);
-					SetPinDetectedEdges (pin, PinDetectedEdges.Both);
-				}
+			    SetPinResistor(pin, PinResistor.None);
+			    SetPinDetectedEdges(pin, PinDetectedEdges.Both);
                 InitializePoll(pin);
             }
         }
@@ -154,7 +160,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <remarks>By default, both edges may be detected on input pins.</remarks>
         public void SetPinDetectedEdges(ProcessorPin pin, PinDetectedEdges edges)
         {
-            var edgePath = Path.Combine(gpioPath, string.Format("gpio{0}/edge", (int)pin));
+            var edgePath = Path.Combine(gpioPath, string.Format("{0}/edge", pin.ToGpioName()));//Path.Combine(gpioPath, string.Format("gpio{0}/edge", (int)pin));
             using (var streamWriter = new StreamWriter(edgePath, false))
                 streamWriter.Write(ToString(edges));
         }
@@ -280,7 +286,7 @@ namespace Raspberry.IO.GeneralPurpose
                 if (pinPoll.PollDescriptor < 0)
                     throw new IOException("Call to epoll_create(1) API failed with the following return value: " + pinPoll.PollDescriptor);
 
-                var valuePath = Path.Combine(gpioPath, string.Format("gpio{0}/value", (int)pin));
+                var valuePath = Path.Combine(gpioPath, string.Format("{0}/value", pin.ToGpioName())); //Path.Combine(gpioPath, string.Format("gpio{0}/value", (int)pin));
                 
                 pinPoll.FileDescriptor = UnixFile.OpenFileDescriptor(valuePath, UnixFileMode.ReadOnly | UnixFileMode.NonBlocking);
 

@@ -72,7 +72,7 @@ namespace Raspberry.IO.GeneralPurpose
                 driver.Release(pin);
 
             driver.Allocate(pin, newDirection);
-            if (newDirection == PinDirection.Input && resistor != PinResistor.None)
+            if (newDirection == PinDirection.Input && resistor != PinResistor.None && (driver.GetCapabilities() & GpioConnectionDriverCapabilities.CanSetPinResistor) > 0)
                 driver.SetPinResistor(pin, resistor);
 
             direction = newDirection;

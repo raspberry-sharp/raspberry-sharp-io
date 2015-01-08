@@ -498,7 +498,7 @@ namespace Raspberry.IO.GeneralPurpose
                 inputPins = inputPins | pin;
                 pinRawValues = Driver.Read(inputPins);
 
-                if (inputConfiguration.Resistor != PinResistor.None)
+                if (inputConfiguration.Resistor != PinResistor.None && (Driver.GetCapabilities() & GpioConnectionDriverCapabilities.CanSetPinResistor) > 0)
                     Driver.SetPinResistor(inputConfiguration.Pin, inputConfiguration.Resistor);
 
                 var switchConfiguration = inputConfiguration as SwitchInputPinConfiguration;

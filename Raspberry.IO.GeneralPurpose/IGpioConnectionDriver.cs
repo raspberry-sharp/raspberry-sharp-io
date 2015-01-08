@@ -1,11 +1,26 @@
+using System;
+
 namespace Raspberry.IO.GeneralPurpose
 {
+    [Flags]
+    public enum GpioConnectionDriverCapabilities
+    {
+        None = 0,
+        CanSetPinResistor = 1,
+        CanSetPinDetectedEdges = 2
+    }
+
     /// <summary>
     /// Provides an interface for connection drivers.
     /// </summary>
     public interface IGpioConnectionDriver
     {
         #region Methods
+
+        /// <summary>
+        /// Gets driver capabilities.
+        /// </summary>
+        GpioConnectionDriverCapabilities GetCapabilities();
 
         /// <summary>
         /// Allocates the specified pin.

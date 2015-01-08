@@ -26,7 +26,8 @@ namespace Raspberry.IO.GeneralPurpose
             this.pin = pin;
 
             driver.Allocate(pin, PinDirection.Output);
-            driver.SetPinResistor(pin, resistor);
+            if ((driver.GetCapabilities() & GpioConnectionDriverCapabilities.CanSetPinResistor) > 0)
+                driver.SetPinResistor(pin, resistor);
         }
 
         #endregion

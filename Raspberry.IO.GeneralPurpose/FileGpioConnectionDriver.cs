@@ -37,13 +37,22 @@ namespace Raspberry.IO.GeneralPurpose
         #region Methods
 
         /// <summary>
+        /// Gets driver capabilities.
+        /// </summary>
+        /// <returns>The capabilites.</returns>
+        public GpioConnectionDriverCapabilities GetCapabilities()
+        {
+            return GpioConnectionDriverCapabilities.None;
+        }
+
+        /// <summary>
         /// Allocates the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
         /// <param name="direction">The direction.</param>
         public void Allocate(ProcessorPin pin, PinDirection direction)
         {
-            var gpioId = string.Format("gpio{0}", (int)pin);
+            var gpioId = pin.ToGpioName();
             if (Directory.Exists(Path.Combine(gpioPath, gpioId)))
                 Release(pin);
 
@@ -121,7 +130,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="value">The pin status.</param>
         public void Write(ProcessorPin pin, bool value)
         {
-            var gpioId = string.Format("gpio{0}", (int) pin);
+            var gpioId = pin.ToGpioName();// string.Format("gpio{0}", (int) pin);
             var filePath = Path.Combine(gpioId, "value");
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
                 streamWriter.Write(value ? "1" : "0");
@@ -136,7 +145,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </returns>
         public bool Read(ProcessorPin pin)
         {
-            var gpioId = string.Format("gpio{0}", (int) pin);
+            var gpioId = pin.ToGpioName();// string.Format("gpio{0}", (int) pin);
             var filePath = Path.Combine(gpioId, "value");
 
             using (var streamReader = new StreamReader(new FileStream(Path.Combine(gpioPath, filePath), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
