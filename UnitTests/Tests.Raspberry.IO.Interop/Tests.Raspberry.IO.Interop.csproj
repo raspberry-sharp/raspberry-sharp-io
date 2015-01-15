@@ -14,6 +14,8 @@
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,15 +58,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Raspberry.IO.Interop\Raspberry.IO.Interop.csproj">
-      <Project>{689cb6c4-3d23-45da-8e00-87c28aea32d0}</Project>
+      <Project>{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}</Project>
       <Name>Raspberry.IO.Interop</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Raspberry.IO\Raspberry.IO.csproj">
-      <Project>{ace64f17-87e5-43e7-97a0-bdde19059c61}</Project>
+      <Project>{ACE64F17-87E5-43E7-97A0-BDDE19059C61}</Project>
       <Name>Raspberry.IO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tests.Raspberry.IO\Tests.Raspberry.IO.csproj">
-      <Project>{0bb6c3ce-422e-49f2-9165-dec06afe1b1a}</Project>
+      <Project>{0BB6C3CE-422E-49F2-9165-DEC06AFE1B1A}</Project>
       <Name>Tests.Raspberry.IO</Name>
     </ProjectReference>
   </ItemGroup>

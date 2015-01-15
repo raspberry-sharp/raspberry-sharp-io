@@ -14,6 +14,8 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,16 +37,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FakeItEasy, Version=1.20.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\FakeItEasy.1.20.0\lib\net40\FakeItEasy.dll</HintPath>
-    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\..\packages\FluentAssertions.2.2.0.0\lib\net40\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,6 +47,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="FakeItEasy">
+      <HintPath>..\..\packages\FakeItEasy.1.20.0\lib\net40\FakeItEasy.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interop\InteropSpec.cs" />
@@ -62,15 +62,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Raspberry.IO.Interop\Raspberry.IO.Interop.csproj">
-      <Project>{689cb6c4-3d23-45da-8e00-87c28aea32d0}</Project>
+      <Project>{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}</Project>
       <Name>Raspberry.IO.Interop</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Raspberry.IO.SerialPeripheralInterface\Raspberry.IO.SerialPeripheralInterface.csproj">
-      <Project>{326342e5-0411-40e8-9f2d-563d6b192568}</Project>
+      <Project>{326342E5-0411-40E8-9F2D-563D6B192568}</Project>
       <Name>Raspberry.IO.SerialPeripheralInterface</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tests.Raspberry.IO\Tests.Raspberry.IO.csproj">
-      <Project>{0bb6c3ce-422e-49f2-9165-dec06afe1b1a}</Project>
+      <Project>{0BB6C3CE-422E-49F2-9165-DEC06AFE1B1A}</Project>
       <Name>Tests.Raspberry.IO</Name>
     </ProjectReference>
   </ItemGroup>

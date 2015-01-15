@@ -94,10 +94,10 @@ namespace Raspberry.IO.GeneralPurpose
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
                 streamWriter.Write(direction == PinDirection.Input ? "in" : "out");
 
-			if (direction == PinDirection.Input)
+            if (direction == PinDirection.Input)
             {
-			    SetPinResistor(pin, PinResistor.None);
-			    SetPinDetectedEdges(pin, PinDetectedEdges.Both);
+                SetPinResistor(pin, PinResistor.None);
+                SetPinDetectedEdges(pin, PinDetectedEdges.Both);
                 InitializePoll(pin);
             }
         }

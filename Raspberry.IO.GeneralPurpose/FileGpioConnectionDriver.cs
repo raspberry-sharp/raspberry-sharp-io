@@ -52,14 +52,13 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="direction">The direction.</param>
         public void Allocate(ProcessorPin pin, PinDirection direction)
         {
-            var gpioId = string.Format("gpio{0}", (int)pin);
-            if (Directory.Exists(Path.Combine(gpioPath, gpioId)))
+            if (Directory.Exists(GuessGpioPath(pin)))
                 Release(pin);
 
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, "export"), false))
                 streamWriter.Write((int)pin);
 
-            var filePath = Path.Combine(gpioPath, gpioId, "direction");
+            var filePath = Path.Combine(GuessGpioPath(pin), "direction");
             try {
                 SetPinDirection(filePath, direction);
             } catch (UnauthorizedAccessException) {
@@ -130,8 +129,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="value">The pin status.</param>
         public void Write(ProcessorPin pin, bool value)
         {
-            var gpioId = string.Format("gpio{0}", (int) pin);
-            var filePath = Path.Combine(gpioId, "value");
+            var filePath = Path.Combine(GuessGpioPath(pin), "value");
             using (var streamWriter = new StreamWriter(Path.Combine(gpioPath, filePath), false))
                 streamWriter.Write(value ? "1" : "0");
         }
@@ -145,8 +143,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </returns>
         public bool Read(ProcessorPin pin)
         {
-            var gpioId = string.Format("gpio{0}", (int) pin);
-            var filePath = Path.Combine(gpioId, "value");
+            var filePath = Path.Combine(GuessGpioPath(pin), "value");
 
             using (var streamReader = new StreamReader(new FileStream(Path.Combine(gpioPath, filePath), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
@@ -181,6 +178,27 @@ namespace Raspberry.IO.GeneralPurpose
                     ? "in"
                     : "out");
             }
+        }
+
+        private static string GuessGpioPath(ProcessorPin pin)
+        {
+            string gpioId = string.Format("gpio{0}", (int)pin);
+            // by default use Raspberry Pi pin path format
+            string pinPath = Path.Combine(gpioPath, gpioId);
+            if (!Directory.Exists(pinPath))
+            {
+                // check for sunxi gpio path name format (eg. "gpio11_pe10", "gpio2_pi21", ...)
+                string[] dirs = Directory.GetDirectories(gpioPath);
+                foreach(string d in dirs)
+                {
+                    if (d.StartsWith(Path.Combine(pinPath, gpioId) + "_"))
+                    {
+                        pinPath = d;
+                        break;
+                    }
+                }
+            } 
+            return pinPath;
         }
 
         #endregion

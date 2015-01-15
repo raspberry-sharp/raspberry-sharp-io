@@ -114,6 +114,8 @@
     <Compile Include="Displays\Ssd1306\Fonts\Fixed1L.cs" />
     <Compile Include="Displays\Ssd1306\Fonts\Proportional2L.cs" />
     <Compile Include="Displays\Ssd1306\Fonts\Proportional3L.cs" />
+    <Compile Include="Leds\GroveRgb\RgbColor.cs" />
+    <Compile Include="Leds\GroveBar\GroveBarConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
@@ -156,5 +158,6 @@
     <Folder Include="Leds\GroveRgb\" />
     <Folder Include="Displays\Ssd1306\" />
     <Folder Include="Displays\Ssd1306\Fonts\" />
+    <Folder Include="Leds\GroveBar\" />
   </ItemGroup>
 </Project>
