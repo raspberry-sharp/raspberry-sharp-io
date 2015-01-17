@@ -213,6 +213,11 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Pin 31.
         /// </summary>
-        Pin31 = 31
+        Pin31 = 31,
+        
+        /// <summary>
+        /// Pin 32. (added for CubieTruck/CubieBoard3 compatibility
+        /// </summary>
+        Pin32 = 32
     }
 }

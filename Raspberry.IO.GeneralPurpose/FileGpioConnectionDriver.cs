@@ -191,7 +191,7 @@ namespace Raspberry.IO.GeneralPurpose
                 string[] dirs = Directory.GetDirectories(gpioPath);
                 foreach(string d in dirs)
                 {
-                    if (d.StartsWith(Path.Combine(pinPath, gpioId) + "_"))
+                    if (d.StartsWith(pinPath + "_"))
                     {
                         pinPath = d;
                         break;

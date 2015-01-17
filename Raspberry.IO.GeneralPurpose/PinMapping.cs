@@ -29,40 +29,40 @@ namespace Raspberry.IO.GeneralPurpose
             var mapping = /* Value is not used but required for anonymous type */ new[]{ new { Processor = ProcessorPin.Pin0, Connector = ConnectorPin.P1Pin03 }};
 
             var uname = GetUname();
-            if (uname.ToLower().Contains("cubieboard"))
+            if (uname.ToLower().Contains("cubie"))
             {
                 mapping = new[] {
-                    new {Processor = ProcessorPin.Pin1, Connector = ConnectorPin.CB3_CN8Pin5},
-                    new {Processor = ProcessorPin.Pin2, Connector = ConnectorPin.CB3_CN8Pin6},
-                    new {Processor = ProcessorPin.Pin3, Connector = ConnectorPin.CB3_CN8Pin7},
-                    new {Processor = ProcessorPin.Pin4, Connector = ConnectorPin.CB3_CN8Pin8},
-                    new {Processor = ProcessorPin.Pin5, Connector = ConnectorPin.CB3_CN8Pin9},
-                    new {Processor = ProcessorPin.Pin6, Connector = ConnectorPin.CB3_CN8Pin10},
-                    new {Processor = ProcessorPin.Pin7, Connector = ConnectorPin.CB3_CN8Pin11},
-                    new {Processor = ProcessorPin.Pin8, Connector = ConnectorPin.CB3_CN8Pin12},
-                    new {Processor = ProcessorPin.Pin9, Connector = ConnectorPin.CB3_CN8Pin15},
-                    new {Processor = ProcessorPin.Pin10, Connector = ConnectorPin.CB3_CN8Pin16},
-                    new {Processor = ProcessorPin.Pin11, Connector = ConnectorPin.CB3_CN8Pin17},
-                    new {Processor = ProcessorPin.Pin12, Connector = ConnectorPin.CB3_CN8Pin18},
-                    new {Processor = ProcessorPin.Pin13, Connector = ConnectorPin.CB3_CN8Pin19},
-                    new {Processor = ProcessorPin.Pin14, Connector = ConnectorPin.CB3_CN8Pin20},
-                    new {Processor = ProcessorPin.Pin15, Connector = ConnectorPin.CB3_CN8Pin21},
-                    new {Processor = ProcessorPin.Pin16, Connector = ConnectorPin.CB3_CN8Pin22},
-                    new {Processor = ProcessorPin.Pin17, Connector = ConnectorPin.CB3_CN8Pin23},
-                    new {Processor = ProcessorPin.Pin18, Connector = ConnectorPin.CB3_CN8Pin25},
+                    new {Processor = ProcessorPin.Pin3, Connector = ConnectorPin.CB3_CN8Pin5},
+                    new {Processor = ProcessorPin.Pin4, Connector = ConnectorPin.CB3_CN8Pin6},
+                    new {Processor = ProcessorPin.Pin5, Connector = ConnectorPin.CB3_CN8Pin7},
+                    new {Processor = ProcessorPin.Pin6, Connector = ConnectorPin.CB3_CN8Pin8},
+                    new {Processor = ProcessorPin.Pin7, Connector = ConnectorPin.CB3_CN8Pin9},
+                    new {Processor = ProcessorPin.Pin8, Connector = ConnectorPin.CB3_CN8Pin10},
+                    new {Processor = ProcessorPin.Pin9, Connector = ConnectorPin.CB3_CN8Pin11},
+                    new {Processor = ProcessorPin.Pin10, Connector = ConnectorPin.CB3_CN8Pin12},
+                    new {Processor = ProcessorPin.Pin11, Connector = ConnectorPin.CB3_CN8Pin15},
+                    new {Processor = ProcessorPin.Pin12, Connector = ConnectorPin.CB3_CN8Pin16},
+                    new {Processor = ProcessorPin.Pin13, Connector = ConnectorPin.CB3_CN8Pin17},
+                    new {Processor = ProcessorPin.Pin14, Connector = ConnectorPin.CB3_CN8Pin18},
+                    new {Processor = ProcessorPin.Pin15, Connector = ConnectorPin.CB3_CN8Pin19},
+                    new {Processor = ProcessorPin.Pin16, Connector = ConnectorPin.CB3_CN8Pin20},
+                    new {Processor = ProcessorPin.Pin17, Connector = ConnectorPin.CB3_CN8Pin21},
+                    new {Processor = ProcessorPin.Pin18, Connector = ConnectorPin.CB3_CN8Pin22},
+                    new {Processor = ProcessorPin.Pin19, Connector = ConnectorPin.CB3_CN8Pin23},
+                    new {Processor = ProcessorPin.Pin20, Connector = ConnectorPin.CB3_CN8Pin25},
                     //
-                    new {Processor = ProcessorPin.Pin19, Connector = ConnectorPin.CB3_CN9Pin3},
-                    new {Processor = ProcessorPin.Pin20, Connector = ConnectorPin.CB3_CN9Pin4},
-                    new {Processor = ProcessorPin.Pin21, Connector = ConnectorPin.CB3_CN9Pin5},
-                    new {Processor = ProcessorPin.Pin22, Connector = ConnectorPin.CB3_CN9Pin6},
-                    new {Processor = ProcessorPin.Pin23, Connector = ConnectorPin.CB3_CN9Pin7},
-                    new {Processor = ProcessorPin.Pin24, Connector = ConnectorPin.CB3_CN9Pin8},
-                    new {Processor = ProcessorPin.Pin25, Connector = ConnectorPin.CB3_CN9Pin9},
-                    new {Processor = ProcessorPin.Pin26, Connector = ConnectorPin.CB3_CN9Pin10},
-                    new {Processor = ProcessorPin.Pin27, Connector = ConnectorPin.CB3_CN9Pin11},
-                    new {Processor = ProcessorPin.Pin28, Connector = ConnectorPin.CB3_CN9Pin12},
-                    new {Processor = ProcessorPin.Pin29, Connector = ConnectorPin.CB3_CN9Pin13},
-                    new {Processor = ProcessorPin.Pin30, Connector = ConnectorPin.CB3_CN9Pin14}
+                    new {Processor = ProcessorPin.Pin21, Connector = ConnectorPin.CB3_CN9Pin3},
+                    new {Processor = ProcessorPin.Pin22, Connector = ConnectorPin.CB3_CN9Pin4},
+                    new {Processor = ProcessorPin.Pin23, Connector = ConnectorPin.CB3_CN9Pin5},
+                    new {Processor = ProcessorPin.Pin24, Connector = ConnectorPin.CB3_CN9Pin6},
+                    new {Processor = ProcessorPin.Pin25, Connector = ConnectorPin.CB3_CN9Pin7},
+                    new {Processor = ProcessorPin.Pin26, Connector = ConnectorPin.CB3_CN9Pin8},
+                    new {Processor = ProcessorPin.Pin27, Connector = ConnectorPin.CB3_CN9Pin9},
+                    new {Processor = ProcessorPin.Pin28, Connector = ConnectorPin.CB3_CN9Pin10},
+                    new {Processor = ProcessorPin.Pin29, Connector = ConnectorPin.CB3_CN9Pin11},
+                    new {Processor = ProcessorPin.Pin30, Connector = ConnectorPin.CB3_CN9Pin12},
+                    new {Processor = ProcessorPin.Pin31, Connector = ConnectorPin.CB3_CN9Pin13},
+                    new {Processor = ProcessorPin.Pin32, Connector = ConnectorPin.CB3_CN9Pin14}
                 };
             } 
             else
