@@ -102,6 +102,7 @@
     <Compile Include="Sensors\Pressure\Bmp085\Bmp085Precision.cs" />
     <Compile Include="Sensors\Temperature\Dht\DhtConnection.cs" />
     <Compile Include="Sensors\Temperature\Dht\DhtData.cs" />
+    <Compile Include="Sensors\Temperature\Ds18b20\Ds18b20Connection.cs" />
     <Compile Include="Sensors\VariableResistiveDividerConnection.cs" />
     <Compile Include="Sensors\Temperature\Tmp36\Tmp36Connection.cs" />
     <Compile Include="Sensors\ResistiveDivider.cs" />
