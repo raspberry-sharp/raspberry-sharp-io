@@ -35,7 +35,7 @@ namespace Raspberry.IO.GeneralPurpose
                     MemoryProtection.ReadWrite, 
                     MemoryFlags.Shared, 
                     memoryFile.Descriptor,
-                    Interop.BCM2835_GPIO_BASE);
+                    Board.Current.Model == '2' ? Interop.BCM2836_GPIO_BASE : Interop.BCM2835_GPIO_BASE);
             }
         }
 
