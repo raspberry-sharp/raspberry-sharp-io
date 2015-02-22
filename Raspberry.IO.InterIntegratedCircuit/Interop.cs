@@ -17,6 +17,11 @@ namespace Raspberry.IO.InterIntegratedCircuit
         public const uint BCM2835_GPIO_BASE = (BCM2835_PERI_BASE + 0x200000);
         public const uint BCM2835_BSC0_BASE = (BCM2835_PERI_BASE + 0x205000);
         public const uint BCM2835_BSC1_BASE = (BCM2835_PERI_BASE + 0x804000);
+        
+        public const uint BCM2836_PERI_BASE = 0x3F000000;
+        public const uint BCM2836_GPIO_BASE = (BCM2836_PERI_BASE + 0x200000);
+        public const uint BCM2836_BSC0_BASE = (BCM2836_PERI_BASE + 0x205000);
+        public const uint BCM2836_BSC1_BASE = (BCM2836_PERI_BASE + 0x804000);
 
         public const uint BCM2835_BLOCK_SIZE = (4*1024);
 

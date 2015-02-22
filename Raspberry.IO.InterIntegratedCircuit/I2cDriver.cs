@@ -47,7 +47,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
             var memoryFile = Interop.open("/dev/mem", Interop.O_RDWR + Interop.O_SYNC);
             try
             {
-                gpioAddress = Interop.mmap(IntPtr.Zero, Interop.BCM2835_BLOCK_SIZE, Interop.PROT_READ | Interop.PROT_WRITE, Interop.MAP_SHARED, memoryFile, Interop.BCM2835_GPIO_BASE);
+                gpioAddress = Interop.mmap(IntPtr.Zero, Interop.BCM2835_BLOCK_SIZE, Interop.PROT_READ | Interop.PROT_WRITE, Interop.MAP_SHARED, memoryFile, Board.Current.Model == '2' ? Interop.BCM2836_GPIO_BASE : Interop.BCM2835_GPIO_BASE);
                 bscAddress = Interop.mmap(IntPtr.Zero, Interop.BCM2835_BLOCK_SIZE, Interop.PROT_READ | Interop.PROT_WRITE, Interop.MAP_SHARED, memoryFile, bscBase);
             }
             finally
@@ -286,14 +286,14 @@ namespace Raspberry.IO.InterIntegratedCircuit
             {
                 case 1:
                     if (sdaPin == ProcessorPin.Pin0 && sclPin == ProcessorPin.Pin1)
-                        return Interop.BCM2835_BSC0_BASE;
+                    return Board.Current.Model == '2' ? Interop.BCM2836_BSC0_BASE : Interop.BCM2835_BSC0_BASE;
                     throw new InvalidOperationException("No I2C device exist on the specified pins");
 
                 case 2:
                     if (sdaPin == ProcessorPin.Pin28 && sclPin == ProcessorPin.Pin29)
-                        return Interop.BCM2835_BSC0_BASE;
+                        return Board.Current.Model == '2' ? Interop.BCM2836_BSC0_BASE : Interop.BCM2835_BSC0_BASE;
                     if (sdaPin == ProcessorPin.Pin2 && sclPin == ProcessorPin.Pin3)
-                        return Interop.BCM2835_BSC1_BASE;
+                        return Board.Current.Model == '2' ? Interop.BCM2836_BSC1_BASE : Interop.BCM2835_BSC1_BASE;
                     throw new InvalidOperationException("No I2C device exist on the specified pins");
 
                 case 3:
