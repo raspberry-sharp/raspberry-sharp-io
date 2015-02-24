@@ -286,19 +286,19 @@ namespace Raspberry.IO.InterIntegratedCircuit
             {
                 case 1:
                     if (sdaPin == ProcessorPin.Pin0 && sclPin == ProcessorPin.Pin1)
-                    return Board.Current.Model == '2' ? Interop.BCM2836_BSC0_BASE : Interop.BCM2835_BSC0_BASE;
+                    return Interop.BCM2835_BSC0_BASE;
                     throw new InvalidOperationException("No I2C device exist on the specified pins");
 
                 case 2:
                     if (sdaPin == ProcessorPin.Pin28 && sclPin == ProcessorPin.Pin29)
-                        return Board.Current.Model == '2' ? Interop.BCM2836_BSC0_BASE : Interop.BCM2835_BSC0_BASE;
+                        return Interop.BCM2835_BSC0_BASE;
                     if (sdaPin == ProcessorPin.Pin2 && sclPin == ProcessorPin.Pin3)
-                        return Board.Current.Model == '2' ? Interop.BCM2836_BSC1_BASE : Interop.BCM2835_BSC1_BASE;
+                        return Interop.BCM2835_BSC1_BASE;
                     throw new InvalidOperationException("No I2C device exist on the specified pins");
 
                 case 3:
                     if (sdaPin == ProcessorPin.Pin2 && sclPin == ProcessorPin.Pin3)
-                        return Interop.BCM2835_BSC1_BASE;
+                        return Board.Current.Model == '2' ? Interop.BCM2836_BSC1_BASE : Interop.BCM2835_BSC1_BASE;
                     throw new InvalidOperationException("No I2C device exist on the specified pins");
 
                 default:
