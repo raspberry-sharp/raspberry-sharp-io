@@ -1,5 +1,3 @@
-using System;
-
 namespace Raspberry.IO.Components.Displays.Ssd1306
 {
     public class Command
@@ -38,28 +36,5 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         public const byte ExternalVcc = 0x1;
         public const byte SwitchCapVcc = 0x2;
     }
-
-    [Flags]
-    public enum ScrollSpeed : byte
-    {
-        F2 = 0x7,
-        F3 = 0x4,
-        F4 = 0x5,
-        F5 = 0x0,
-        F25 = 0x6,
-        F64 = 0x1,
-        F128 = 0x2,
-        F256 = 0x3
-    }
-
-    [Flags]
-    public enum ScrollDirection : byte
-    {
-        HorizontalRight = 0x01,
-        HorizontalLeft = 0x02,
-        VerticalAndHorizontalRight = 0x04,
-        VerticalAndHorizontalLeft = 0x05
-    }
-
 }
 

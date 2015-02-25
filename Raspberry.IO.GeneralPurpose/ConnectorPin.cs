@@ -137,7 +137,7 @@ namespace Raspberry.IO.GeneralPurpose
 
         /// <summary>
         /// Connector P1, pin 32.
-        /// </summary>enum
+        /// </summary>
         P1Pin32,
 
         /// <summary>

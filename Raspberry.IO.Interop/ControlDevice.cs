@@ -9,13 +9,17 @@ namespace Raspberry.IO.Interop
     public class ControlDevice : IControlDevice
     {
         #region Classes 
+
         private static class GenericIoControl<T> {
+        
             #region Libc imports
+
             [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
             public static extern int ioctl(int descriptor, UInt32 request, ref T data);
             
             [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
             public static extern int ioctl(int descriptor, UInt32 request, T data);
+            
             #endregion
         }
         #endregion

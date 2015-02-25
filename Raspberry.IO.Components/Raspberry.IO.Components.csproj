@@ -33,17 +33,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Raspberry.System, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Raspberry.System.1.4.0\lib\net40\Raspberry.System.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Common.Logging">
-      <HintPath>..\packages\Common.Logging.2.2.0\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>..\packages\Common.Logging.Core.2.2.0\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Raspberry.System">
-      <HintPath>..\packages\Raspberry.System.1.3.0\lib\net40\Raspberry.System.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -81,6 +84,8 @@
     <Compile Include="Displays\Hd44780\Hd44780LcdConnection.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
     <Compile Include="Displays\Hd44780\Hd44780Pins.cs" />
+    <Compile Include="Displays\Ssd1306\ScrollDirection.cs" />
+    <Compile Include="Displays\Ssd1306\ScrollSpeed.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017InputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017OutputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
@@ -154,12 +159,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Leds\" />
-    <Folder Include="Leds\GroveRgb\" />
-    <Folder Include="Displays\Ssd1306\" />
-    <Folder Include="Displays\Ssd1306\Fonts\" />
-    <Folder Include="Leds\GroveBar\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
 </Project>
