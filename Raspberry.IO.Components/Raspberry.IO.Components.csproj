@@ -65,6 +65,10 @@
     <Compile Include="Controllers\Tlc59711\Tlc59711Settings.cs" />
     <Compile Include="Controllers\Tlc59711\Tlc59711Connection.cs" />
     <Compile Include="Controllers\Tlc59711\Tlc59711Device.cs" />
+    <Compile Include="Converters\Mcp3002\Mcp3002AnalogPinExtensionMethods.cs" />
+    <Compile Include="Converters\Mcp3002\Mcp3002Channel.cs" />
+    <Compile Include="Converters\Mcp3002\Mcp3002InputAnalogPin.cs" />
+    <Compile Include="Converters\Mcp3002\Mcp3002SpiConnection.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008AnalogPinExtensionMethods.cs" />
     <Compile Include="Controllers\Pca9685\IPwmDevice.cs" />
     <Compile Include="Controllers\Pca9685\PwmChannel.cs" />
