@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.GeneralPurpose", "Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj", "{281C71ED-C36D-408E-8BAA-75C381DC17E7}"
 EndProject
@@ -62,6 +62,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.Interop", "Raspberry.IO.Interop\Raspberry.IO.Interop.csproj", "{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Components.PiFaceDigital", "Tests\Test.Components.PiFaceDigital\Test.Components.PiFaceDigital.csproj", "{475CEB21-BA5F-4338-80E2-C6B29766A04A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Spi.MCP3208", "Tests\Test.Spi.MCP3208\Test.Spi.MCP3208.csproj", "{D4B87926-598E-4EAB-BA75-CD9FB253D450}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +151,10 @@ Global
 		{475CEB21-BA5F-4338-80E2-C6B29766A04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{475CEB21-BA5F-4338-80E2-C6B29766A04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{475CEB21-BA5F-4338-80E2-C6B29766A04A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4B87926-598E-4EAB-BA75-CD9FB253D450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4B87926-598E-4EAB-BA75-CD9FB253D450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4B87926-598E-4EAB-BA75-CD9FB253D450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4B87926-598E-4EAB-BA75-CD9FB253D450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +176,7 @@ Global
 		{99EB3D1A-F0B7-454E-BB50-9B2F5349BC5B} = {C39D0CC3-C0F2-4B58-8779-2CCB5B52534C}
 		{CAF876A0-0FCB-44F7-96F1-53704CB6015F} = {C39D0CC3-C0F2-4B58-8779-2CCB5B52534C}
 		{475CEB21-BA5F-4338-80E2-C6B29766A04A} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
+		{D4B87926-598E-4EAB-BA75-CD9FB253D450} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj

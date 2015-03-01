@@ -75,6 +75,10 @@
     <Compile Include="Converters\Mcp3008\Mcp3008Channel.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008InputAnalogPin.cs" />
     <Compile Include="Converters\Mcp3008\Mcp3008SpiConnection.cs" />
+    <Compile Include="Converters\Mcp3208\Mcp3208AnalogPinExtensionMethods.cs" />
+    <Compile Include="Converters\Mcp3208\Mcp3208Channel.cs" />
+    <Compile Include="Converters\Mcp3208\Mcp3208InputAnalogPin.cs" />
+    <Compile Include="Converters\Mcp3208\Mcp3208SpiConnection.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822AnalogPinExtensionMethods.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822Channel.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822OutputAnalogPin.cs" />
