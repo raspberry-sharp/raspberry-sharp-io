@@ -79,6 +79,12 @@
     <Compile Include="Converters\Mcp4822\Mcp4822Channel.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822OutputAnalogPin.cs" />
     <Compile Include="Converters\Mcp4822\Mcp4822SpiConnection.cs" />
+    <Compile Include="Devices\PiFaceDigital\InputPinChangedArgs.cs" />
+    <Compile Include="Devices\PiFaceDigital\InputPinChangedHandler.cs" />
+    <Compile Include="Devices\PiFaceDigital\PiFaceDigitalDevice.cs" />
+    <Compile Include="Devices\PiFaceDigital\PiFaceInputPin.cs" />
+    <Compile Include="Devices\PiFaceDigital\PiFaceOutputPin.cs" />
+    <Compile Include="Devices\PiFaceDigital\PiFacePin.cs" />
     <Compile Include="Displays\Hd44780\Command.cs" />
     <Compile Include="Displays\Hd44780\CursorShiftFlags.cs" />
     <Compile Include="Displays\Hd44780\DisplayFlags.cs" />
