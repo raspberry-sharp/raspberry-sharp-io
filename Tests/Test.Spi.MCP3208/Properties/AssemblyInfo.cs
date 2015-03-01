@@ -1,36 +1,13 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// Le informazioni generali relative a un assembly sono controllate dal seguente 
-// set di attributi. Per modificare le informazioni associate a un assembly
-// occorre quindi modificare i valori di questi attributi.
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
 [assembly: AssemblyTitle("Test.Spi.MCP3208")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Raspberry Pi MCP3208 Component Sample")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Test.Spi.MCP3208")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
-// Se si imposta ComVisible su false, i tipi in questo assembly non saranno visibili 
-// ai componenti COM.  Se è necessario accedere a un tipo in questo assembly da 
-// COM, impostare su true l'attributo ComVisible per tale tipo.
-[assembly: ComVisible(false)]
-
-// Se il progetto viene esposto a COM, il GUID che segue verrà utilizzato per creare l'ID della libreria dei tipi
+// The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("2e0267cc-028e-4e7a-8ca6-d9cab73f13ed")]
 
-// Le informazioni sulla versione di un assembly sono costituite dai seguenti quattro valori:
-//
-//      Numero di versione principale
-//      Numero di versione secondario 
-//      Numero build
-//      Revisione
-//
-// È possibile specificare tutti i valori oppure impostare valori predefiniti per i numeri relativi alla revisione e alla build 
-// utilizzando l'asterisco (*) come descritto di seguito:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
