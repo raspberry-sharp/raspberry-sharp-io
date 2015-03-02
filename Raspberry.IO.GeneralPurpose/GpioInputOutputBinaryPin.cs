@@ -5,10 +5,16 @@ namespace Raspberry.IO.GeneralPurpose
     /// </summary>
     public class GpioInputOutputBinaryPin : IInputOutputBinaryPin
     {
+        #region Fields
+
         private readonly IGpioConnectionDriver driver;
         private readonly ProcessorPin pin;
         private readonly PinResistor resistor;
         private PinDirection? direction;
+
+        #endregion
+
+        #region Instance Management
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GpioInputOutputBinaryPin"/> class.
@@ -22,6 +28,10 @@ namespace Raspberry.IO.GeneralPurpose
             this.pin = pin;
             this.resistor = resistor;
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
@@ -40,6 +50,22 @@ namespace Raspberry.IO.GeneralPurpose
         {
             SetDirection(PinDirection.Input);
             return driver.Read(pin);
+        }
+
+        /// <summary>
+        /// Prepares the pin to act as an input.
+        /// </summary>
+        public void AsInput()
+        {
+            SetDirection(PinDirection.Input);
+        }
+
+        /// <summary>
+        /// Prepares the pin to act as an output.
+        /// </summary>
+        public void AsOutput()
+        {
+            SetDirection(PinDirection.Output);
         }
 
         /// <summary>
@@ -63,6 +89,10 @@ namespace Raspberry.IO.GeneralPurpose
             driver.Write(pin, state);
         }
 
+        #endregion
+
+        #region Private Helpers
+
         private void SetDirection(PinDirection newDirection)
         {
             if (direction == newDirection)
@@ -72,11 +102,14 @@ namespace Raspberry.IO.GeneralPurpose
                 driver.Release(pin);
 
             driver.Allocate(pin, newDirection);
-            if (newDirection == PinDirection.Input && resistor != PinResistor.None && (driver.GetCapabilities() & GpioConnectionDriverCapabilities.CanSetPinResistor) > 0)
+            if (newDirection == PinDirection.Input
+                && resistor != PinResistor.None
+                && (driver.GetCapabilities() & GpioConnectionDriverCapabilities.CanSetPinResistor) != GpioConnectionDriverCapabilities.None)
                 driver.SetPinResistor(pin, resistor);
 
             direction = newDirection;
         }
 
+        #endregion
     }
 }
