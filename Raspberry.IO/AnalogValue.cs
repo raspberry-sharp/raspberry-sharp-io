@@ -6,16 +6,16 @@ namespace Raspberry.IO
     public class AnalogValue
     {
         private decimal value;
-        private decimal maximum;
+        private decimal range;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalogValue"/> class.
         /// </summary>
-        /// <param name="maximum">The maximum.</param>
+        /// <param name="range">The total range (ie. maximum value).</param>
         /// <param name="value">The value.</param>
-        public AnalogValue(decimal value, decimal maximum = 1)
+        public AnalogValue(decimal value, decimal range = 1)
         {
-            this.maximum = maximum;
+            this.range = range;
             this.value = value;
         }
 
@@ -32,15 +32,15 @@ namespace Raspberry.IO
         }
 
         /// <summary>
-        /// Gets or sets the maximum.
+        /// Gets or sets the total range.
         /// </summary>
         /// <value>
-        /// The maximum.
+        /// The total range, ie. the maximum value.
         /// </value>
-        public decimal Maximum
+        public decimal Range
         {
-            get { return maximum; }
-            set { maximum = value; }
+            get { return range; }
+            set { range = value; }
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Raspberry.IO
         /// </value>
         public decimal Relative
         {
-            get { return value / maximum; }
+            get { return value / range; }
         }
     }
 }
