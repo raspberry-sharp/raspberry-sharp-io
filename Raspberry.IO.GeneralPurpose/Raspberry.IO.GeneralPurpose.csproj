@@ -56,6 +56,7 @@
     <Compile Include="ConnectedPin.cs" />
     <Compile Include="ConnectedPins.cs" />
     <Compile Include="FileGpioConnectionDriver.cs" />
+    <Compile Include="FileGpioHandle.cs" />
     <Compile Include="GpioBinaryPinExtensionMethods.cs" />
     <Compile Include="GpioConnectionDriver.cs" />
     <Compile Include="GpioConnectionDriverCapabilities.cs" />

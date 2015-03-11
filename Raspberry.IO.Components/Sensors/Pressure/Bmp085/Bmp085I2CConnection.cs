@@ -58,12 +58,25 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
         #region Methods
 
         /// <summary>
-        /// Gets the pressure, in pascal.
+        /// Gets the pressure.
         /// </summary>
         /// <returns>The pressure.</returns>
-        public decimal GetPressure()
+        public UnitsNet.Pressure GetPressure()
         {
             return GetData().Pressure;
+        }
+
+        /// <summary>
+        /// Gets the temperature.
+        /// </summary>
+        /// <returns>The temperature.</returns>
+        public UnitsNet.Temperature GetTemperature()
+        {
+            // Do not use GetData here since it would imply useless I/O and computation.
+            var rawTemperature = GetRawTemperature();
+            var b5 = ComputeB5(rawTemperature);
+
+            return UnitsNet.Temperature.FromDegreesCelsius((double)((b5 + 8) >> 4) / 10);
         }
 
         /// <summary>
@@ -104,22 +117,9 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
 
             return new Bmp085Data
             {
-                Pressure = p + ((x1 + x2 + 3791) >> 4),
-                Temperature = ((b5 + 8) >> 4)/10m
+                Pressure = UnitsNet.Pressure.FromPascals(p + ((x1 + x2 + 3791) >> 4)),
+                Temperature = UnitsNet.Temperature.FromDegreesCelsius((double)((b5 + 8) >> 4) / 10)
             };
-        }
-
-        /// <summary>
-        /// Gets the temperature, in °C.
-        /// </summary>
-        /// <returns>The temperature.</returns>
-        public decimal GetTemperature()
-        {
-            // Do not use GetData here since it would imply useless I/O and computation.
-            var rawTemperature = GetRawTemperature();
-            var b5 = ComputeB5(rawTemperature);
-
-            return ((b5 + 8) >> 4)/10m;
         }
 
         #endregion

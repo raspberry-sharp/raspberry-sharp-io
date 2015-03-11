@@ -38,8 +38,8 @@ namespace Test.Gpio.HCSR04
                 {
                     try
                     {
-                        var distance = connection.GetDistance();
-                        Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0:0.0}cm", distance * 100).PadRight(16));
+                        var distance = connection.GetDistance().Centimeters;
+                        Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0:0.0}cm", distance).PadRight(16));
                         Console.CursorTop--;
                     }
                     catch (TimeoutException e)

@@ -1,6 +1,7 @@
 ﻿#region References
 
 using System;
+using UnitsNet;
 
 #endregion
 
@@ -14,7 +15,7 @@ namespace Raspberry.IO.Components.Sensors
         #region Fields
 
         private readonly IInputAnalogPin analogPin;
-        private readonly Func<AnalogValue, decimal> resistorEvalFunc;
+        private readonly Func<AnalogValue, ElectricResistance> resistorEvalFunc;
 
         #endregion
 
@@ -26,7 +27,7 @@ namespace Raspberry.IO.Components.Sensors
         /// <param name="analogPin">The analog pin.</param>
         /// <param name="resistorEvalFunc">The resistor eval function.</param>
         /// <remarks>Methods from <see cref="ResistiveDivider"/> should be used.</remarks>
-        public VariableResistiveDividerConnection(IInputAnalogPin analogPin, Func<AnalogValue, decimal> resistorEvalFunc)
+        public VariableResistiveDividerConnection(IInputAnalogPin analogPin, Func<AnalogValue, ElectricResistance> resistorEvalFunc)
         {
             this.analogPin = analogPin;
             this.resistorEvalFunc = resistorEvalFunc;
@@ -45,10 +46,10 @@ namespace Raspberry.IO.Components.Sensors
         #region Methods
 
         /// <summary>
-        /// Gets the resistor, in Ohms.
+        /// Gets the electric resistance.
         /// </summary>
-        /// <returns>The resistor value.</returns>
-        public decimal GetResistor()
+        /// <returns>The resistance value.</returns>
+        public ElectricResistance GetResistance()
         {
             var value = analogPin.Read();
             return resistorEvalFunc(value);

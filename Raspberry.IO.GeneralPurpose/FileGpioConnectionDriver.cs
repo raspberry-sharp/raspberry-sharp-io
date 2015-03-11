@@ -3,7 +3,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Security;
 using System.Threading;
 using System.Collections.Generic;
 
@@ -11,12 +10,6 @@ using System.Collections.Generic;
 
 namespace Raspberry.IO.GeneralPurpose
 {
-    public class FileGpioHandle
-    {
-        public string GpioPath { get; set; }
-        public Stream GpioStream { get; set; }
-    }
-
     /// <summary>
     /// Represents a connection driver using files.
     /// </summary>
@@ -25,7 +18,7 @@ namespace Raspberry.IO.GeneralPurpose
         #region Fields
 
         private const string gpioPath = "/sys/class/gpio";
-        private static Dictionary<ProcessorPin, FileGpioHandle> gpioPathList = new Dictionary<ProcessorPin, FileGpioHandle>();
+        private static readonly Dictionary<ProcessorPin, FileGpioHandle> gpioPathList = new Dictionary<ProcessorPin, FileGpioHandle>();
 
         #endregion
 
@@ -36,7 +29,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </summary>
         public FileGpioConnectionDriver()
         {
-            if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+            if (Environment.OSVersion.Platform != PlatformID.Unix)
                 throw new NotSupportedException("FileGpioConnectionDriver is only supported in Unix");
         }
 
@@ -67,7 +60,7 @@ namespace Raspberry.IO.GeneralPurpose
 
             if (!gpioPathList.ContainsKey(pin))
             {
-                FileGpioHandle gpio = new FileGpioHandle() { GpioPath = GuessGpioPath(pin) };
+                var gpio = new FileGpioHandle { GpioPath = GuessGpioPath(pin) };
                 gpioPathList.Add(pin, gpio);
             }
 

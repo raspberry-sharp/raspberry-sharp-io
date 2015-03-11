@@ -5,7 +5,7 @@
     /// </summary>
     public struct Bmp085Data
     {
-        public decimal Temperature;
-        public decimal Pressure;
+        public UnitsNet.Temperature Temperature;
+        public UnitsNet.Pressure Pressure;
     }
 }

@@ -7,6 +7,7 @@ using Raspberry.IO.Components.Sensors;
 using Raspberry.IO.Components.Sensors.Temperature.Dht;
 using Raspberry.IO.Components.Sensors.Temperature.Tmp36;
 using Raspberry.IO.GeneralPurpose;
+using UnitsNet;
 
 #endregion
 
@@ -33,7 +34,7 @@ namespace Test.Gpio.MCP3008
             Console.WriteLine("\tMISO: {0}", adcMiso);
             Console.WriteLine();
 
-            const decimal voltage = 3.3m;
+            ElectricPotential voltage = ElectricPotential.FromVolts(3.3);
 
             var driver = new MemoryGpioConnectionDriver(); //GpioConnectionSettings.DefaultDriver;
 
@@ -47,17 +48,17 @@ namespace Test.Gpio.MCP3008
                 voltage))
             using (var lightConnection = new VariableResistiveDividerConnection(
                 adcConnection.In(Mcp3008Channel.Channel1), 
-                ResistiveDivider.ForLowerResistor(10000)))
+                ResistiveDivider.ForLowerResistor(ElectricResistance.FromKiloohms(10))))
             {
                 Console.CursorVisible = false;
 
                 while (!Console.KeyAvailable)
                 {
                     var temperature = temperatureConnection.GetTemperature();
-                    decimal resistor = lightConnection.GetResistor();
+                    var resistor = lightConnection.GetResistance();
                     var lux = resistor.ToLux();
 
-                    Console.WriteLine("Temperature = {0,5:0.0} °C\tLight = {1,5:0.0} Lux ({2} ohms)", temperature, lux, (int) resistor);
+                    Console.WriteLine("Temperature = {0,5:0.0} °C\tLight = {1,5:0.0} Lux ({2} ohms)", temperature, lux, (int)resistor.Ohms);
 
                     Console.CursorTop--;
 

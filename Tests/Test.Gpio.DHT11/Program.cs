@@ -29,7 +29,7 @@ namespace Test.Gpio.DHT11
                 {
                     var data = DhtConnection.GetData();
                     if (data != null)
-                        Console.WriteLine("{0:0.00}% humidity, {1:0.0}°C", data.Humidity, data.Temperature);
+                        Console.WriteLine("{0:0.00}% humidity, {1:0.0}°C", data.RelativeHumidity.Percent, data.Temperature.DegreesCelsius);
                     else
                         Console.WriteLine("Unable to read data");
 

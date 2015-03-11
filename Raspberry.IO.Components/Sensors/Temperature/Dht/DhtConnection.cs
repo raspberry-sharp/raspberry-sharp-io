@@ -3,6 +3,7 @@
 using System;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.Timers;
+using UnitsNet;
 
 #endregion
 
@@ -148,8 +149,8 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
 
             return new DhtData
             {
-                Humidity = humidity,
-                Temperature = temperature
+                RelativeHumidity = Ratio.FromPercent((double)humidity),
+                Temperature = UnitsNet.Temperature.FromDegreesCelsius((double)temperature)
             };
         }
 

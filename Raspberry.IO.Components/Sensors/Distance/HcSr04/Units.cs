@@ -1,3 +1,5 @@
+using UnitsNet;
+
 namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
 {
     internal static class Units
@@ -19,12 +21,12 @@ namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
                 /// </summary>
                 /// <param name="time">The time, in milliseconds.</param>
                 /// <returns>The distance travelled by sound in one second, in meters.</returns>
-                public static decimal ToDistance(decimal time)
+                public static Length ToDistance(decimal time)
                 {
                     if (time == decimal.MinValue)
-                        return decimal.MinValue;
+                        return Length.FromMeters(double.MinValue);
 
-                    return (time*340)/1000m;
+                    return Length.FromMeters((double)(time * 340) / 1000);
                 }
 
                 #endregion

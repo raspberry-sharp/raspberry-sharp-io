@@ -1,4 +1,5 @@
 ﻿using System;
+using UnitsNet;
 
 namespace Raspberry.IO.Components.Sensors
 {
@@ -11,11 +12,11 @@ namespace Raspberry.IO.Components.Sensors
         /// <returns>
         /// The function.
         /// </returns>
-        public static Func<AnalogValue, decimal> ForUpperResistor(decimal lowerResistorValue)
+        public static Func<AnalogValue, ElectricResistance> ForUpperResistor(ElectricResistance lowerResistorValue)
         {
-            return v => v.Relative != 0 
-                ? lowerResistorValue * (1 - v.Relative) / v.Relative
-                : decimal.MaxValue;
+            return v => v.Relative != 0
+                ? lowerResistorValue * (double)((1 - v.Relative) / v.Relative)
+                : ElectricResistance.FromOhms(double.MaxValue);
         }
 
         /// <summary>
@@ -25,11 +26,11 @@ namespace Raspberry.IO.Components.Sensors
         /// <returns>
         /// The function.
         /// </returns>
-        public static Func<AnalogValue, decimal> ForLowerResistor(decimal upperResistorValue)
+        public static Func<AnalogValue, ElectricResistance> ForLowerResistor(ElectricResistance upperResistorValue)
         {
-            return v => v.Relative != 1 
-                ? upperResistorValue * v.Relative / (1 - v.Relative)
-                : decimal.MaxValue;
+            return v => v.Relative != 1
+                ? upperResistorValue * (double)(v.Relative / (1 - v.Relative))
+                : ElectricResistance.FromOhms(double.MaxValue);
         }
     }
 }

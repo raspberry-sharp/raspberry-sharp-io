@@ -1,6 +1,7 @@
 ﻿#region References
 
 using System;
+using UnitsNet;
 
 #endregion
 
@@ -15,7 +16,7 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Tmp36
         #region Fields
 
         private readonly IInputAnalogPin inputPin;
-        private readonly decimal referenceVoltage;
+        private readonly ElectricPotential referenceVoltage;
 
         #endregion
 
@@ -26,7 +27,7 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Tmp36
         /// </summary>
         /// <param name="inputPin">The input pin.</param>
         /// <param name="referenceVoltage">The reference voltage.</param>
-        public Tmp36Connection(IInputAnalogPin inputPin, decimal referenceVoltage)
+        public Tmp36Connection(IInputAnalogPin inputPin, ElectricPotential referenceVoltage)
         {
             this.inputPin = inputPin;
             this.referenceVoltage = referenceVoltage;
@@ -45,13 +46,13 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Tmp36
         #region Methods
 
         /// <summary>
-        /// Gets the temperature, in Celsius.
+        /// Gets the temperature.
         /// </summary>
-        /// <returns>The temperature, in Celsius.</returns>
-        public decimal GetTemperature()
+        /// <returns>The temperature.</returns>
+        public UnitsNet.Temperature GetTemperature()
         {
-            var voltage = inputPin.Read().Relative * referenceVoltage;
-            return voltage*100 - 50;
+            var voltage = referenceVoltage * (double)inputPin.Read().Relative;
+            return UnitsNet.Temperature.FromDegreesCelsius(voltage.Volts * 100 - 50);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 
 using System;
 using Raspberry.Timers;
+using UnitsNet;
 
 #endregion
 
@@ -77,10 +78,10 @@ namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
         #region Methods
 
         /// <summary>
-        /// Gets the distance, in meters.
+        /// Gets the distance.
         /// </summary>
-        /// <returns>The distance, in meters.</returns>
-        public decimal GetDistance()
+        /// <returns>The distance.</returns>
+        public Length GetDistance()
         {
             triggerPin.Write(true);
             Timer.Sleep(triggerTime);
