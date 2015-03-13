@@ -55,7 +55,7 @@ namespace Raspberry.IO.Components.Expanders.Pcf8574
                 ? status | bit
                 : status & ~bit);
 
-            connection.Write(newStatus);
+            connection.Write((byte)(newStatus | inputPins));
             currentStatus = newStatus;
         }
 
@@ -93,7 +93,7 @@ namespace Raspberry.IO.Components.Expanders.Pcf8574
                 ? status | bit
                 : status & ~bit);
 
-            connection.Write(newStatus);
+            connection.Write((byte)(newStatus | inputPins));
             currentStatus = newStatus;
         }
 
@@ -107,6 +107,8 @@ namespace Raspberry.IO.Components.Expanders.Pcf8574
             inputPins = (byte) (isInput
                 ? inputPins | bit
                 : inputPins & ~bit);
+
+            connection.Write((byte) (currentStatus | inputPins));
         }
 
         #endregion
