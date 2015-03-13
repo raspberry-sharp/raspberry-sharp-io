@@ -25,7 +25,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         #endregion
 
         #region Fields
-        private readonly IControlDevice deviceFile;
+        private readonly ISpiControlDevice deviceFile;
         private UInt16 delay;
         private UInt32 maxSpeed;
         private UInt32 mode;
@@ -38,7 +38,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// Creates a new instance of the <see cref="NativeSpiConnection"/> class.
         /// </summary>
         /// <param name="deviceFile">A control device (IOCTL) to the device file (e.g. /dev/spidev0.0).</param>
-        public NativeSpiConnection(IControlDevice deviceFile) {
+        public NativeSpiConnection(ISpiControlDevice deviceFile) {
             this.deviceFile = deviceFile;
         }
 
@@ -47,7 +47,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// </summary>
         /// <param name="deviceFile">A control device (IOCTL) to the device file (e.g. /dev/spidev0.0).</param>
         /// <param name="settings">Connection settings</param>
-        public NativeSpiConnection(IControlDevice deviceFile, SpiConnectionSettings settings)
+        public NativeSpiConnection(ISpiControlDevice deviceFile, SpiConnectionSettings settings)
             : this(deviceFile)
         {
             Init(settings);
@@ -59,7 +59,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// <param name="deviceFilePath">Full path to the SPI device file (e.g. /dev/spidev0.0).</param>
         /// <param name="settings">Connection settings</param>
         public NativeSpiConnection(string deviceFilePath, SpiConnectionSettings settings) 
-            : this(new ControlDevice(new UnixFile(deviceFilePath, UnixFileMode.ReadWrite)), settings)
+            : this(new SpiControlDevice(new UnixFile(deviceFilePath, UnixFileMode.ReadWrite)), settings)
         {}
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Raspberry.IO.SerialPeripheralInterface
         /// </summary>
         /// <param name="deviceFilePath">Full path to the SPI device file (e.g. /dev/spidev0.0).</param>
         public NativeSpiConnection(string deviceFilePath)
-            : this(new ControlDevice(new UnixFile(deviceFilePath, UnixFileMode.ReadWrite))) 
+            : this(new SpiControlDevice(new UnixFile(deviceFilePath, UnixFileMode.ReadWrite))) 
         {}
 
         /// <summary>

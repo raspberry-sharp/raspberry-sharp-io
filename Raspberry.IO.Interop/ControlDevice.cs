@@ -8,31 +8,29 @@ namespace Raspberry.IO.Interop
     /// </summary>
     public class ControlDevice : IControlDevice
     {
-        #region Classes 
-
-        private static class GenericIoControl<T> {
-        
-            #region Libc imports
-
-            [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
-            public static extern int ioctl(int descriptor, UInt32 request, ref T data);
-            
-            [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
-            public static extern int ioctl(int descriptor, UInt32 request, T data);
-            
-            #endregion
-        }
-        #endregion
-
+       
         #region Fields
-        private readonly IFile file;
-        private readonly bool disposeFile;
+        /// <summary>
+        /// Device file used for communication
+        /// </summary>
+        protected readonly IFile file;
+        
+        /// <summary>
+        /// If <c>true</c>, <see cref="file"/> will be disposed on <see cref="ControlDevice.Dispose"/>
+        /// </summary>
+        protected readonly bool disposeFile;
 
         #endregion
 
         #region Libc imports
         [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
         private static extern int ioctl(int descriptor, UInt32 request, IntPtr data);
+
+        [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+        private static extern int ioctl(int descriptor, UInt32 request, ref UInt32 data);
+
+        [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+        private static extern int ioctl(int descriptor, UInt32 request, ref byte data);
         #endregion
 
         #region Instance Management
@@ -78,27 +76,26 @@ namespace Raspberry.IO.Interop
         #endregion
 
         #region Methods
+
         /// <summary>
         /// The function manipulates the underlying device parameters of special files. In particular, many operating characteristics of character special files (e.g. terminals) may be controlled with ioctl requests.
         /// </summary>
-        /// <typeparam name="T">Data type that will be marshaled and send.</typeparam>
         /// <param name="request">A device-dependent request code.</param>
         /// <param name="data">The data to be transmitted.</param>
         /// <returns>Usually, on success zero is returned. A few ioctls use the return value as an output parameter and return a nonnegative value on success. On error, -1 is returned, and errno is set appropriately.</returns>
-        public int Control<T>(UInt32 request, ref T data) {
-            var result = GenericIoControl<T>.ioctl(file.Descriptor, request, ref data);
+        public int Control(UInt32 request, ref UInt32 data) {
+            var result = ioctl(file.Descriptor, request, ref data);
             return result;
         }
 
         /// <summary>
         /// The function manipulates the underlying device parameters of special files. In particular, many operating characteristics of character special files (e.g. terminals) may be controlled with ioctl requests.
         /// </summary>
-        /// <typeparam name="T">Data type that will be marshaled and send.</typeparam>
         /// <param name="request">A device-dependent request code.</param>
         /// <param name="data">The data to be transmitted.</param>
         /// <returns>Usually, on success zero is returned. A few ioctls use the return value as an output parameter and return a nonnegative value on success. On error, -1 is returned, and errno is set appropriately.</returns>
-        public int Control<T>(uint request, T data) {
-            var result = GenericIoControl<T>.ioctl(file.Descriptor, request, data);
+        public int Control(UInt32 request, ref byte data) {
+            var result = ioctl(file.Descriptor, request, ref data);
             return result;
         }
 
