@@ -16,10 +16,6 @@ namespace Raspberry.IO.Components.Converters.Mcp3208
     public class Mcp3208SpiConnection : IDisposable
     {
         #region Fields
-        IOutputBinaryPin clockPin;
-        IOutputBinaryPin slaveSelectPin;
-        IInputBinaryPin misoPin;
-        IOutputBinaryPin mosiPin;
 
         private readonly SpiConnection spiConnection;
 
@@ -34,14 +30,8 @@ namespace Raspberry.IO.Components.Converters.Mcp3208
         /// <param name="slaveSelectPin">The slave select pin.</param>
         /// <param name="misoPin">The miso pin.</param>
         /// <param name="mosiPin">The mosi pin.</param>
-        public Mcp3208SpiConnection(IOutputBinaryPin clockPin, IOutputBinaryPin slaveSelectPin, 
-            IInputBinaryPin misoPin, IOutputBinaryPin mosiPin)
+        public Mcp3208SpiConnection(IOutputBinaryPin clockPin, IOutputBinaryPin slaveSelectPin, IInputBinaryPin misoPin, IOutputBinaryPin mosiPin)
         {
-            this.clockPin = clockPin;
-            this.slaveSelectPin = slaveSelectPin;
-            this.misoPin = misoPin; 
-            this.mosiPin = mosiPin; 
-
             spiConnection = new SpiConnection(clockPin, slaveSelectPin, misoPin, mosiPin, Endianness.LittleEndian);
         }
 
@@ -79,8 +69,6 @@ namespace Raspberry.IO.Components.Converters.Mcp3208
 
                 // Read 12 bits
                 var data = (int)spiConnection.Read(12);
-                //Console.WriteLine(((byte)channel).ToString() + " " + channel.ToString() +
-                    //" " + data.ToString());
 
                 return new AnalogValue(data, 0xFFF);
             }
@@ -93,6 +81,7 @@ namespace Raspberry.IO.Components.Converters.Mcp3208
         {
             spiConnection.Close();
         }
+
         #endregion
     }
 }
