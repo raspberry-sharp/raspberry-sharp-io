@@ -20,7 +20,7 @@ namespace Raspberry.IO.Components.Controllers.Pca9685
         #region Fields
 
         private readonly I2cDeviceConnection connection;
-        private static readonly ILog log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog log = LogManager.GetLogger<Pca9685Connection>();
 
         #endregion
         
