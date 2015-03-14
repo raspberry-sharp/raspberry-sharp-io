@@ -24,6 +24,16 @@ namespace Raspberry.IO.GeneralPurpose
 
         private readonly Dictionary<ProcessorPin, PinPoll> polls = new Dictionary<ProcessorPin, PinPoll>();
 
+        /// <summary>
+        /// The default timeout (5 seconds).
+        /// </summary>
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
+
+        /// <summary>
+        /// The minimum timeout (1 milliseconds)
+        /// </summary>
+        public static readonly TimeSpan MinimumTimeout = TimeSpan.FromMilliseconds(1);
+
         #endregion
 
         #region Instance Management
@@ -32,7 +42,6 @@ namespace Raspberry.IO.GeneralPurpose
         /// Initializes a new instance of the <see cref="MemoryGpioConnectionDriver"/> class.
         /// </summary>
         public GpioConnectionDriver() {
-            
             using (var memoryFile = UnixFile.Open("/dev/mem", UnixFileMode.ReadWrite | UnixFileMode.Synchronized)) {
                 gpioAddress = MemoryMap.Create(
                     IntPtr.Zero, 
@@ -40,8 +49,7 @@ namespace Raspberry.IO.GeneralPurpose
                     MemoryProtection.ReadWrite,
                     MemoryFlags.Shared, 
                     memoryFile.Descriptor,
-                    Board.Current.Model == '2' ? Interop.BCM2836_GPIO_BASE : Interop.BCM2835_GPIO_BASE
-                );
+                    Board.Current.Model == '2' ? Interop.BCM2836_GPIO_BASE : Interop.BCM2835_GPIO_BASE);
             }
         }
 
@@ -169,11 +177,12 @@ namespace Raspberry.IO.GeneralPurpose
         /// Waits for the specified pin to be in the specified state.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up.</param>
-        /// <param name="timeout">The timeout, in milliseconds.</param>
-        /// <exception cref="System.TimeoutException"></exception>
-        /// <exception cref="System.IO.IOException">epoll_wait failed</exception>
-        public void Wait(ProcessorPin pin, bool waitForUp = true, decimal timeout = 0)
+        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up. Default value is <c>true</c>.</param>
+        /// <param name="timeout">The timeout. Default value is <see cref="TimeSpan.Zero" />.</param>
+        /// <remarks>
+        /// If <c>timeout</c> is set to <see cref="TimeSpan.Zero" />, a 5 seconds timeout is used.
+        /// </remarks>
+        public void Wait(ProcessorPin pin, bool waitForUp = true, TimeSpan timeout = new TimeSpan())
         {
             var pinPoll = polls[pin];
             if (Read(pin) == waitForUp)
@@ -184,7 +193,7 @@ namespace Raspberry.IO.GeneralPurpose
             while (true)
             {
                 // TODO: timeout after the remaining amount of time.
-                var waitResult = Interop.epoll_wait(pinPoll.PollDescriptor, pinPoll.OutEventPtr, 1, actualTimeout);
+                var waitResult = Interop.epoll_wait(pinPoll.PollDescriptor, pinPoll.OutEventPtr, 1, (int)actualTimeout.TotalMilliseconds);
                 if (waitResult > 0)
                 {
                     if (Read(pin) == waitForUp)
@@ -261,15 +270,15 @@ namespace Raspberry.IO.GeneralPurpose
 
         #region Private Methods
 
-        private static int GetActualTimeout(decimal timeout)
+        private static TimeSpan GetActualTimeout(TimeSpan timeout)
         {
-            if (timeout > 0)
-                return (int)timeout;
+            if (timeout > TimeSpan.Zero)
+                return timeout;
             
-            if (timeout > 0)
-                return 1;
+            if (timeout < TimeSpan.Zero)
+                return MinimumTimeout;
             
-            return 5000;
+            return DefaultTimeout;
         }
 
         private void InitializePoll(ProcessorPin pin)

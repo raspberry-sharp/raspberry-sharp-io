@@ -49,7 +49,7 @@ namespace Test.Gpio.WatchPin
 
                     Console.WriteLine(now + "." + now.Millisecond.ToString("000") + ": " + (isHigh?"HIGH":"LOW"));
 
-                    driver.Wait(procPin, !isHigh, 7*24*60*60*1000); // 1 week - //todo infinite
+                    driver.Wait(procPin, !isHigh, TimeSpan.FromDays(7)); //TODO: infinite
                     isHigh = !isHigh;
                 }
             } 

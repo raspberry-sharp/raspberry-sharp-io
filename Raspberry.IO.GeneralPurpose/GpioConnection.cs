@@ -68,7 +68,7 @@ namespace Raspberry.IO.GeneralPurpose
             
             timer = Timer.Create();
 
-            timer.Interval = this.settings.PollInterval;
+            timer.Interval = (int)this.settings.PollInterval.TotalMilliseconds;
             timer.Action = CheckInputPins;
 
             if (this.settings.Opened)
@@ -371,8 +371,8 @@ namespace Raspberry.IO.GeneralPurpose
         /// Blinks the specified pin.
         /// </summary>
         /// <param name="pinName">Name of the pin.</param>
-        /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(string pinName, decimal duration = -1)
+        /// <param name="duration">The duration.</param>
+        public void Blink(string pinName, TimeSpan duration = new TimeSpan())
         {
             Toggle(pinName);
             Sleep(duration);
@@ -383,8 +383,8 @@ namespace Raspberry.IO.GeneralPurpose
         /// Blinks the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(ProcessorPin pin, decimal duration = -1)
+        /// <param name="duration">The duration.</param>
+        public void Blink(ProcessorPin pin, TimeSpan duration = new TimeSpan())
         {
             Toggle(pin);
             Sleep(duration);
@@ -395,8 +395,8 @@ namespace Raspberry.IO.GeneralPurpose
         /// Blinks the specified pin.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(ConnectorPin pin, decimal duration = -1)
+        /// <param name="duration">The duration.</param>
+        public void Blink(ConnectorPin pin, TimeSpan duration = new TimeSpan())
         {
             Toggle(pin);
             Sleep(duration);
@@ -407,8 +407,8 @@ namespace Raspberry.IO.GeneralPurpose
         /// Blinks the specified pin.
         /// </summary>
         /// <param name="configuration">The pin configuration.</param>
-        /// <param name="duration">The duration, in millisecond.</param>
-        public void Blink(PinConfiguration configuration, decimal duration = -1)
+        /// <param name="duration">The duration.</param>
+        public void Blink(PinConfiguration configuration, TimeSpan duration = new TimeSpan())
         {
             Toggle(configuration);
             Sleep(duration);
@@ -467,9 +467,9 @@ namespace Raspberry.IO.GeneralPurpose
             get { return settings.Driver; }
         }
 
-        private void Sleep(decimal duration)
+        private void Sleep(TimeSpan duration)
         {
-            Timer.Sleep(duration < 0 ? settings.BlinkDuration : duration);
+            Timer.Sleep((int)(duration <= TimeSpan.Zero ? settings.BlinkDuration : duration).TotalMilliseconds);
         }
 
         private void Allocate(PinConfiguration configuration)

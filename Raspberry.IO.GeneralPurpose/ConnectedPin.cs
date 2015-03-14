@@ -63,8 +63,8 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Blinks the pin.
         /// </summary>
-        /// <param name="duration">The blink duration, in millisecond.</param>
-        public void Blink(decimal duration = -1)
+        /// <param name="duration">The blink duration.</param>
+        public void Blink(TimeSpan duration = new TimeSpan())
         {
             connection.Blink(Configuration, duration);
         }

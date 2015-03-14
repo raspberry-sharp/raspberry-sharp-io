@@ -1,3 +1,5 @@
+using System;
+
 namespace Raspberry.IO.GeneralPurpose
 {
     /// <summary>
@@ -58,9 +60,10 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// Waits for the specified pin to be in the specified state.
         /// </summary>
-        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up.</param>
-        /// <param name="timeout">The timeout, in milliseconds.</param>
-        public void Wait(bool waitForUp = true, decimal timeout = 0)
+        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up. Default value is <c>true</c>.</param>
+        /// <param name="timeout">The timeout. Default value is <see cref="TimeSpan.Zero"/>.</param>
+        /// <remarks>If <c>timeout</c> is set to <see cref="TimeSpan.Zero"/>, a default timeout is used instead.</remarks>
+        public void Wait(bool waitForUp = true, TimeSpan timeout = new TimeSpan())
         {
             driver.Wait(pin, waitForUp, timeout);
         }

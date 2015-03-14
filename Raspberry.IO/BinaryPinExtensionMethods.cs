@@ -23,14 +23,14 @@ namespace Raspberry.IO
         /// <returns>
         /// The time the pin remains up, in milliseconds.
         /// </returns>
-        public static decimal Time(this IInputBinaryPin pin, bool waitForUp = true, decimal phase1Timeout = 0, decimal phase2Timeout = 0)
+        public static TimeSpan Time(this IInputBinaryPin pin, bool waitForUp = true, TimeSpan phase1Timeout = new TimeSpan(), TimeSpan phase2Timeout = new TimeSpan())
         {
             pin.Wait(waitForUp, phase1Timeout);
 
-            var waitDown = DateTime.Now.Ticks;
+            var waitDown = DateTime.UtcNow;
             pin.Wait(!waitForUp, phase2Timeout);
 
-            return (DateTime.Now.Ticks - waitDown)/10000m;
+            return DateTime.UtcNow - waitDown;
         }
 
         #endregion

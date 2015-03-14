@@ -15,9 +15,10 @@ namespace Raspberry.IO.GeneralPurpose
     {
         #region Fields
 
-        private decimal blinkDuration;
         private IGpioConnectionDriver driver;
-        private decimal pollInterval;
+
+        private TimeSpan blinkDuration;
+        private TimeSpan pollInterval;
 
         #endregion
 
@@ -39,9 +40,9 @@ namespace Raspberry.IO.GeneralPurpose
         #region Constants
 
         /// <summary>
-        /// Gets the default blink duration, in milliseconds.
+        /// Gets the default blink duration.
         /// </summary>
-        public const decimal DefaultBlinkDuration = 250;
+        public static readonly TimeSpan DefaultBlinkDuration = TimeSpan.FromMilliseconds(250);
 
         #endregion
 
@@ -61,10 +62,10 @@ namespace Raspberry.IO.GeneralPurpose
         /// <value>
         /// The duration of the blink, in milliseconds.
         /// </value>
-        public decimal BlinkDuration
+        public TimeSpan BlinkDuration
         {
             get { return blinkDuration; }
-            set { blinkDuration = value >= 0 ? value : DefaultBlinkDuration; }
+            set { blinkDuration = value >= TimeSpan.Zero ? value : DefaultBlinkDuration; }
         }
 
         /// <summary>
@@ -83,25 +84,25 @@ namespace Raspberry.IO.GeneralPurpose
         /// Gets or sets the poll interval.
         /// </summary>
         /// <value>
-        /// The poll interval, in milliseconds.
+        /// The poll interval.
         /// </value>
-        public decimal PollInterval
+        public TimeSpan PollInterval
         {
             get { return pollInterval; }
-            set { pollInterval = value >= 0 ? value : DefaultPollInterval; }
+            set { pollInterval = value >= TimeSpan.Zero ? value : DefaultPollInterval; }
         }
 
         /// <summary>
-        /// Gets the default poll interval, in milliseconds.
+        /// Gets the default poll interval.
         /// </summary>
-        public static decimal DefaultPollInterval
+        public static TimeSpan DefaultPollInterval
         {
             get
             {
                 var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
-                return configurationSection != null
-                           ? configurationSection.PollInterval
-                           : GpioConnectionConfigurationSection.DefaultPollInterval;
+                return TimeSpan.FromMilliseconds(configurationSection != null
+                           ? (double)configurationSection.PollInterval
+                           : (double)GpioConnectionConfigurationSection.DefaultPollInterval);
 
             }
         }

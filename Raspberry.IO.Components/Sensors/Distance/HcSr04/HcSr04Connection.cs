@@ -20,7 +20,7 @@ namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
         #region Fields
 
         private const decimal triggerTime = 0.01m;  // Waits at least 10µs = 0.01ms
-        private const decimal echoUpTimeout = 500m;
+        private static readonly TimeSpan echoUpTimeout = TimeSpan.FromMilliseconds(500);
 
         private readonly IOutputBinaryPin triggerPin;
         private readonly IInputBinaryPin echoPin;
@@ -63,15 +63,15 @@ namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
         /// The default timeout (50ms).
         /// </summary>
         /// <remarks>Maximum time (if no obstacle) is 38ms.</remarks>
-        public const decimal DefaultTimeout = 50m;
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMilliseconds(50);
 
         /// <summary>
-        /// Gets or sets the timeout for distance measure, in milliseconds.
+        /// Gets or sets the timeout for distance measure.
         /// </summary>
         /// <value>
-        /// The timeout, in milliseconds.
+        /// The timeout.
         /// </value>
-        public decimal Timeout { get; set; }
+        public TimeSpan Timeout { get; set; }
 
         #endregion
 

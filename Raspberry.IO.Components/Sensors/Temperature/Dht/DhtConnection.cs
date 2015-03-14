@@ -18,9 +18,11 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
     /// </remarks>
     public class DhtConnection : IDisposable
     {
-        #region References
+        #region Fields
 
         private readonly IInputOutputBinaryPin pin;
+        
+        private static TimeSpan timeout = TimeSpan.FromMilliseconds(100);
 
         #endregion
 
@@ -85,7 +87,7 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
 
         private DhtData TryGetData()
         {
-            // Prepare bugger
+            // Prepare buffer
             var data = new byte[5];
             for (var i = 0; i < 5; i++)
                 data[i] = 0;
@@ -103,17 +105,17 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
             try
             {
                 // Read acknowledgement from DHT
-                pin.Wait(true, 100m);
-                pin.Wait(false, 100m);
+                pin.Wait(true, timeout);
+                pin.Wait(false, timeout);
 
                 // Read 40 bits output, or time-out
                 var cnt = 7;
                 var idx = 0;
                 for (var i = 0; i < 40; i++)
                 {
-                    pin.Wait(true, 100m);
+                    pin.Wait(true, timeout);
                     var start = DateTime.UtcNow.Ticks;
-                    pin.Wait(false, 100m);
+                    pin.Wait(false, timeout);
                     var ticks = (DateTime.UtcNow.Ticks - start);
                     if (ticks > 400)
                         data[idx] |= (byte) (1 << cnt);
