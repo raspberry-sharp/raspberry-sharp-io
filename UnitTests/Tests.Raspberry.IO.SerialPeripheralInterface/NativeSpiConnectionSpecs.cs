@@ -5,7 +5,6 @@ using FakeItEasy;
 using FakeItEasy.ExtensionSyntax.Full;
 using FluentAssertions;
 using NUnit.Framework;
-using Raspberry.IO.Interop;
 using Raspberry.IO.SerialPeripheralInterface;
 
 // ReSharper disable once CheckNamespace
@@ -21,7 +20,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
         
         private SpiConnectionSettings settings;
         private NativeSpiConnection connection;
-        private IControlDevice controlDevice;
+        private ISpiControlDevice controlDevice;
 
         protected override void EstablishContext() {
             settings = new SpiConnectionSettings {
@@ -31,7 +30,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
                 MaxSpeed = SPEED_IN_HZ
             };
 
-            controlDevice = A.Fake<IControlDevice>();
+            controlDevice = A.Fake<ISpiControlDevice>();
         }
 
         protected override void BecauseOf() {
@@ -107,7 +106,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
         private const int REQUESTED_SIZE = 100;
 
         private SpiConnectionSettings settings;
-        private IControlDevice controlDevice;
+        private ISpiControlDevice controlDevice;
         private NativeSpiConnection connection;
         private ISpiTransferBuffer buffer;
 
@@ -119,7 +118,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
                 MaxSpeed = SPEED_IN_HZ
             };
 
-            controlDevice = A.Fake<IControlDevice>();
+            controlDevice = A.Fake<ISpiControlDevice>();
             connection = new NativeSpiConnection(controlDevice, settings);
         }
 
@@ -158,7 +157,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
         private const int IOCTL_PINVOKE_RESULT_CODE = 1;
         private const int SPI_IOC_MESSAGE_1 = 0x40206b00;
 
-        private IControlDevice controlDevice;
+        private ISpiControlDevice controlDevice;
         private NativeSpiConnection connection;
         private ISpiTransferBuffer buffer;
         private int result;
@@ -174,7 +173,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
                 Speed = SPEED_IN_HZ
             };
             
-            controlDevice = A.Fake<IControlDevice>();
+            controlDevice = A.Fake<ISpiControlDevice>();
             controlDevice
                 .CallsTo(device => device.Control(A<uint>.Ignored, ref controlStructure))
                 .WithAnyArguments()
@@ -214,7 +213,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
         private const int IOCTL_PINVOKE_RESULT_CODE = 1;
         private const int SPI_IOC_MESSAGE_1 = 0x40206b00;
 
-        private IControlDevice controlDevice;
+        private ISpiControlDevice controlDevice;
         private NativeSpiConnection connection;
         private ISpiTransferBufferCollection collection;
         private ISpiTransferBuffer buffer;
@@ -222,7 +221,7 @@ namespace Tests.Raspberry.IO.SerialPeripheralInterface.NativeSpiConnectionSpecs
         private SpiTransferControlStructure controlStructure;
 
         protected override void EstablishContext() {
-            controlDevice = A.Fake<IControlDevice>();
+            controlDevice = A.Fake<ISpiControlDevice>();
             controlDevice
                 .CallsTo(device => device.Control(A<uint>.Ignored, A<SpiTransferControlStructure[]>.Ignored))
                 .Returns(IOCTL_PINVOKE_RESULT_CODE);

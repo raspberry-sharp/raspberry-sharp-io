@@ -52,6 +52,7 @@
     <Compile Include="Interop\Interop.cs" />
     <Compile Include="Endianness.cs" />
     <Compile Include="Interop\SpiTransferControlStructure.cs" />
+    <Compile Include="ISpiControlDevice.cs" />
     <Compile Include="ISpiTransferBuffer.cs" />
     <Compile Include="ISpiTransferBufferCollection.cs" />
     <Compile Include="NativeSpiConnection.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="SpiConnection.cs" />
     <Compile Include="EnumTypes\SpiMode.cs" />
     <Compile Include="SpiConnectionSettings.cs" />
+    <Compile Include="SpiControlDevice.cs" />
     <Compile Include="SpiSlaveSelectionContext.cs" />
     <Compile Include="SpiTransferBuffer.cs" />
     <Compile Include="Exceptions\WriteOnlyTransferBufferException.cs" />
