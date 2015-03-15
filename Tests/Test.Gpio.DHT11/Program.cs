@@ -23,7 +23,7 @@ namespace Test.Gpio.DHT11
             var driver = GpioConnectionSettings.GetBestDriver(GpioConnectionDriverCapabilities.CanChangePinDirectionRapidly);
 
             using (var pin = driver.InOut(measurePin))
-            using (var dhtConnection = new DhtConnection(pin))
+            using (var dhtConnection = new Dht11Connection(pin))
             {
                 while (!Console.KeyAvailable)
                 {
