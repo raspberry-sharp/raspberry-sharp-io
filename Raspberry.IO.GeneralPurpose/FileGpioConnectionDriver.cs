@@ -20,6 +20,11 @@ namespace Raspberry.IO.GeneralPurpose
         private const string gpioPath = "/sys/class/gpio";
         private static readonly Dictionary<ProcessorPin, FileGpioHandle> gpioPathList = new Dictionary<ProcessorPin, FileGpioHandle>();
 
+        /// <summary>
+        /// The default timeout (5 seconds).
+        /// </summary>
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
+
         #endregion
 
         #region Instance Management
@@ -67,7 +72,8 @@ namespace Raspberry.IO.GeneralPurpose
             var filePath = Path.Combine(gpioPathList[pin].GpioPath, "direction");
             try {
                 SetPinDirection(filePath, direction);
-            } catch (UnauthorizedAccessException) {
+            } 
+            catch (UnauthorizedAccessException) {
                 // program hasn't been started as root, give it a second to correct file permissions
                 Thread.Sleep(TimeSpan.FromSeconds(1));
                 SetPinDirection(filePath, direction);
@@ -104,18 +110,20 @@ namespace Raspberry.IO.GeneralPurpose
         /// Waits for the specified pin to be in the specified state.
         /// </summary>
         /// <param name="pin">The pin.</param>
-        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up.</param>
-        /// <param name="timeout">The timeout, in milliseconds.</param>
-        /// <exception cref="System.TimeoutException">A timeout occurred while waiting</exception>
-        public void Wait(ProcessorPin pin, bool waitForUp = true, decimal timeout = 0)
+        /// <param name="waitForUp">if set to <c>true</c> waits for the pin to be up. Default value is <c>true</c>.</param>
+        /// <param name="timeout">The timeout. Default value is <see cref="TimeSpan.Zero" />.</param>
+        /// <remarks>
+        /// If <c>timeout</c> is set to <see cref="TimeSpan.Zero" />, a 5 second timeout is used.
+        /// </remarks>
+        public void Wait(ProcessorPin pin, bool waitForUp = true, TimeSpan timeout = new TimeSpan())
         {
-            var startWait = DateTime.Now;
-            if (timeout == 0)
-                timeout = 5000;
+            var startWait = DateTime.UtcNow;
+            if (timeout == TimeSpan.Zero)
+                timeout = DefaultTimeout;
 
             while (Read(pin) != waitForUp)
             {
-                if (DateTime.Now.Ticks - startWait.Ticks >= 10000 * timeout)
+                if (DateTime.UtcNow - startWait >= timeout)
                     throw new TimeoutException("A timeout occurred while waiting for pin status to change");
             }
         }

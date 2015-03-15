@@ -1,3 +1,4 @@
+using System;
 using UnitsNet;
 
 namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
@@ -19,14 +20,14 @@ namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
                 /// <summary>
                 /// Converts a time to a distance.
                 /// </summary>
-                /// <param name="time">The time, in milliseconds.</param>
+                /// <param name="time">The time.</param>
                 /// <returns>The distance travelled by sound in one second, in meters.</returns>
-                public static Length ToDistance(decimal time)
+                public static Length ToDistance(TimeSpan time)
                 {
-                    if (time == decimal.MinValue)
+                    if (time < TimeSpan.Zero)
                         return Length.FromMeters(double.MinValue);
 
-                    return Length.FromMeters((double)(time * 340) / 1000);
+                    return Length.FromMeters(time.TotalMilliseconds * 340 / 1000);
                 }
 
                 #endregion

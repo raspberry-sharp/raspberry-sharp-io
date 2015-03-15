@@ -22,9 +22,9 @@ namespace Raspberry.IO.GeneralPurpose
         /// <param name="phase1Timeout">The first phase timeout.</param>
         /// <param name="phase2Timeout">The second phase timeout.</param>
         /// <returns>
-        /// The time the pin remains up, in milliseconds.
+        /// The time the pin remains up.
         /// </returns>
-        public static decimal Time(this IGpioConnectionDriver driver, ProcessorPin pin, bool waitForUp = true, decimal phase1Timeout = 0, decimal phase2Timeout = 0)
+        public static decimal Time(this IGpioConnectionDriver driver, ProcessorPin pin, bool waitForUp = true, TimeSpan phase1Timeout = new TimeSpan(), TimeSpan phase2Timeout = new TimeSpan())
         {
             driver.Wait(pin, waitForUp, phase1Timeout);
 

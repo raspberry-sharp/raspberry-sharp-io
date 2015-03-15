@@ -17,7 +17,7 @@ namespace Test.Gpio.PCA9685
     /// </remarks>
     class Program
     {
-        private static readonly ILog log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog log = LogManager.GetLogger<Program>();
 
         static void Main(string[] args)
         {
