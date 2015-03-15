@@ -19,10 +19,11 @@ namespace Raspberry.IO.GeneralPurpose
     {
         #region Fields
 
-        private readonly IntPtr gpioAddress;
         private const string gpioPath = "/sys/class/gpio";
 
-        private readonly Dictionary<ProcessorPin, PinPoll> polls = new Dictionary<ProcessorPin, PinPoll>();
+        private readonly IntPtr gpioAddress;
+        private readonly Dictionary<ProcessorPin, PinResistor> pinResistors = new Dictionary<ProcessorPin, PinResistor>();
+        private readonly Dictionary<ProcessorPin, PinPoll> pinPolls = new Dictionary<ProcessorPin, PinPoll>();
 
         /// <summary>
         /// The default timeout (5 seconds).
@@ -39,7 +40,7 @@ namespace Raspberry.IO.GeneralPurpose
         #region Instance Management
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MemoryGpioConnectionDriver"/> class.
+        /// Initializes a new instance of the <see cref="GpioConnectionDriver"/> class.
         /// </summary>
         public GpioConnectionDriver() {
             using (var memoryFile = UnixFile.Open("/dev/mem", UnixFileMode.ReadWrite | UnixFileMode.Synchronized)) {
@@ -55,7 +56,7 @@ namespace Raspberry.IO.GeneralPurpose
 
         /// <summary>
         /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="MemoryGpioConnectionDriver"/> is reclaimed by garbage collection.
+        /// <see cref="GpioConnectionDriver"/> is reclaimed by garbage collection.
         /// </summary>
         ~GpioConnectionDriver()
         {
@@ -70,7 +71,16 @@ namespace Raspberry.IO.GeneralPurpose
         /// Gets driver capabilities.
         /// </summary>
         /// <returns>The capabilites.</returns>
-        public GpioConnectionDriverCapabilities GetCapabilities()
+        GpioConnectionDriverCapabilities IGpioConnectionDriver.GetCapabilities()
+        {
+            return GetCapabilities();
+        }
+
+        /// <summary>
+        /// Gets driver capabilities.
+        /// </summary>
+        /// <returns>The capabilites.</returns>
+        public static GpioConnectionDriverCapabilities GetCapabilities()
         {
             return GpioConnectionDriverCapabilities.CanSetPinResistor | GpioConnectionDriverCapabilities.CanSetPinDetectedEdges;
         }
@@ -104,7 +114,10 @@ namespace Raspberry.IO.GeneralPurpose
 
             if (direction == PinDirection.Input)
             {
-                SetPinResistor(pin, PinResistor.None);
+                PinResistor pinResistor;
+                if (!pinResistors.TryGetValue(pin, out pinResistor) || pinResistor != PinResistor.None)
+                    SetPinResistor(pin, PinResistor.None);
+
                 SetPinDetectedEdges(pin, PinDetectedEdges.Both);
                 InitializePoll(pin);
             }
@@ -158,6 +171,8 @@ namespace Raspberry.IO.GeneralPurpose
             HighResolutionTimer.Sleep(0.005m);
             WriteResistor(Interop.BCM2835_GPIO_PUD_OFF);
             SetPinResistorClock(pin, false);
+
+            pinResistors[pin] = PinResistor.None;
         }
 
         /// <summary>
@@ -184,7 +199,7 @@ namespace Raspberry.IO.GeneralPurpose
         /// </remarks>
         public void Wait(ProcessorPin pin, bool waitForUp = true, TimeSpan timeout = new TimeSpan())
         {
-            var pinPoll = polls[pin];
+            var pinPoll = pinPolls[pin];
             if (Read(pin) == waitForUp)
                 return;
 
@@ -283,10 +298,10 @@ namespace Raspberry.IO.GeneralPurpose
 
         private void InitializePoll(ProcessorPin pin)
         {
-            lock (polls)
+            lock (pinPolls)
             {
                 PinPoll poll;
-                if (polls.TryGetValue(pin, out poll))
+                if (pinPolls.TryGetValue(pin, out poll))
                     return;
 
                 var pinPoll = new PinPoll();
@@ -313,16 +328,16 @@ namespace Raspberry.IO.GeneralPurpose
                     throw new IOException("Call to epoll_ctl(EPOLL_CTL_ADD) API failed with the following return value: " + controlResult);
 
                 pinPoll.OutEventPtr = Marshal.AllocHGlobal(64);
-                polls[pin] = pinPoll;
+                pinPolls[pin] = pinPoll;
             }
         }
 
         private void UninitializePoll(ProcessorPin pin)
         {
             PinPoll poll;
-            if (polls.TryGetValue(pin, out poll))
+            if (pinPolls.TryGetValue(pin, out poll))
             {
-                polls.Remove(pin);
+                pinPolls.Remove(pin);
 
                 var controlResult = poll.InEventPtr != IntPtr.Zero ? Interop.epoll_ctl(poll.PollDescriptor, Interop.EPOLL_CTL_DEL, poll.FileDescriptor, poll.InEventPtr) : 0;
 

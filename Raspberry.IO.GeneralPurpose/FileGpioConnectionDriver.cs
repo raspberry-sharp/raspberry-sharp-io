@@ -46,7 +46,16 @@ namespace Raspberry.IO.GeneralPurpose
         /// Gets driver capabilities.
         /// </summary>
         /// <returns>The capabilites.</returns>
-        public GpioConnectionDriverCapabilities GetCapabilities()
+        GpioConnectionDriverCapabilities IGpioConnectionDriver.GetCapabilities()
+        {
+            return GetCapabilities();
+        }
+
+        /// <summary>
+        /// Gets driver capabilities.
+        /// </summary>
+        /// <returns>The capabilites.</returns>
+        public static GpioConnectionDriverCapabilities GetCapabilities()
         {
             return GpioConnectionDriverCapabilities.None;
         }

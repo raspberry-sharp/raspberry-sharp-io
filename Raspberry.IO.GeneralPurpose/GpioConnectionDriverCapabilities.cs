@@ -21,6 +21,16 @@ namespace Raspberry.IO.GeneralPurpose
         /// <summary>
         /// The driver can set pin detected edges
         /// </summary>
-        CanSetPinDetectedEdges = 2
+        CanSetPinDetectedEdges = 2,
+
+        /// <summary>
+        /// The driver can change pin direction rapidly.
+        /// </summary>
+        CanChangePinDirectionRapidly = 4,
+        
+        /// <summary>
+        /// The driver can work on third-party computers (not only Raspberry Pi)
+        /// </summary>
+        CanWorkOnThirdPartyComputers = 8
     }
 }
