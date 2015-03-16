@@ -158,8 +158,7 @@ namespace Test.Gpio.HD44780
                 Pins = new Hd44780Pins(
                     driver.Out(registerSelectPin),
                     driver.Out(clockPin),
-                    dataPins.Select(p => (IOutputBinaryPin)driver.Out(p))
-                    )
+                    dataPins.Select(p => (IOutputBinaryPin)driver.Out(p)))
             };
         }
 

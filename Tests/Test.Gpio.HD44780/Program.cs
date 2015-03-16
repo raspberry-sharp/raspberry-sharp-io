@@ -38,6 +38,8 @@ namespace Test.Gpio.HD44780
                 connection.WriteLine("R# IP Config");
                 connection.WriteLine(Environment.OSVersion);
 
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+
                 var delay = 0m;
                 while (true)
                 {
@@ -47,11 +49,11 @@ namespace Test.Gpio.HD44780
                                              {
                                                  string.Format("{0}: {1}", i.Name, i.OperationalStatus)
                                                  + Environment.NewLine
-                                                 + (i.GetIPProperties().UnicastAddresses.Select(a => a.Address.ToString()).FirstOrDefault() ?? "(unassigned)"),
+                                                 + string.Format("\u0002{0} \u0001{1}", FormatByteCount(i.GetIPv4Statistics().BytesReceived), FormatByteCount(i.GetIPv4Statistics().BytesSent)),
 
-                                                 i.GetPhysicalAddress().ToString()
+                                                 "IP  " + (i.GetIPProperties().UnicastAddresses.Select(a => a.Address.ToString()).FirstOrDefault() ?? "(unassigned)")
                                                  + Environment.NewLine
-                                                 + string.Format("\u0001{0} \u0002{1}", FormatByteCount(i.GetIPv4Statistics().BytesReceived), FormatByteCount(i.GetIPv4Statistics().BytesSent))
+                                                 + "MAC " + i.GetPhysicalAddress().ToString()
                                              }))
                     {
                         connection.Clear();
@@ -94,11 +96,12 @@ namespace Test.Gpio.HD44780
                                         break;
 
                                     default:
+                                        connection.BacklightEnabled = false;
                                         return;
                                 }
                             }
 
-                            Thread.Sleep(100);
+                            Thread.Sleep(TimeSpan.FromSeconds(2d /20));
                         }
                     }
                 }
