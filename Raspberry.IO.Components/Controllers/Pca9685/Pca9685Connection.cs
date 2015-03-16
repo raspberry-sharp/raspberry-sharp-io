@@ -4,6 +4,7 @@ using System;
 using Common.Logging;
 using Raspberry.IO.InterIntegratedCircuit;
 using Raspberry.Timers;
+using UnitsNet;
 
 #endregion
 
@@ -26,16 +27,15 @@ namespace Raspberry.IO.Components.Controllers.Pca9685
         
         #region Instance Management
 
-        public static Pca9685Connection Create(I2cDeviceConnection connection)
-        {
-            return new Pca9685Connection(connection);
-        }
-
-        private Pca9685Connection(I2cDeviceConnection connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Pca9685Connection"/> class.
+        /// </summary>
+        /// <param name="connection">The I2C connection.</param>
+        public Pca9685Connection(I2cDeviceConnection connection)
         {
             this.connection = connection;
 
-            log.Info(m => m("Reseting PCA9685"));
+            log.Info(m => m("Resetting PCA9685"));
             WriteRegister(Register.MODE1, 0x00);
         }
 
@@ -46,17 +46,17 @@ namespace Raspberry.IO.Components.Controllers.Pca9685
         /// <summary>
         /// Sets the PWM update rate.
         /// </summary>
-        /// <param name="frequencyHz">The frequency, in hz.</param>
+        /// <param name="frequency">The frequency, in hz.</param>
         /// <remarks>Datasheet: 7.3.5 PWM frequency PRE_SCALE</remarks>
-        public void SetPwmUpdateRate(int frequencyHz)
+        public void SetPwmUpdateRate(Frequency frequency)
         {
             var preScale = 25000000.0m; // 25MHz
             preScale /= 4096m; // 12-bit
-            preScale /= frequencyHz;
+            preScale /= (int)frequency.Hertz;
 
             preScale -= 1.0m;
 
-            log.Trace(m => m("Setting PWM frequency to {0} Hz", frequencyHz));
+            log.Trace(m => m("Setting PWM frequency to {0} Hz", frequency));
             log.Trace(m => m("Estimated pre-maximum: {0}", preScale));
 
             var prescale = Math.Floor(preScale + 0.5m);
@@ -110,19 +110,19 @@ namespace Raspberry.IO.Components.Controllers.Pca9685
 
         private enum Register
         {
-            SUBADR1 = 0x02,
-            SUBADR2 = 0x03,
-            SUBADR3 = 0x04,
+            //SUBADR1 = 0x02,
+            //SUBADR2 = 0x03,
+            //SUBADR3 = 0x04,
             MODE1 = 0x00,
             PRESCALE = 0xFE,
             LED0_ON_L = 0x06,
             LED0_ON_H = 0x07,
             LED0_OFF_L = 0x08,
             LED0_OFF_H = 0x09,
-            ALLLED_ON_L = 0xFA,
-            ALLLED_ON_H = 0xFB,
-            ALLLED_OFF_L = 0xFC,
-            ALLLED_OFF_H = 0xFD,
+            //ALLLED_ON_L = 0xFA,
+            //ALLLED_ON_H = 0xFB,
+            //ALLLED_OFF_L = 0xFC,
+            //ALLLED_OFF_H = 0xFD,
         }
 
         private void SetFullOn(PwmChannel channel)

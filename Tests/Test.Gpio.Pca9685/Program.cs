@@ -6,6 +6,7 @@ using NDesk.Options;
 using Raspberry.IO.Components.Controllers.Pca9685;
 using Raspberry.IO.GeneralPurpose;
 using Raspberry.IO.InterIntegratedCircuit;
+using UnitsNet;
 
 namespace Test.Gpio.PCA9685
 {
@@ -45,7 +46,7 @@ namespace Test.Gpio.PCA9685
                 using (var driver = new I2cDriver(options.SdaPin.ToProcessor(), options.SclPin.ToProcessor()))
                 {
                     log.Info("Creating device...");
-                    var device = Pca9685Connection.Create(driver.Connect(options.DeviceAddress));
+                    var device = new Pca9685Connection(driver.Connect(options.DeviceAddress));
 
                     log.Info("Setting frequency...");
                     device.SetPwmUpdateRate(options.PwmFrequency);
@@ -73,11 +74,11 @@ namespace Test.Gpio.PCA9685
         /// Ported but wasn't used in original? Ported from https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_PWM_Servo_Driver/Servo_Example.py
         /// Not entirely sure what the result is meant to mean.
         /// </summary>
-        private static int CalculatePulse(int frequency, int pulse)
+        private static int CalculatePulse(Frequency frequency, int pulse)
         {
             const int microSeconds = 1000000; // # 1,000,000 us per second
 
-            var pulseLengthMicroSeconds = microSeconds/frequency; // # 60 Hz
+            var pulseLengthMicroSeconds = microSeconds/(int)frequency.Hertz; // # 60 Hz
             log.Info(m => m("{0} uSecs per period", pulseLengthMicroSeconds));
 
             var microSecondsPerBit = pulseLengthMicroSeconds/4096; // # 12 bits of resolution
@@ -89,23 +90,23 @@ namespace Test.Gpio.PCA9685
         private static Pca9685Options ParseOptions(IEnumerable<string> arguments)
         {
             var options = new Pca9685Options
-                {
-                    SdaPin = ConnectorPin.P1Pin03,
-                    SclPin = ConnectorPin.P1Pin05,
-                    DeviceAddress = 0x40,
-                    PwmFrequency = 60,
-                    PwmOn = 150,
-                    PwmOff = 600
-                };
+            {
+                SdaPin = ConnectorPin.P1Pin03,
+                SclPin = ConnectorPin.P1Pin05,
+                DeviceAddress = 0x40,
+                PwmFrequency = Frequency.FromHertz(60),
+                PwmOn = 150,
+                PwmOff = 600
+            };
 
             var optionSet = new OptionSet
-                {
-                    {"c|Channel=", v => options.Channel = (PwmChannel) Enum.Parse(typeof (PwmChannel), v)},
-                    {"f|PwmFrequency=", v => options.PwmFrequency = int.Parse(v)},
-                    {"b|PwmOn=", v => options.PwmOn = int.Parse(v)},
-                    {"e|PwmOff=", v => options.PwmOff = int.Parse(v)},
-                    {"h|?:", v => options.ShowHelp = true}
-                };
+            {
+                {"c|Channel=", v => options.Channel = (PwmChannel) Enum.Parse(typeof (PwmChannel), v)},
+                {"f|PwmFrequency=", v => options.PwmFrequency = Frequency.FromHertz(int.Parse(v))},
+                {"b|PwmOn=", v => options.PwmOn = int.Parse(v)},
+                {"e|PwmOff=", v => options.PwmOff = int.Parse(v)},
+                {"h|?:", v => options.ShowHelp = true}
+            };
 
             optionSet.Parse(arguments);
 

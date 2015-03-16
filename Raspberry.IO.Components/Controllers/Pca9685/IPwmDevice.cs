@@ -1,7 +1,9 @@
-﻿namespace Raspberry.IO.Components.Controllers.Pca9685
+﻿using UnitsNet;
+
+namespace Raspberry.IO.Components.Controllers.Pca9685
 {
     /// <summary>
-    /// Make it easier to IoC
+    /// Provides an interface for PWM devices.
     /// </summary>
     public interface IPwmDevice
     {
@@ -10,8 +12,8 @@
         /// <summary>
         /// Sets the PWM update rate.
         /// </summary>
-        /// <param name="frequencyHz">The frequency, in hz.</param>
-        void SetPwmUpdateRate(int frequencyHz);
+        /// <param name="frequency">The frequency.</param>
+        void SetPwmUpdateRate(Frequency frequency);
 
         /// <summary>
         /// Sets a single PWM channel with on / off values to control the duty cycle

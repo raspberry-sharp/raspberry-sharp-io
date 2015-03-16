@@ -14,7 +14,7 @@ namespace Test.Gpio.PCA9685
 
         public PwmChannel Channel { get; set; }
 
-        public int PwmFrequency { get; set; }
+        public UnitsNet.Frequency PwmFrequency { get; set; }
 
         public int DeviceAddress { get; set; }
 
