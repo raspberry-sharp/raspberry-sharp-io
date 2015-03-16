@@ -1,3 +1,9 @@
+#region References
+
+using System;
+
+#endregion
+
 namespace Raspberry.IO.Components.Expanders.Pcf8574
 {
     /// <summary>
@@ -30,9 +36,7 @@ namespace Raspberry.IO.Components.Expanders.Pcf8574
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose()
-        {
-        }
+        public void Dispose(){}
 
         #endregion
 

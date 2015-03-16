@@ -3,8 +3,8 @@
     /// <summary>
     /// A pulse-width modulation (PWM) device
     /// </summary>
-    public interface IPwmDevice {
-        
+    public interface IPwmDevice 
+    {
         #region Properties
 
         /// <summary>
@@ -13,6 +13,5 @@
         IPwmChannels Channels { get; }
 
         #endregion
-
     }
 }

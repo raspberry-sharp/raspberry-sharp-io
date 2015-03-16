@@ -25,8 +25,9 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         private const int DATA_OFFSET = 4;
         private const int DATA_LENGTH = COMMAND_SIZE - DATA_OFFSET;
         #endregion
-
+        
         #region Fields
+
         private readonly IMemory memory;
         private readonly ITlc59711Settings initSettings;
         private readonly IPwmChannels channels;
@@ -39,6 +40,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         private byte bcb = 127;
         private byte bcg = 127;
         private byte bcr = 127;
+
         #endregion
 
         #region Instance Management
@@ -63,9 +65,11 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
 
             Reset();
         }
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// BLANK: If set to <c>true</c> all outputs are forced off. Default value is <c>true</c>.
         /// </summary>
@@ -205,18 +209,22 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         public IPwmChannels Channels {
             get { return channels; }
         }
+
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Initializes the device with default values.
         /// </summary>
         public void Reset() {
             Initialize(initSettings ?? new Tlc59711Settings());
         }
+
         #endregion
 
         #region Private Helpers
+
         private void Initialize(ITlc59711Settings settings) {
             referenceClockEdge = settings.ReferenceClockEdge ? OUTTMG : OFF;
             referenceClock = settings.ReferenceClock ? EXTGCK : OFF;
@@ -251,6 +259,7 @@ namespace Raspberry.IO.Components.Controllers.Tlc59711
         private void WriteFourthByte() {
             memory.Write(3, (byte) ((bcg << 7) | bcr));
         }
+
         #endregion
     }
 }

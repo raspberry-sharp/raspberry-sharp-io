@@ -35,6 +35,10 @@ namespace Raspberry.IO.Components.Sensors.Pressure.Bmp085
 
         #region Instance Management
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Bmp085I2cConnection"/> class.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
         public Bmp085I2cConnection(I2cDeviceConnection connection)
         {
             this.connection = connection;

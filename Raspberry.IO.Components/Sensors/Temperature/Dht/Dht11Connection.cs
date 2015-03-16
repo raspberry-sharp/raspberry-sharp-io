@@ -7,11 +7,19 @@ using UnitsNet;
 
 namespace Raspberry.IO.Components.Sensors.Temperature.Dht
 {
+    /// <summary>
+    /// Represents a connection to a DHT11 sensor.
+    /// </summary>
     public class Dht11Connection : DhtConnection
     {
         #region Instance Management
 
-        public Dht11Connection(IInputOutputBinaryPin pin, bool autoStart = true) : base(pin, autoStart){}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DhtConnection" /> class.
+        /// </summary>
+        /// <param name="pin">The pin.</param>
+        /// <param name="autoStart">if set to <c>true</c>, DHT is automatically started. Default value is <c>true</c>.</param>
+        public Dht11Connection(IInputOutputBinaryPin pin, bool autoStart = true) : base(pin, autoStart) { }
 
         #endregion
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace Raspberry.IO.Components.Expanders.Mcp23017
 {
     /// <summary>
@@ -36,9 +38,7 @@ namespace Raspberry.IO.Components.Expanders.Mcp23017
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose()
-        {
-        }
+        public void Dispose(){}
 
         #endregion
 
