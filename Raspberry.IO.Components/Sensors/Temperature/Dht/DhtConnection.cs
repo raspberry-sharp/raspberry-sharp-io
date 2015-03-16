@@ -23,10 +23,11 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
         #region Fields
 
         private readonly IInputOutputBinaryPin pin;
+        private TimeSpan samplingInterval;
         
         private DateTime previousRead;
         private bool started;
-        
+
         private static readonly TimeSpan timeout = TimeSpan.FromMilliseconds(100);
         private static readonly TimeSpan bitSetUptime = new TimeSpan(10 * (26 +70) / 2); // 26µs for "0", 70µs for "1"
 
@@ -62,6 +63,22 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
             Close();
         }
         
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the sampling interval.
+        /// </summary>
+        /// <value>
+        /// The sampling interval.
+        /// </value>
+        public TimeSpan SamplingInterval
+        {
+            get { return samplingInterval != TimeSpan.Zero ? samplingInterval : DefaultSamplingInterval; }
+            set { samplingInterval = value; }
+        }
+
         #endregion
 
         #region Method
@@ -137,7 +154,7 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
 
         protected abstract DhtData GetDhtData(int temperatureValue, int humidityValue);
 
-        protected abstract TimeSpan MinimumSamplingInterval { get; }
+        protected abstract TimeSpan DefaultSamplingInterval { get; }
 
         protected abstract TimeSpan WakeupInterval { get; }
 
@@ -152,7 +169,7 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
             for (var i = 0; i < 5; i++)
                 data[i] = 0;
 
-            var remainingSamplingInterval = MinimumSamplingInterval - (DateTime.UtcNow - previousRead);
+            var remainingSamplingInterval = SamplingInterval - (DateTime.UtcNow - previousRead);
             if (remainingSamplingInterval > TimeSpan.Zero)
                 HighResolutionTimer.Sleep((int)remainingSamplingInterval.TotalMilliseconds);
 

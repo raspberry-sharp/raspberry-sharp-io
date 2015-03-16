@@ -25,7 +25,7 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
 
         #region Protected Methods
 
-        protected override TimeSpan MinimumSamplingInterval
+        protected override TimeSpan DefaultSamplingInterval
         {
             get { return TimeSpan.FromSeconds(1); }
         }
