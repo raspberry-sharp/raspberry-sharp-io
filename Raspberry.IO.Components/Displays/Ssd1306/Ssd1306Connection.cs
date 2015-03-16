@@ -15,31 +15,28 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         #region Fields
 
         private readonly I2cDeviceConnection connection;
-        private int displayWidth = 128, displayHeight = 64;
-        private int cursorX = 0, cursorY = 0;
-        private object syncObject = new object();
+        private readonly int displayWidth;
+        private readonly int displayHeight;
+        private int cursorX;
+        private int cursorY;
+
+        private readonly object syncObject = new object();
 
         #endregion
 
         #region Instance Management
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ssd1306Connection"/> class at default width=128 and height=64.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        public Ssd1306Connection (I2cDeviceConnection connection) : this(connection, 128, 64) { }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Ssd1306Connection"/> class.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        /// <param name="width">The display width.</param>
-        /// <param name="height">The display height.</param>
-        public Ssd1306Connection(I2cDeviceConnection connection, int width, int height)
+        /// <param name="displayWidth">The display displayWidth.</param>
+        /// <param name="displayHeight">The display displayHeight.</param>
+        public Ssd1306Connection(I2cDeviceConnection connection, int displayWidth = 128, int displayHeight = 64)
         {
             this.connection = connection;
-            this.displayWidth = width;
-            this.displayHeight = height;
+            this.displayWidth = displayWidth;
+            this.displayHeight = displayHeight;
             Initialize();
         }
 
@@ -53,9 +50,9 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         public void ClearScreen()
         {
             lock (syncObject)
-            for (int y = 0; y < displayWidth * displayHeight / 8; y++)
             {
-                connection.Write(new byte[] { 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                for (var y = 0; y < displayWidth * displayHeight / 8; y++)
+                    connection.Write(0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
             }
         }
 
@@ -64,9 +61,7 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         /// </summary>
         public void InvertDisplay()
         {
-            SendCommand(new byte[] {
-                Command.DisplayInvert
-            });
+            SendCommand(Command.DisplayInvert);
         }
 
         /// <summary>
@@ -74,9 +69,7 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         /// </summary>
         public void NormalDisplay()
         {
-            SendCommand(new byte[] {
-                Command.DisplayNormal
-            });
+            SendCommand(Command.DisplayNormal);
         }
 
         /// <summary>
@@ -84,9 +77,7 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         /// </summary>
         public void On()
         {
-            SendCommand(new byte[] {
-                Command.DisplayOn
-            });
+            SendCommand(Command.DisplayOn);
         }
 
         /// <summary>
@@ -94,25 +85,24 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         /// </summary>
         public void Off()
         {
-            SendCommand(new byte[] {
-                Command.DisplayOff
-            });
+            SendCommand(Command.DisplayOff);
         }
 
         /// <summary>
-        /// Sets the current cursor position to <column>, <row>.
+        /// Sets the current cursor position to the specified column and row.
         /// </summary>
         /// <param name="column">Column.</param>
         /// <param name="row">Row.</param>
         public void GotoXY(int column, int row)
         {
-            SendCommand(new byte[] {
+            SendCommand(
                 (byte)(0xB0 + row),							//set page address
                 (byte)(0x00 + (8 * column & 0x0F)),			//set column lower address
                 (byte)(0x10 + ((8 * column >> 4) & 0x0F))	//set column higher address
-            });
-            this.cursorX = column;
-            this.cursorY = row;
+            );
+            
+            cursorX = column;
+            cursorY = row;
         }
 
         /// <summary>
@@ -123,35 +113,38 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         public void DrawText(IFont font, string text)
         {
             var charset = font.GetData();
-            for (int c = 0; c < text.Length; c++)
+            foreach (var character in text)
             {
-                int charIndex = -1;
-                for(int i = 0; i < charset.Length; i++)
+                var charIndex = -1;
+                for(var i = 0; i < charset.Length; i++)
                 {
-                    if (charset[i][0] == text[c])
+                    if (charset[i][0] == character)
                     {
                         charIndex = i;
                         break;
                     }
                 }
-                if (charIndex == -1) continue;
-                //
-                byte[] fontData = charset[charIndex];
+                if (charIndex == -1)
+                    continue;
+
+                var fontData = charset[charIndex];
                 int fontWidth = fontData[1];
                 int fontLength = fontData[2];
-                for (int y = 0; y < (fontLength / fontWidth); y++)
+                for (var y = 0; y < (fontLength / fontWidth); y++)
                 {
-                    SendCommand(new byte[]{
-                        (byte)(0xB0 + this.cursorY + y),    //set page address
+                    SendCommand(
+                        (byte)(0xB0 + cursorY + y),    //set page address
                         (byte)(0x00 + (cursorX & 0x0F)),    //set column lower address
                         (byte)(0x10 + ((cursorX>>4)&0x0F))  //set column higher address
-                    });      
+                    );      
+
                     var data = new byte[fontWidth + 1];
                     data[0] = 0x40;
                     Array.Copy(fontData, (y * fontWidth) + 3, data, 1, fontWidth);
                     DrawStride(data);
                 }
-                this.cursorX += fontWidth;
+                
+                cursorX += fontWidth;
             }
         }
 
@@ -162,8 +155,9 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         public void DrawImage(byte[] image)
         {
             var data = new byte[image.Length + 1];
-            data [0] = 0x40;
+            data[0] = 0x40;
             Array.Copy(image, 0, data, 1, image.Length);
+
             DrawStride(data);
         }
 
@@ -172,9 +166,7 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         /// </summary>
         public void ActivateScroll()
         {
-            SendCommand(new byte[] {
-                Command.ActivateScroll
-            });
+            SendCommand(Command.ActivateScroll);
         }
 
         /// <summary>
@@ -182,9 +174,7 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
         /// </summary>
         public void DeactivateScroll()
         {
-            SendCommand(new byte[] {
-                Command.DeactivateScroll
-            });
+            SendCommand(Command.DeactivateScroll);
         }
 
         /// <summary>
@@ -211,18 +201,18 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
 
         #region Private Helpers
 
-        private void SendCommand(byte[] commands)
+        private void SendCommand(params byte[] commands)
         {
             lock (syncObject)
-            for (int c = 0; c < commands.Length; c++)
             {
-                connection.Write(new byte[] { 0x00, commands[c] });
+                foreach (byte command in commands)
+                    connection.Write(0x00, command);
             }
         }
 
         private void Initialize()
         {
-            SendCommand(new byte[] {
+            SendCommand(
                 Command.DisplayOff,
                 Command.SetDisplayClockDivider, 0x80,
                 Command.SetMultiplex, 0x3F,
@@ -238,11 +228,13 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
                 Command.SetVComDetect, 0x40,
                 Command.DisplayAllOnResume,
                 Command.DisplayNormal
-            });
-            SendCommand(new byte[] {
+            );
+
+            SendCommand(
                 Command.ColumnAddress, 0, (byte)(displayWidth - 1),
                 Command.PageAddress, 0, (byte)((displayHeight / 8) - 1)
-            });
+            );
+
             ClearScreen();
         }
 
