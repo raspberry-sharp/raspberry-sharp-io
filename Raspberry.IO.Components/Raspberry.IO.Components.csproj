@@ -33,22 +33,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Raspberry.System, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Raspberry.System.1.4.0\lib\net40\Raspberry.System.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnitsNet">
       <HintPath>..\packages\UnitsNet.3.4.0\lib\net35\UnitsNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Raspberry.System">
+      <HintPath>..\packages\Raspberry.System.1.4.0\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +118,6 @@
     <Compile Include="Sensors\Distance\HcSr04\HcSr04Connection.cs" />
     <Compile Include="Sensors\Distance\HcSr04\Units.cs" />
     <Compile Include="Sensors\Pressure\Bmp085\Bmp085Data.cs" />
-    <Compile Include="Sensors\Pressure\Bmp085\Bmp085I2cConnection.cs" />
     <Compile Include="Sensors\Pressure\Bmp085\Bmp085I2cConnectionExtensionMethods.cs" />
     <Compile Include="Sensors\Pressure\Bmp085\Bmp085Precision.cs" />
     <Compile Include="Sensors\Temperature\Dht\Dht11Connection.cs" />
@@ -142,6 +138,7 @@
     <Compile Include="Displays\Ssd1306\Fonts\Proportional3L.cs" />
     <Compile Include="Leds\GroveRgb\RgbColor.cs" />
     <Compile Include="Leds\GroveBar\GroveBarConnection.cs" />
+    <Compile Include="Sensors\Pressure\Bmp085\Bmp085I2CConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raspberry.IO.InterIntegratedCircuit\Raspberry.IO.InterIntegratedCircuit.csproj">
