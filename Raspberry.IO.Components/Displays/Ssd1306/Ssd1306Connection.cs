@@ -2,6 +2,7 @@
 
 using System;
 using Raspberry.IO.InterIntegratedCircuit;
+using Raspberry.IO.Components.Displays.Ssd1306.Fonts;
 
 #endregion
 

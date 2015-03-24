@@ -62,7 +62,6 @@
     <Reference Include="System.Core" />
     <Reference Include="UnitsNet">
       <HintPath>..\..\packages\UnitsNet.3.4.0\lib\net35\UnitsNet.dll</HintPath>
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
