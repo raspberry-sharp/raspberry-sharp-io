@@ -48,9 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
       <Project>{8388CFCA-E3DB-43F7-B049-2CB195211CE8}</Project>
       <Name>Raspberry.IO.Components</Name>
