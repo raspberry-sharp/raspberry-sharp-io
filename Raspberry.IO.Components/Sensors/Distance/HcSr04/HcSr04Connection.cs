@@ -19,7 +19,7 @@ namespace Raspberry.IO.Components.Sensors.Distance.HcSr04
     {
         #region Fields
 
-        private const decimal triggerTime = 0.01m;  // Waits at least 10µs = 0.01ms
+        private static readonly TimeSpan triggerTime = TimeSpanUtility.FromMicroseconds(10);
         private static readonly TimeSpan echoUpTimeout = TimeSpan.FromMilliseconds(500);
 
         private readonly IOutputBinaryPin triggerPin;

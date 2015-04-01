@@ -171,14 +171,14 @@ namespace Raspberry.IO.Components.Sensors.Temperature.Dht
 
             var remainingSamplingInterval = SamplingInterval - (DateTime.UtcNow - previousRead);
             if (remainingSamplingInterval > TimeSpan.Zero)
-                HighResolutionTimer.Sleep((int)remainingSamplingInterval.TotalMilliseconds);
+                HighResolutionTimer.Sleep(remainingSamplingInterval);
 
             // Prepare for reading
             try
             {
                 // Measure required by host : pull down then pull up
                 pin.Write(false);
-                HighResolutionTimer.Sleep((decimal)WakeupInterval.TotalMilliseconds);
+                HighResolutionTimer.Sleep(WakeupInterval);
                 pin.Write(true);
 
                 // Read acknowledgement from DHT

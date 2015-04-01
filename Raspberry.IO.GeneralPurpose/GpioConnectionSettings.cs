@@ -108,27 +108,30 @@ namespace Raspberry.IO.GeneralPurpose
         }
 
         /// <summary>
-        /// Gets the board connector revision.
+        /// Gets the board connector pinout.
         /// </summary>
         /// <value>
-        /// The board connector revision.
+        /// The board connector pinout.
         /// </value>
-        public static int BoardConnectorRevision
+        public static ConnectorPinout ConnectorPinout
         {
             get
             {
                 var configurationSection = ConfigurationManager.GetSection("gpioConnection") as GpioConnectionConfigurationSection;
                 if (configurationSection != null)
-                    return configurationSection.BoardConnectorRevision;
+                {
+                    switch (configurationSection.BoardConnectorRevision)
+                    {
+                        case 1:
+                            return ConnectorPinout.Rev1;
+                        case 2:
+                            return ConnectorPinout.Rev2;
+                        case 3:
+                            return ConnectorPinout.Plus;
+                    }
+                }
 
-                var board = Board.Current;
-                if (board.Model == 'B' && board.Revision == 1)
-                    return 1;
-
-                if ((board.Model == 'B' && board.Revision == 3) || board.Model == '2')
-                    return 3;
-
-                return 2;
+                return Board.Current.ConnectorPinout;
             }
         }
 

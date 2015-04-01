@@ -56,14 +56,14 @@ namespace Test.Gpio.HCSR04
 
         #region Private Helpers
 
-        private static int GetInterval(IEnumerable<string> args)
+        private static TimeSpan GetInterval(IEnumerable<string> args)
         {
-            return args
+            return TimeSpan.FromMilliseconds(args
                 .SkipWhile(a => a != "-interval")
                 .Skip(1)
                 .Select(int.Parse)
                 .DefaultIfEmpty(100)
-                .First();
+                .First());
         }
 
         #endregion

@@ -34,6 +34,8 @@ namespace Raspberry.IO.Components.Displays.Hd44780
 
         private bool backlightEnabled;
 
+        private static readonly TimeSpan syncDelay = TimeSpanUtility.FromMicroseconds(1);
+
         #endregion
 
         #region Instance Management
@@ -236,7 +238,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             currentRow = 0;
             currentColumn = 0;
 
-            Sleep(3);
+            Timer.Sleep(TimeSpan.FromMilliseconds(3));
         }
 
         /// <summary>
@@ -248,7 +250,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
             currentRow = 0;
             currentColumn = 0;
 
-            Sleep(3); // Clearing the display takes a long time
+            Timer.Sleep(TimeSpan.FromMilliseconds(3)); // Clearing the display takes a long time
         }
 
         /// <summary>
@@ -280,7 +282,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="animationDelay">The animation delay.</param>
-        public void WriteLine(object value, decimal animationDelay = 0m)
+        public void WriteLine(object value, TimeSpan animationDelay = new TimeSpan())
         {
             WriteLine("{0}", value, animationDelay);
         }
@@ -290,7 +292,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="animationDelay">The animation delay.</param>
-        public void WriteLine(string text, decimal animationDelay = 0m)
+        public void WriteLine(string text, TimeSpan animationDelay = new TimeSpan())
         {
             Write(text + Environment.NewLine, animationDelay);
         }
@@ -300,7 +302,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="animationDelay">The animation delay.</param>
-        public void Write(object value, decimal animationDelay = 0m)
+        public void Write(object value, TimeSpan animationDelay = new TimeSpan())
         {
             Write("{0}", value, animationDelay);
         }
@@ -331,7 +333,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="format">The format.</param>
         /// <param name="animationDelay">The animation delay.</param>
         /// <param name="values">The values.</param>
-        public void WriteLine(string format, decimal animationDelay, params object[] values)
+        public void WriteLine(string format, TimeSpan animationDelay, params object[] values)
         {
             WriteLine(string.Format(format, values), animationDelay);
         }
@@ -342,7 +344,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="format">The format.</param>
         /// <param name="animationDelay">The animation delay.</param>
         /// <param name="values">The values.</param>
-        public void Write(string format, decimal animationDelay, params object[] values)
+        public void Write(string format, TimeSpan animationDelay, params object[] values)
         {
             Write(string.Format(format, values), animationDelay);
         }
@@ -352,7 +354,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="animationDelay">The animation delay.</param>
-        public void Write(string text, decimal animationDelay = 0m)
+        public void Write(string text, TimeSpan animationDelay = new TimeSpan())
         {
             var lines = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
 
@@ -368,7 +370,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
                     if (currentColumn < width)
                         WriteByte(b, true);
 
-                    if (animationDelay > 0m)
+                    if (animationDelay > TimeSpan.Zero)
                         Timer.Sleep(animationDelay);
 
                     currentColumn++;
@@ -388,11 +390,6 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         #endregion
 
         #region Private Helpers
-
-        private void Sleep(decimal delay)
-        {
-            Timer.Sleep(delay);
-        }
 
         private void WriteCommand(Command command, int parameter = 0)
         {
@@ -456,10 +453,10 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         private void Synchronize()
         {
             pins.Clock.Write(true);
-            Sleep(0.001m); // 1 microsecond pause - enable pulse must be > 450ns 	
+            Timer.Sleep(syncDelay); // 1 microsecond pause - enable pulse must be > 450ns 	
 
             pins.Clock.Write(false);
-            Sleep(0.001m); // commands need > 37us to settle
+            Timer.Sleep(syncDelay); // commands need > 37us to settle
         }
 
         #endregion

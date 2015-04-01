@@ -33,7 +33,7 @@ namespace Test.Gpio.DHT11
                     else
                         Console.WriteLine("Unable to read data");
 
-                    Timer.Sleep(2000);
+                    Timer.Sleep(TimeSpan.FromSeconds(2));
                 }
             }
         }

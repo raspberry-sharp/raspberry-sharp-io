@@ -50,7 +50,7 @@ namespace Test.Gpio.Chaser
                                    Loop = args.GetLoop(),
                                    RoundTrip = args.GetRoundTrip(),
                                    Width = args.GetWidth(),
-                                   Interval = args.GetSpeed()
+                                   Interval = TimeSpan.FromMilliseconds(args.GetSpeed())
                                };
 
             // Alternate behaviors...

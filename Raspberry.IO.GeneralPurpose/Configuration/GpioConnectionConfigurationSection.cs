@@ -39,7 +39,7 @@ namespace Raspberry.IO.GeneralPurpose.Configuration
         /// Gets or sets the board connector revision.
         /// </summary>
         /// <value>
-        /// The board revision, <c>0</c> for automatic detection, <c>1</c> for model B rev1; <c>2</c> for model B rev2 and model A.
+        /// The board revision, <c>0</c> for automatic detection, <c>1</c> for model B rev1; <c>2</c> for model B rev2 and model A, <c>3</c> for model B+, A+ and higher.
         /// </value>
         [ConfigurationProperty("boardConnectorRevision", DefaultValue = 0)]
         public int BoardConnectorRevision
