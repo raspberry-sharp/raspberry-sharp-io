@@ -19,7 +19,7 @@
     <language>en-US</language>
     <tags>Raspberry Pi Mono GPIO</tags>
     <dependencies>
-      <dependency id="Raspberry.System" version="1.4.0" />
+      <dependency id="Raspberry.System" version="2.0.0" />
     </dependencies>
   </metadata>
   <files>
