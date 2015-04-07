@@ -11,11 +11,9 @@
     <iconUrl>https://raw.github.com/raspberry-sharp/raspberry-sharp-io/master/Icon.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>
-      Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.
-
-      Raspberry.IO.GeneralPurpose is no longer maintained and superseded by Raspberry.IO.
+      Raspberry.IO is a set of Mono/.NET assembly providing access to Raspberry Pi I/O features.
     </description>
-    <summary>Raspberry.IO.GeneralPurpose is a Mono/.NET assembly providing access to Raspberry Pi GPIO features.</summary>
+    <summary>Raspberry.IO is a set of Mono/.NET assembly providing access to Raspberry Pi I/O features.</summary>
     <language>en-US</language>
     <tags>Raspberry Pi Mono GPIO</tags>
     <dependencies>
