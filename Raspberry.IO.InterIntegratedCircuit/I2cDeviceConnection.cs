@@ -1,5 +1,7 @@
 namespace Raspberry.IO.InterIntegratedCircuit
 {
+    using System;
+
     /// <summary>
     /// Represents a connection to the I2C device.
     /// </summary>
@@ -39,6 +41,20 @@ namespace Raspberry.IO.InterIntegratedCircuit
         #endregion
 
         #region Methods
+        
+        /// <summary>
+        /// Executes the specified transaction.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        public void Execute(I2cTransaction transaction)
+        {
+            if (transaction == null)
+            {
+                throw new ArgumentNullException("transaction");
+            }
+
+            driver.Execute(deviceAddress, transaction);
+        }
 
         /// <summary>
         /// Writes the specified buffer.
@@ -46,7 +62,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
         /// <param name="buffer">The buffer.</param>
         public void Write(params byte[] buffer)
         {
-            driver.Write(deviceAddress, buffer);
+            Execute(new I2cTransaction(new I2cWriteAction(buffer)));
         }
 
         /// <summary>
@@ -55,7 +71,7 @@ namespace Raspberry.IO.InterIntegratedCircuit
         /// <param name="value">The value.</param>
         public void WriteByte(byte value)
         {
-            Write(value);
+            Execute(new I2cTransaction(new I2cWriteAction(value)));
         }
 
         /// <summary>
@@ -65,7 +81,10 @@ namespace Raspberry.IO.InterIntegratedCircuit
         /// <returns>The buffer.</returns>
         public byte[] Read(int byteCount)
         {
-            return driver.Read(deviceAddress, byteCount);
+            var readAction = new I2cReadAction(new byte[byteCount]);
+            Execute(new I2cTransaction(readAction));
+
+            return readAction.Buffer;
         }
 
         /// <summary>
