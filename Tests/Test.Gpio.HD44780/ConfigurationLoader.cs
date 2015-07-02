@@ -47,6 +47,7 @@ namespace Test.Gpio.HD44780
 
             const Mcp23008Pin registerSelectPin = Mcp23008Pin.Pin1;
             const Mcp23008Pin clockPin = Mcp23008Pin.Pin2;
+            const Mcp23008Pin backlightPin = Mcp23008Pin.Pin7;
 
             var dataPins = new[]
             {
@@ -64,7 +65,7 @@ namespace Test.Gpio.HD44780
             Console.WriteLine("\tData 2: {0}", dataPins[1]);
             Console.WriteLine("\tData 3: {0}", dataPins[2]);
             Console.WriteLine("\tData 4: {0}", dataPins[3]);
-            Console.WriteLine("\tBacklight: VCC");
+            Console.WriteLine("\tBacklight: {0}", backlightPin);
             Console.WriteLine("\tRead/write: GND");
             Console.WriteLine();
 
@@ -74,13 +75,17 @@ namespace Test.Gpio.HD44780
             var driver = new I2cDriver(sdaPin.ToProcessor(), sclPin.ToProcessor()) { ClockDivider = 512 };
             var connection = new Mcp23008I2cConnection(driver.Connect(address));
 
-            return new Hd44780Configuration(driver)
+            var retVal = new Hd44780Configuration(driver)
             {
                 Pins = new Hd44780Pins(
                     connection.Out(registerSelectPin),
                     connection.Out(clockPin),
                     dataPins.Select(pin => (IOutputBinaryPin)connection.Out(pin)))
             };
+
+            retVal.Pins.Backlight = connection.Out(backlightPin);
+
+            return retVal;
         }
 
         private static Hd44780Configuration LoadMcp23017Configuration(IEnumerable<string> args)
