@@ -69,6 +69,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO", "Raspberry.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspberry.IO.Interop", "Raspberry.IO.Interop\Raspberry.IO.Interop.csproj", "{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Gpio.MCP23008", "Tests\Test.Gpio.MCP23008\Test.Gpio.MCP23008.csproj", "{E401FE2A-7F73-41E7-9347-B51FEDAE71B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,10 @@ Global
 		{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E401FE2A-7F73-41E7-9347-B51FEDAE71B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E401FE2A-7F73-41E7-9347-B51FEDAE71B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E401FE2A-7F73-41E7-9347-B51FEDAE71B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E401FE2A-7F73-41E7-9347-B51FEDAE71B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +197,7 @@ Global
 		{0BB6C3CE-422E-49F2-9165-DEC06AFE1B1A} = {C39D0CC3-C0F2-4B58-8779-2CCB5B52534C}
 		{99EB3D1A-F0B7-454E-BB50-9B2F5349BC5B} = {C39D0CC3-C0F2-4B58-8779-2CCB5B52534C}
 		{CAF876A0-0FCB-44F7-96F1-53704CB6015F} = {C39D0CC3-C0F2-4B58-8779-2CCB5B52534C}
+		{E401FE2A-7F73-41E7-9347-B51FEDAE71B9} = {15ECD485-B3FD-4B6F-8491-7489DFFC89BC}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj
