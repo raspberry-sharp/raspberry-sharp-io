@@ -111,6 +111,14 @@
     <Compile Include="Displays\Hd44780\Hd44780Pins.cs" />
     <Compile Include="Displays\Ssd1306\ScrollDirection.cs" />
     <Compile Include="Displays\Ssd1306\ScrollSpeed.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008I2cConnection.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008InputBinaryPin.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008OutputBinaryPin.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008Pin.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008PinDirection.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008PinExtensionMethods.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008PinPolarity.cs" />
+    <Compile Include="Expanders\Mcp23008\Mcp23008PinResistor.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017InputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017OutputBinaryPin.cs" />
     <Compile Include="Expanders\Mcp23017\Mcp23017PinExtensionMethods.cs" />
