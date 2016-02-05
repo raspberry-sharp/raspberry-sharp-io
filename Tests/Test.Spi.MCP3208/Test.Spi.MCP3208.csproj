@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,15 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Raspberry.IO.Components\Raspberry.IO.Components.csproj">
-      <Project>{8388cfca-e3db-43f7-b049-2cb195211ce8}</Project>
+      <Project>{8388CFCA-E3DB-43F7-B049-2CB195211CE8}</Project>
       <Name>Raspberry.IO.Components</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Raspberry.IO.GeneralPurpose\Raspberry.IO.GeneralPurpose.csproj">
-      <Project>{281c71ed-c36d-408e-8baa-75c381dc17e7}</Project>
+      <Project>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</Project>
       <Name>Raspberry.IO.GeneralPurpose</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Raspberry.IO\Raspberry.IO.csproj">
-      <Project>{ace64f17-87e5-43e7-97a0-bdde19059c61}</Project>
+      <Project>{ACE64F17-87E5-43E7-97A0-BDDE19059C61}</Project>
       <Name>Raspberry.IO</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,11 +1,12 @@
 using System;
+using Raspberry.IO;
 
 namespace Raspberry.IO.GeneralPurpose
 {
     /// <summary>
     /// Represents a GPIO input binary pin.
     /// </summary>
-    public class GpioInputBinaryPin : IInputBinaryPin
+    public class GpioInputBinaryPin : Raspberry.IO.IInputBinaryPin
     {
         #region Fields
 
