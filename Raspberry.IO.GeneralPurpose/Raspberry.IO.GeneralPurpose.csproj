@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{281C71ED-C36D-408E-8BAA-75C381DC17E7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -35,15 +33,17 @@
     <DocumentationFile>bin\Release\Raspberry.IO.GeneralPurpose.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Raspberry.System, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Raspberry.System.2.0.0\lib\net40\Raspberry.System.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Raspberry.System">
-      <HintPath>..\packages\Raspberry.System.1.4.0\lib\net40\Raspberry.System.dll</HintPath>
+      <HintPath>..\packages\Raspberry.System.2.0.0\lib\net40\Raspberry.System.dll</HintPath>
+    </Reference>
+    <Reference Include="Raspberry.IO">
+      <HintPath>..\Raspberry.IO\bin\Debug\Raspberry.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Raspberry.IO.Interop">
+      <HintPath>..\Raspberry.IO.Interop\bin\Debug\Raspberry.IO.Interop.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -87,17 +87,6 @@
     <Compile Include="PinStatusEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchInputPinConfiguration.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Raspberry.IO.Interop\Raspberry.IO.Interop.csproj">
-      <Project>{689CB6C4-3D23-45DA-8E00-87C28AEA32D0}</Project>
-      <Name>Raspberry.IO.Interop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Raspberry.IO\Raspberry.IO.csproj">
-      <Project>{ACE64F17-87E5-43E7-97A0-BDDE19059C61}</Project>
-      <Project>{D2E41147-5BF6-4109-A497-C76284F3C020}</Project>
-      <Name>Raspberry.IO</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

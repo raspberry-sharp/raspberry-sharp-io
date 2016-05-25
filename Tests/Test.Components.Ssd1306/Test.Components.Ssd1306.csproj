@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CAD5F2DD-AB2D-4145-9850-8101343E2AF5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Test.Components.Ssd1306</RootNamespace>
