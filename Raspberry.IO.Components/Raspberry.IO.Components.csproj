@@ -37,14 +37,15 @@
     <Reference Include="Raspberry.System">
       <HintPath>..\packages\Raspberry.System.2.0.0\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
-    <Reference Include="UnitsNet">
-      <HintPath>..\packages\UnitsNet.3.24.0\lib\net35\UnitsNet.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging.Core">
       <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet, Version=3.34.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UnitsNet.3.34.0\lib\net35\UnitsNet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -191,8 +192,5 @@
   -->
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Controllers\HT16K33\" />
-    <Folder Include="Leds\BiColor24Bargraph\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

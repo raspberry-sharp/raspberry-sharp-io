@@ -45,8 +45,9 @@
     <Reference Include="Raspberry.System">
       <HintPath>..\..\packages\Raspberry.System.2.0.0\lib\net40\Raspberry.System.dll</HintPath>
     </Reference>
-    <Reference Include="UnitsNet">
-      <HintPath>..\..\packages\UnitsNet.3.10.0\lib\net35\UnitsNet.dll</HintPath>
+    <Reference Include="UnitsNet, Version=3.34.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\UnitsNet.3.34.0\lib\net35\UnitsNet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
