@@ -109,6 +109,7 @@
     <Compile Include="Displays\Hd44780\Hd44780LcdConnection.cs" />
     <Compile Include="Displays\Hd44780\Hd44780LcdConnectionSettings.cs" />
     <Compile Include="Displays\Hd44780\Hd44780Pins.cs" />
+    <Compile Include="Displays\Hd44780\Hd44780Position.cs" />
     <Compile Include="Displays\Ssd1306\ScrollDirection.cs" />
     <Compile Include="Displays\Ssd1306\ScrollSpeed.cs" />
     <Compile Include="Expanders\Mcp23008\Mcp23008I2cConnection.cs" />

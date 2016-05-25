@@ -34,9 +34,8 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         private readonly EntryModeFlags entryModeFlags;
         
         private DisplayFlags displayFlags = DisplayFlags.DisplayOn | DisplayFlags.BlinkOff | DisplayFlags.CursorOff;
-        private int currentRow;
-        private int currentColumn;
-
+        private Hd44780Position currentPosition;
+        
         private bool backlightEnabled;
 
         private static readonly TimeSpan syncDelay = TimeSpanUtility.FromMicroseconds(1);
@@ -240,9 +239,8 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         public void Home()
         {
             WriteCommand(Command.ReturnHome);
-            currentRow = 0;
-            currentColumn = 0;
-
+            currentPosition = Hd44780Position.Zero;
+            
             Timer.Sleep(TimeSpan.FromMilliseconds(3));
         }
 
@@ -252,9 +250,8 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         public void Clear()
         {
             WriteCommand(Command.ClearDisplay);
-            currentRow = 0;
-            currentColumn = 0;
-
+            currentPosition = Hd44780Position.Zero;
+            
             Timer.Sleep(TimeSpan.FromMilliseconds(3)); // Clearing the display takes a long time
         }
 
@@ -264,46 +261,47 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <param name="offset">The offset.</param>
         public void Move(int offset)
         {
-            var count = offset > 0 ? offset : -offset;
-            for (var i = 0; i < count; i++)
-                WriteCommand(Command.MoveCursor, (int)(CursorShiftFlags.DisplayMove | (offset < 0 ? CursorShiftFlags.MoveLeft : CursorShiftFlags.MoveRight)));
-        }
+            var column = currentPosition.Column += offset;
+            var row = currentPosition.Row;
 
-        /// <summary>
-        /// Moves the cursor to the designated row
-        /// </summary>
-        /// <param name="row">Zero based row position</param>
-        public void MoveToRow(int row)
-        {
-            if (row < 0 || height <= row)
+            if (column >= width)
+            {
+                column = 0;
+                row++;
+            }
+            else if (column < 0)
+            {
+                column = width - 1;
+                row--;
+            }
+
+            if (row >= height)
+                row = 0;
+            if (row < 0)
                 row = height - 1;
 
-            var rowAddress = GetLcdAddressLocation(row);
-
-            currentRow = row;
-            currentColumn = 0;
-            WriteByte(rowAddress, false);
+            SetCursorPosition(new Hd44780Position{Row = row, Column = column});
         }
 
         /// <summary>
         /// Moves the cursor to the specified row and column
         /// </summary>
-        /// <param name="row">Zero based row position</param>
-        /// <param name="column">Zero based column position</param>
-        public void GotoXY(int row, int column)
+        /// <param name="position">The position.</param>
+        public void SetCursorPosition(Hd44780Position position)
         {
+            var row = position.Row;
             if (row < 0 || height <= row)
                 row = height - 1;
 
+            var column = position.Column;
             if (column < 0 || width <= column)
                 column = width - 1;
 
             var address = column + GetLcdAddressLocation(row);
-
+            
             WriteByte(address, false);
 
-            currentRow = row;
-            currentColumn = column;
+            currentPosition = new Hd44780Position { Row = row, Column = column };
         }
 
         /// <summary>
@@ -409,22 +407,22 @@ namespace Raspberry.IO.Components.Displays.Hd44780
                 var bytes = encoding.GetBytes(line);
                 foreach (var b in bytes)
                 {
-                    if (currentColumn < width)
+                    if (currentPosition.Column < width)
                         WriteByte(b, true);
 
                     if (animationDelay > TimeSpan.Zero)
                         Timer.Sleep(animationDelay);
 
-                    currentColumn++;
+                    currentPosition.Column++;
                 }
 
-                if ((currentRow == 0 || (currentRow + 1) % height != 0) && height > 1)
+                if ((currentPosition.Row == 0 || (currentPosition.Row + 1) % height != 0) && height > 1)
                 {
-                    int addressLocation = GetLcdAddressLocation(currentRow + 1);
+                    var addressLocation = GetLcdAddressLocation(currentPosition.Row + 1);
                     
                     WriteByte(addressLocation, false);
-                    currentColumn = 0;
-                    currentRow++;
+                    currentPosition.Column = 0;
+                    currentPosition.Row++;
                 }
                 else
                 {
@@ -505,7 +503,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
         /// <remarks>http://www.mikroe.com/forum/viewtopic.php?t=5149</remarks>
         private int GetLcdAddressLocation(int row)
         {
-            int baseAddress = 128;
+            const int baseAddress = 128;
 
             switch (row)
             {
