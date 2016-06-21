@@ -136,7 +136,7 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
                     SendCommand(
                         (byte)(0xB0 + cursorY + y),    //set page address
                         (byte)(0x00 + (cursorX & 0x0F)),    //set column lower address
-                        (byte)(0x10 + ((cursorX>>4)&0x0F))  //set column higher address
+                        (byte)(0x10 + ((cursorX>>4) & 0x0F))  //set column higher address
                     );      
 
                     var data = new byte[fontWidth + 1];
@@ -198,6 +198,16 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
             });
         }
 
+        /// <summary>
+        /// Sets the contrast (brightness) of the display. Default is 127.
+        /// </summary>
+        /// <param name="contrast">A number between 0 and 255. Contrast increases as the value increases.</param>
+        public void SetContrast(int contrast)
+        {
+            if (contrast < 0 || contrast > 255) throw new ArgumentOutOfRangeException("contrast", "Contrast must be between 0 and 255.");
+            SendCommand(Command.SetContrast, (byte)contrast);
+        }
+
         #endregion
 
         #region Private Helpers
@@ -224,7 +234,7 @@ namespace Raspberry.IO.Components.Displays.Ssd1306
                 Command.SegRemap | 0x1,
                 Command.ComScanDecrement,
                 Command.SetComPins, 0x12,
-                Command.SetContrast, 0x9F,
+                Command.SetContrast, 0x7F,
                 Command.SetPreCharge, 0x22,
                 Command.SetVComDetect, 0x40,
                 Command.DisplayAllOnResume,

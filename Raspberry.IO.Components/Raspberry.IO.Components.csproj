@@ -52,6 +52,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Clocks\Ds1307Connection.cs" />
     <Compile Include="Controllers\Tlc59711\ExtensionMethods\ByteExtensionMethods.cs" />
     <Compile Include="Controllers\Tlc59711\IPwmChannels.cs" />
     <Compile Include="Controllers\Tlc59711\IPwmDevice.cs" />

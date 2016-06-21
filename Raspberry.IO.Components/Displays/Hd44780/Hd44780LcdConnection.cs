@@ -403,7 +403,7 @@ namespace Raspberry.IO.Components.Displays.Hd44780
                 if (string.IsNullOrEmpty(line))
                     continue;
 
-                Console.WriteLine(line);
+                //Console.WriteLine(line);
                 var bytes = encoding.GetBytes(line);
                 foreach (var b in bytes)
                 {
