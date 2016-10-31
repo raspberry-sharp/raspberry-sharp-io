@@ -31,20 +31,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Raspberry.System, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Raspberry.System.2.1\lib\net40\Raspberry.System.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Raspberry.System.2.1\lib\net40\Raspberry.System.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Configuration" />
     <Reference Include="Common.Logging.Core">
-      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
-      <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="UnitsNet, Version=3.34.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UnitsNet.3.34.0\lib\net35\UnitsNet.dll</HintPath>
+    <Reference Include="UnitsNet, Version=3.46.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)packages\UnitsNet.3.46.1\lib\net35\UnitsNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -194,4 +194,3 @@
   <ItemGroup />
   <ItemGroup />
 </Project>
-
