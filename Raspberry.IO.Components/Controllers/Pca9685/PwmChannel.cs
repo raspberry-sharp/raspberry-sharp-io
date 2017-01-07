@@ -1,4 +1,4 @@
-﻿namespace Raspberry.IO.Components.Controllers.Pca9685
+namespace Raspberry.IO.Components.Controllers.Pca9685
 {
     /// <summary>
     /// Denotes available PWM channels
@@ -17,5 +17,9 @@
         C9 = 9,
         C10 = 10,
         C11 = 11,
+        C12 = 12,
+        C13 = 13,
+        C14 = 14,
+        C15 = 15
     }
 }
